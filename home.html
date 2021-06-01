@@ -1,0 +1,91 @@
+<!--
+Copyright © Jan Kubát 2021 - present
+api.mapy.cz
+-->
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Kopce Českého Středohoří" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://kopceceskehostredohori.jednoduse.cz/home.html" />
+        <meta property="og:image" content="http://kopceceskehostredohori.jednoduse.cz/assets/img/ogimage.png">
+        <meta property="og:description" content="Virtuální interaktivní mapa kopců českého středohoří. Zaškrtněte si svoje kopce, na kterých jste byli a graficky znázorněte!" />
+        <title>Kopce Českého Středohoří</title>
+
+        <script src="./assets/libs/loader.js"></script>
+        <script>Loader.load()</script>
+
+        <link rel="stylesheet" href="./assets/css/home.css">
+        <link rel="stylesheet" href="./assets/libs/bootstrap.min.css">
+        <link rel="stylesheet" href="./assets/libs/jquery-ui.css">
+        <link rel="icon" href="./assets/img/brand.png">
+    </head>
+
+    <body>
+        <div class="sidebar bg-white">
+            <div id="sidebarContentAll">
+                <div id="sidebarContent"></div>
+                <div class="mt-5 text-center">
+                    <button id="btnWasHere" class="btn btn-success" style="display: none;">Byl jsem zde</button>
+                    <button id="btnRemoveWasHere" class="btn btn-success" style="display: none;">Nebyl jsem zde</button>
+                </div>
+                <hr>
+                <div id="geometry">
+                    <div class="form-check mx-2">
+                        <input class="form-check-input" type="checkbox" value="" id="checkGeo">
+                        <label class="form-check-label" for="checkGeo">
+                          Zobrazit geometrii
+                        </label>
+                    </div>
+                    <div class="form-check mx-2">
+                        <input class="form-check-input" type="checkbox" value="" id="checkWasHere">
+                        <label class="form-check-label" for="checkWasHere">
+                          Zobrazit pouze navštívené místa
+                        </label>
+                    </div>
+                </div>
+                <hr>
+                <div class="account text-center">
+                    <h3 id="accName"></h3>
+                </div>
+                <hr>
+                <div class="mx-3">
+                    <small class="fw-lighter font-monospace text-muted">
+                        Kopce se neustále přidávají. Pokud máš nějaký, který chceš přidat,
+                        neváhej mi napsat buďto na email (jankubat77@gmail.com) nebo na discord (Tarv#8839)
+                    </small>
+                </div>
+                
+                <button id="btnLogout" class="btn btn-success">Odhlásit se</button>
+            </div>
+
+            <button id="btnSidebar" class="btn"><i class="fas fa-angle-double-left fa-2x"></i></button>
+        </div>
+        
+        <div class="content">
+            <div class="search">
+                <div class="input-group">
+                    <input type="text" class="form-control searchbar">
+
+                    <div class="input-group-append">
+                        <span id="btnSearch" class="input-group-text btn btn-success">Hledat</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="mapa"></div>
+        </div>
+
+        <script src="./assets/libs/bootstrap.bundle.min.js"></script>
+        <script src="./assets/libs/jquery.min.js"></script>
+        <script src="./assets/libs/848da1e5f7.js"></script>
+        <script src="./assets/libs/jquery-ui.js"></script>
+        <script src="./assets/js/home.js"></script>
+        <script src="./assets/js/sidebar.js"></script>
+    </body>
+</html>

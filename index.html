@@ -1,0 +1,47 @@
+<!--
+Copyright © Jan Kubát 2021 - present
+api.mapy.cz
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta property="og:title" content="Kopce Českého Středohoří" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="http://kopceceskehostredohori.jednoduse.cz/" />
+        <meta property="og:image" content="http://kopceceskehostredohori.jednoduse.cz/assets/img/ogimage.png">
+        <meta property="og:description" content="Virtuální interaktivní mapa kopců českého středohoří. Zaškrtněte si svoje kopce, na kterých jste byli a graficky znázorněte!" />
+        <title>Kopce Českého Středohoří</title>
+
+        <link href="./assets/libs/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="./assets/css/index.css">
+        <link href="./assets/img/brand.png" rel="icon">
+    </head>
+
+    <body>
+        <div class="bg-image"></div>
+
+        <div class="bg-text">
+            <div class="loginForm">
+                <div class="mb-3">
+                    <label for="login" class="form-label">Přihlašovací jméno</label>
+                    <input type="text" class="form-control" id="login">
+                </div>
+                <div class="mb-3">
+                    <label for="pass" class="form-label">Heslo</label>
+                    <input type="password" class="form-control" id="pass">
+                </div>
+                <a href="register.html">Nemáš účet? Registrovat</a>
+                <input id="btnLogin" class="btn btn-success" style="float: right;" type="submit" value="Přihlásit">
+            </div>
+        </div>
+        
+        <script src="./assets/libs/bootstrap.bundle.min.js"></script>
+        <script src="./assets/libs/jquery.min.js"></script>
+        <script src="./assets/libs/848da1e5f7.js" crossorigin="anonymous"></script>
+        <script src="./assets/js/accountHandling.js"></script>
+    </body>
+</html>
