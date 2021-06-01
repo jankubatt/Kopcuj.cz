@@ -1,0 +1,2 @@
+# KopceCeskehoStredohori
+kopceceskehostredohori.jednoduse.cz
