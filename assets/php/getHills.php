@@ -1,5 +1,6 @@
 <?php
     include_once("conn.php");
+    mysqli_set_charset($conn, "utf8");
 
     $data = [];
 
@@ -21,5 +22,5 @@
         }
     }
 
-    echo json_encode($data, JSON_FORCE_OBJECT);
+    echo json_encode($data);
 ?>
