@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: sql.endora.cz:3310
--- Generation Time: Jun 06, 2021 at 08:38 AM
--- Server version: 5.6.45-86.1
--- PHP Version: 7.3.9
+-- Host: 127.0.0.1
+-- Generation Time: Jun 10, 2021 at 07:14 AM
+-- Server version: 5.7.33
+-- PHP Version: 7.4.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -52,7 +51,7 @@ INSERT INTO `hills` (`id`, `name`, `elevation`, `lat`, `lon`, `prominence`, `iso
 (3, 'Pařez', 736, 50.5464, 13.8783, 219, '3.7 km → Milešovka', 'trachyt', 'Labe', 'Teplice', 'Kostomlaty pod Milešovkou'),
 (4, 'Sedlo', 726, 50.5931, 14.2639, 416, '23.6km → Milešovka', 'čedič, znělec', 'Labe', 'Litoměřice', 'Liběšice'),
 (5, 'Kleč', 721, 50.5478, 13.8861, 45, '0.5km → Pařez', 'nefelinit', 'Labe', 'Teplice', 'Kostomlaty pod Milešovkou'),
-(6, 'Ostrý (Červený újezd)', 719, 50.4972, 13.86, 65, '1.1km → Hradišťany', 'čedič', 'Bílina, Ohře', 'Teplice', 'Červený újezd'),
+(6, 'Ostrý', 719, 50.4972, 13.86, 65, '1.1km → Hradišťany', 'čedič', 'Bílina, Ohře', 'Teplice', 'Červený újezd'),
 (7, 'Kletečná', 706, 50.5672, 13.9728, 234, '3km → Milešovka', 'trachyt', 'Labe', 'Litoměřice', 'Velemín'),
 (8, 'Lipská hora', 689, 50.5128, 13.9131, 151, '2.8km → Hradišťany', 'trachyt', 'Labe', 'Litoměřice', 'Mrsklesy'),
 (9, 'Buková hora', 683, 50.6717, 14.2278, 238, '8.5km → Sedlo', 'tefrit', 'Labe', 'Ústí nad Labem', 'Zubrnice'),
@@ -68,7 +67,7 @@ INSERT INTO `hills` (`id`, `name`, `elevation`, `lat`, `lon`, `prominence`, `iso
 (19, 'Mravenčí vrch', 660, 50.5356, 13.8914, 22, '0.4km → Kleč', '', '', 'Teplice', 'Lukov'),
 (20, 'Široký vrch', 659, 50.6275, 14.1058, 36, '0.6km → Trpasličí kameny', '', '', 'Ústí nad Labem', 'Malečov'),
 (21, 'Kamenný vrch', 656, 50.6136, 14.1169, 28, '0.9km → Trpasličí kameny', '', '', 'Ústí nad Labem', 'Malečov'),
-(22, 'Dlouhý vrch (Lbín)', 655, 50.5814, 14.1492, 25, '0.8km → Vrchovina', 'augitit, tufy', 'Labe', 'Litoměřice', 'Lbín'),
+(22, 'Dlouhý vrch', 655, 50.5814, 14.1492, 25, '0.8km → Vrchovina', 'augitit, tufy', 'Labe', 'Litoměřice', 'Lbín'),
 (23, 'Zvon', 653, 50.5594, 13.9036, 95, '1.0km → Kleč', 'trachyt', 'Labe', 'Teplice', 'Černčice u Žalan'),
 (24, 'Medvědí hůrka', 645, 50.7969, 14.5344, 67, '1.3km → Malý Buk', 'znělec', 'Ploučnice, Kamenice', 'Česká Lípa', 'Polevsko'),
 (25, 'Klučky', 642, 50.7806, 14.5089, 50, '2.5km → Medvědí hůrka', 'čedič', 'Ploučnice', 'Česká Lípa', 'Prácheň, Polevsko'),
@@ -83,11 +82,11 @@ INSERT INTO `hills` (`id`, `name`, `elevation`, `lat`, `lon`, `prominence`, `iso
 (34, 'Modřín', 626, 50.6153, 14.1003, 59, '1.0km → Kamenný vrch', '', '', 'Ústí nad Labem', 'Němčí'),
 (35, 'Polevský vrch', 626, 50.7917, 14.5253, 19, '0.4km → Medvědí hůrka', 'znělec', 'Ploučnice, Kamenice', 'Česká Lípa', 'Polevsko'),
 (36, 'Stráž', 625, 50.6817, 14.2636, 17, '0.6m → Kočičí vrch', '', '', 'Děčín', 'Verneřice'),
-(37, 'Dlouhý vrch (Podsedice)', 618, 50.4936, 13.9106, 30, '0.4km → Solanská hora', '', '', 'Litoměřice', 'Podsedice'),
+(37, 'Dlouhý vrch', 618, 50.4936, 13.9106, 30, '0.4km → Solanská hora', '', '', 'Litoměřice', 'Podsedice'),
 (38, 'Javorský vrch', 617, 50.7317, 14.1144, 219, '5.9km → Děčínský Sněžník', '', 'Račí potok, Jílovský potok', 'Děčín', 'Javory'),
 (39, 'Pákova hora', 617, 50.5103, 13.8956, 54, '1.1km → Lipská hora', '', '', 'Litoměřice', 'Velemín'),
 (40, 'Setenka', 612, 50.5122, 13.9025, 34, '0.5km → Lipská hora', '', '', 'Litoměřice', 'Velemín'),
-(41, 'Špičák (Žitenice)', 608, 50.5997, 14.145, 30, '0.2km → Vrchovina', '', '', 'Litoměřice', 'Žitenice'),
+(41, 'Špičák', 608, 50.5997, 14.145, 30, '0.2km → Vrchovina', '', '', 'Litoměřice', 'Žitenice'),
 (42, 'Loučný', 606, 50.6733, 14.3364, 68, '4.5km → Stráž', '', '', 'Děčín ', 'Verneřice'),
 (43, 'Čachnov', 605, 50.7556, 14.4711, 22, '0.4km → Vlčí hora', '', '', 'Česká Lípa', 'Slunečná'),
 (44, 'Kamenná hora', 601, 50.6475, 14.1783, 143, '4.2km → Buková hora', '', '', 'Ústí nad Labem', 'Homole u Panny'),
@@ -114,14 +113,15 @@ INSERT INTO `hills` (`id`, `name`, `elevation`, `lat`, `lon`, `prominence`, `iso
 (65, 'Vysoký kámen', 494, 50.6897, 14.1356, 131, '2.5km → Blansko', '', '', 'Ústí nad Labem', 'Povrly'),
 (66, 'Panna', 593, 50.6117, 14.1847, 130, '3.1km → Vrchovina → Sedlo', 'augitit', 'Labe', 'Litoměřice', 'Řepčice'),
 (67, 'Chmelník', 508, 50.7547, 14.1583, 130, '1.5km → Lotarův vrch', 'olivinický nefelinit', 'Labe', 'Děčín', 'Chmelnice'),
-(68, 'Špičák (Most)', 399, 50.5197, 13.6678, 128, '3.1km → Zlatník', 'znělec', 'Bílina', 'Most', 'Most'),
+(68, 'Špičák', 399, 50.5197, 13.6678, 128, '3.1km → Zlatník', 'znělec', 'Bílina', 'Most', 'Most'),
 (69, 'Lotarův vrch', 510, 50.7594, 14.1392, 127, '2.5km → Javorský vrch', 'čedič', 'Jílovský potok, Chrochvický potok, Račí potok', 'Děčín', 'Krásný Studenec'),
-(70, 'Ostrý (Milešov)', 553, 50.5317, 13.9514, 120, '1.1km → Lhota → Kloc', 'čedič', 'Labe', 'Litoměřice', 'Milešov, Velemín, Kocourov'),
+(70, 'Ostrý', 553, 50.5317, 13.9514, 120, '1.1km → Lhota → Kloc', 'čedič', 'Labe', 'Litoměřice', 'Milešov, Velemín, Kocourov'),
 (71, 'Vysoký Ostrý', 587, 50.6364, 14.0803, 114, '1.7km → Široký vrch', 'bazanit', 'Labe', 'Ústí nad Labem', 'Střekov, Brná nad Labem'),
 (72, 'Želenický vrch', 456, 50.5194, 13.7317, 113, '1.0km → Zlatník', 'znělec', 'Labe', 'Most', 'Želenice nad Bílinou'),
-(73, 'Plešivec (Kamýk)', 509, 50.5653, 14.0894, 112, '1.8km → Hradiště', 'olivnický čedič', 'Labe', 'Litoměřice', 'Kamýk'),
+(73, 'Plešivec', 509, 50.5653, 14.0894, 112, '1.8km → Hradiště', 'olivnický čedič', 'Labe', 'Litoměřice', 'Kamýk'),
 (74, 'Střížovický vrch', 348, 50.6756, 14.0033, 112, '2.5km → Čepec', '', '', 'Ústí nad Labem', 'Ústí nad Labem'),
 (75, 'Kohout', 589, 50.71, 14.3119, 111, '1.8km → Na Koruně', 'čedič', 'Labe', 'Děčín', 'Valkeřice'),
+(76, 'Šenovský vrch', 632, 50.7828, 14.4814, 110, '1.9km → Klučky', 'čedič', '', 'Česká Lípa', 'Kamenický Šenov'),
 (77, 'Hněvín', 407, 50.5203, 13.6331, 110, '1.8km → Ressl', 'znělec', 'Bílina', 'Most', 'Most'),
 (78, 'Srdov', 482, 50.4172, 13.8206, 109, '1km → Oblík', 'nefelinit', 'Ohře', 'Louny', 'Charvatce u Loun'),
 (79, 'Trojhora', 456, 50.5919, 14.1908, 108, '1.6km → Kalich', 'limburgit, trachyt', 'Labe', 'Litoměřice', 'Třebušín'),
@@ -137,7 +137,7 @@ INSERT INTO `hills` (`id`, `name`, `elevation`, `lat`, `lon`, `prominence`, `iso
 (89, 'Ovčín', 431, 50.505, 14.0048, 0, '', 'čedič', 'Labe', 'Litoměřice', 'Vchynice'),
 (91, 'Košťál', 481, 50.4902, 13.9847, 64, '1 km → Jezerka', 'trachybazalt, bazanit', '', 'Litoměřice', 'Třebenice'),
 (92, 'Radobýl', 399, 50.5304, 14.0933, 85, '3,3 km → Plešivec', 'čedič', 'Labe', 'Litoměřice', 'Litoměřice'),
-(93, 'Plešivec (Děkovka)', 477, 50.4912, 13.9388, 0, '', '', '', 'Litoměřice', 'Děkovka'),
+(93, 'Plešivec', 477, 50.4912, 13.9388, 0, '', '', '', 'Litoměřice', 'Děkovka'),
 (94, 'Kalich', 535, 50.605, 14.2067, 99, '1,6 km → Panna', 'trachyt', 'Labe', 'Litoměřice', 'Třebušín'),
 (95, 'Děčínský Sněžník', 723, 50.7916, 14.1039, 151, '12,0 km → Jelení vrch', 'pískovec', 'Labe', 'Děčín', 'Děčín');
 
@@ -160,13 +160,13 @@ INSERT INTO `ids` (`id`, `idKey`) VALUES
 (23, '$2y$10$iTajhwDdY40Tp1JCaZpgVOSDEiCil/4yyAg71Um0h2d7kzPcctdgC'),
 (22, '$2y$10$btZJPUmgbfn2p1sdYYI8V.dagCPtXaCvCluiD8c.nvw9/TUM4FC96'),
 (21, '$2y$10$pvYott5aP2tJKg1QIz0gj.wFdxCwlhuWPmv/uHaei6ZST1KyJoxme'),
-(24, '$2y$10$IZQRnF9X3bYiyBmlYO4zQ..4vLiMTyVzStYftgfBoXV0mFY7OqXN6'),
+(24, '$2y$10$QpufVaeX4K4GWiRq2vQ3GOeS2WJqbqpIXP3QyKcXV5iRTaTEWps1e'),
 (25, '$2y$10$C6cIj5WdhMxhtTExvul0sOs8v.tevD5Yqz/EnIMgEQL5Ha7kM/Xzm'),
+(26, '$2y$10$7qMWq7sqQpNCtqXrwAnda.IH.27yMynOHp1vdVPnYtQa5rGAv5DiO'),
 (27, '$2y$10$UL8S1CR3QZEc.QTX8Ja41Ort9htBjCKqpLSma5PaYebJitIahl0im'),
-(26, '$2y$10$L5RO4lax2ONV0rhuk5TCG.3LpkmYCwlQPC3GPouUIcr6cNpZMk4.e'),
-(29, '$2y$10$nVV1saKMzbCl.QG1Cvj4kutxKaM3h5r9DK7.VWLskpqlpxr74po0S'),
-(30, '$2y$10$n9LvzcCi59B0WuI0TiTSS.R2f/tK6XKHEdbVkM.LIvlsxM8qQ7GvK'),
-(31, '$2y$10$gyqioOUD/w7XRcUmkhaZneg8xOqGy3KRigrbdc/f9oxUVrxXjpe3O');
+(29, '$2y$10$LJS6vY3tEJWzeYts6chOPu1THjhbyo/6Ub133pigC57JKg8t.ODiW'),
+(30, '$2y$10$wgzLxHdyb4tSBeu2G80yZ.q/Tk0ZVzPB9CNyHvcRKYxPgVHqo2krG'),
+(32, '$2y$10$XnyjmI9taoPEWvCxMJh7O.hNBHl1YictnjtFETxLFQfVbF2RG8R.O');
 
 -- --------------------------------------------------------
 
@@ -178,20 +178,22 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `login` char(60) NOT NULL,
   `pass` varchar(255) NOT NULL,
-  `wasHere` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL
+  `wasHere` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT '',
+  `registered` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `lastLogin` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `login`, `pass`, `wasHere`) VALUES
-(26, 'test', '$argon2id$v=19$m=65536,t=4,p=1$8IcMn4aCVZTou0SvzOyxew$E5B1s6gEPVPjOU511xWI34pfGSDMaRdPF+owOW9I/3M', ' 22, 0.3763486067733135, 79, 47, 67,'),
-(24, 'kubat', '$argon2id$v=19$m=65536,t=4,p=1$Sv7OV6Ex61ydqh7nco1kxw$MW0aVi7JrGB83DDTffrYfVYGsyIIYIYmWSkKarNIV1U', ' 0.5296870031929242, 46, 6, 84, 7, 72,'),
-(27, 'Talarius', '$argon2id$v=19$m=65536,t=4,p=1$q1KtnNTwIXUvtZTLDirrgA$xdQeJFsRxgXcfBNuY7pRId6b37XlNNgZd/59tPKufhI', ''),
-(28, 'Talarius', '$argon2id$v=19$m=65536,t=4,p=1$jRyoI7ReSG/pa1vaI+5/sA$G5D3HuP8p1jY1jgLJD6eXPFkq05DCGcayT6F0hhoqQo', ''),
-(30, 'picus', '$argon2id$v=19$m=65536,t=4,p=1$8NS3B+rzvqI1to1IVL5twA$r8OrvkU1Amz5fNRyEUqBy0b3/VxhqKbVppmpBLZxASU', ' 0.4786344317412152, 22, 4,'),
-(31, 'teo', '$argon2id$v=19$m=65536,t=4,p=1$ZnsB/EqdD1QFq3G8Ofco2Q$n9Rf79UXjLzvV7Zg0+YkgNKXwxN4X0vDlkcxy76rY0Q', '');
+INSERT INTO `users` (`id`, `login`, `pass`, `wasHere`, `registered`, `lastLogin`) VALUES
+(26, 'test', '$argon2id$v=19$m=65536,t=4,p=1$8IcMn4aCVZTou0SvzOyxew$E5B1s6gEPVPjOU511xWI34pfGSDMaRdPF+owOW9I/3M', ' 46, 0.06980102429015522, 6,', '2021-06-10 08:32:48', '2021-06-10 09:13:32'),
+(25, 'gay', '$argon2id$v=19$m=65536,t=4,p=1$CSQO5Nc35UzHmp3hfnGtHg$Ijb6fcR3s12UPLXDnk19s4g/729JYI+Wvwm+J/67RUw', '', '2021-06-10 08:32:48', NULL),
+(24, 'kubat', '$argon2id$v=19$m=65536,t=4,p=1$Sv7OV6Ex61ydqh7nco1kxw$MW0aVi7JrGB83DDTffrYfVYGsyIIYIYmWSkKarNIV1U', ' 0.5296870031929242, 46, 6, 84, 7, 72,', '2021-06-10 08:32:48', NULL),
+(27, 'Talarius', '$argon2id$v=19$m=65536,t=4,p=1$q1KtnNTwIXUvtZTLDirrgA$xdQeJFsRxgXcfBNuY7pRId6b37XlNNgZd/59tPKufhI', '', '2021-06-10 08:32:48', NULL),
+(28, 'Talarius', '$argon2id$v=19$m=65536,t=4,p=1$jRyoI7ReSG/pa1vaI+5/sA$G5D3HuP8p1jY1jgLJD6eXPFkq05DCGcayT6F0hhoqQo', '', '2021-06-10 08:32:48', NULL),
+(60, 'registered', '$argon2id$v=19$m=65536,t=4,p=1$ZnhxZ3JOWTJTRWdrT1BIYw$YMS4te0hE3O06JiCSPJUOTvxij9SlRHttQob+a92vUs', '', '2021-06-10 08:33:08', NULL);
 
 --
 -- Indexes for dumped tables
@@ -223,7 +225,7 @@ ALTER TABLE `hills`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
