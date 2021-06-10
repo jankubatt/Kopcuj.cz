@@ -36,7 +36,7 @@ body {
     position: fixed;
     height: 100%;
     overflow: auto;
-    z-index: 10;
+    z-index: 2;
 }
 
 #btnSidebar {

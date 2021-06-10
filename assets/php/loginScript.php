@@ -33,6 +33,10 @@ if ($result->num_rows > 0) {
 
 if (password_verify($pwd_peppered, $pwd_hashed)) {
     setcookie("id", $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
+    date_default_timezone_set('Europe/Prague');
+    $date=date("Y-m-d H:i:s");
+    $sql = "UPDATE users SET lastLogin=now() WHERE login='$login'";
+    mysqli_query($conn, $sql);
     echo "OK";
 }
 ?>

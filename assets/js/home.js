@@ -82,7 +82,9 @@ map.getSignals().addListener(window, "marker-click", function(e) {
 
     for (let i = 0; i < markers.length; i++) {
         if (markers[i]._id == id) {
+            console.log(SetSidebarText(markers[i]));
             $("#sidebarContent").html(SetSidebarText(markers[i]));
+            $("#sidebarContentAll").show();
             if($(".sidebar").width() == 50) 
                 $(".sidebar").animate({width: '300px'}, 100, function () {
                     $("#sidebarContent").show();
@@ -196,11 +198,6 @@ function search() {
             for (let i = 0; i < markers.length; i++) {
                 if (markers[i]._id == id) {
                     $("#sidebarContent").html(SetSidebarText(markers[i]));
-                    if($(".sidebar").width() == 50) 
-                        $(".sidebar").animate({width: '300px'}, 100, function () {
-                            $("#sidebarContent").show();
-                            $("#btnSidebar").html(`<i class="fas fa-angle-double-left fa-2x"></i>`);
-                        });
                     break;
                 }
             }
