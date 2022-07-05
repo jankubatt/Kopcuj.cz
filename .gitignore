@@ -1,2 +1,4 @@
 .idea
 .code
+node_modules
+config/default.json
