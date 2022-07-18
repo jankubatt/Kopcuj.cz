@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Load hill model
-const Hill = require('../../models/hill');
+const Hill = require('../../models/Hill');
 
 // @route GET api/hills/test
 // @description tests hills route

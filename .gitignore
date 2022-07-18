@@ -1,4 +1,4 @@
 .idea
 .code
 node_modules
-config/default.json
+backend/config/default.json
