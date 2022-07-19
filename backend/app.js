@@ -6,6 +6,7 @@ var cors = require('cors');
 
 // routes
 const hills = require('./routes/api/hills');
+const users = require('./routes/api/users');
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => res.send('Hello world!'));
 
 // use Routes
 app.use('/api/hills', hills);
+app.use('/api/users', users);
 
 const port = process.env.PORT || 8082;
 
