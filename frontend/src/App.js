@@ -4,13 +4,14 @@ import './App.css';
 
 import Register from "./pages/register";
 import Login from "./pages/login";
+import Profile from "./pages/profile";
 
 class App extends Component {
     render() {
         return (
             <Router>
                 <Routes>
-                    <Route exact path='/'/>
+                    <Route exact path='/' element={<Profile/>}/>
                     <Route path='/register' element={<Register/>}/>
                     <Route path='/login' element={<Login/>}/>
                 </Routes>
