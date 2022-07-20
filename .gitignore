@@ -1,0 +1,4 @@
+.idea
+.code
+node_modules
+backend/config/default.json
