@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import Cookies from 'js-cookie';
+import pfp from "../components/pfp.jpeg"
 
 axios.defaults.withCredentials = true;
 
@@ -25,10 +26,16 @@ function Profile() {
 
     return (
         <>
-            <h1>{user.name}</h1>
-            <p>
-                {JSON.stringify(user)}
-            </p>
+            <div className={"container text-center"}>
+                <img src={pfp} alt={"profile"} className={"pfp mt-5"}/>
+
+                <h1 className={"mt-5"}>{(user.name) ? user.name : user.login}</h1>
+                <small className={"text-muted"}>{user.email}</small>
+
+                <p className={"mt-5 align-left text-left w-50 text-"}>
+                    {user.description}
+                </p>
+            </div>
         </>
     )
 }
