@@ -4,14 +4,14 @@ import './App.css';
 
 import Register from "./pages/register";
 import Login from "./pages/login";
-import Profile from "./pages/profile";
+import Map from "./pages/map";
 
 class App extends Component {
     render() {
         return (
             <Router>
                 <Routes>
-                    <Route exact path='/' element={<Profile/>}/>
+                    <Route exact path='/' element={<Map/>}/>
                     <Route path='/register' element={<Register/>}/>
                     <Route path='/login' element={<Login/>}/>
                 </Routes>
