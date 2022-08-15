@@ -1,14 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
-import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Sidebar from "../components/Sidebar";
+import Map from "../components/Map";
 
 axios.defaults.withCredentials = true;
 
 function Login() {
     const [hills, getHills] = useState([]);
-    let hill = {name: "ahj"};
+    const [hill, setHill] = useState({name: 'ahoj'});
+    const [isMapLoaded, setMapLoaded] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -18,32 +19,63 @@ function Login() {
         fetchData()
             .then((res) => {
                 getHills(res)
-                hill = hills[0];
             })
             .catch((e) => {
                 console.log(e.message)
             })
     }, [])
 
+    // Pokud ještě nebyl script tag vložen
+    if (!document.getElementById("map-loader-script")) {
+        // Vytvoříme script tag s odkazem na SMap API
+        const script = document.createElement("script");
+        script.src = "https://api.mapy.cz/loader.js";
+        script.id = "map-loader-script";
+
+        // Po načtení scriptu nastavíme callback
+        script.onLoad = () => {
+            // Nastavíme asynchronní zpracování
+            window.Loader.async = true;
+            // Po načtení map nastavíme state a vykreslíme mapu
+            window.Loader.load(
+                null,
+                null,
+                setMapLoaded(true)
+            );
+        };
+        // Script tag přidáme do hlavičky
+        document.head.append(script);
+    }
+
+    const Map = () => {
+        let map = null;
+
+        map = new window.SMap(
+            JAK.gel("map"),
+            // Vysvětlení metody fromWGS84 je níže v sekci "Práce se souřadnicemi"
+            SMap.Coords.fromWGS84(50, 14),
+            9,
+        );
+        // Přidáme výchozí vrstvu a zapneme jí
+        map.addDefaultLayer(window.SMap.DEF_BASE).enable();
+
+        return (
+            <div id="map"/>
+        )
+    };
+
+    const changeHill = (e) => {
+        console.log(e);
+    }
+
     return (
         <>
             <Sidebar hill={hill}/>
 
-            <Map height={"100vh"} center={{lat: 50.555, lng: 13.931666666666667}}>
-                <KeyboardControl/>
-                <ZoomControl/>
-                <MouseControl zoom={true} pan={true} wheel={true}/>
-                <MarkerLayer>
-                    {
-                        hills.map((hill) =>
-                            <Marker key={hill._id}
-                                    options={{title: hill.name, url: "https://api.mapy.cz/img/api/marker/drop-red.png"}}
-                                    coords={{lat: hill.lat, lng: hill.lon}}
-                            />
-                        )
-                    }
-                </MarkerLayer>
-            </Map>
+            {isMapLoaded
+                ? <p>Loading...</p>
+                : <Map/>
+            }
         </>
     )
 }

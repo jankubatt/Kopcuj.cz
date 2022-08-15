@@ -26,3 +26,7 @@
     border-right: 1px solid black;
     text-align: center;
 }
+
+#mapa > img {
+    max-width: none;
+}
