@@ -52,7 +52,7 @@ router.post("/login", (req, res) => {
                 const token = crypto.randomUUID();
                 User.updateOne({"_id": user.id}, {$set: {"authToken": token, "date_lastLogin": Date.now()}}).then();
 
-                res.cookie("authToken", token, {maxAge: 1000 * 3600 * 24});
+                res.cookie("authToken", token, {maxAge: 1000 * 3600 * 24, sameSite: false});
                 res.send("/").status(200);
             } else {
                 res.sendStatus(400);

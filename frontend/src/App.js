@@ -4,6 +4,7 @@ import './App.css';
 import MapPage from "./pages/map";
 import RegisterPage from "./pages/register";
 import LoginPage from "./pages/login";
+import ProfilePage from "./pages/profile";
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
                 <Route exact path='/' element={<MapPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/login' element={<LoginPage/>}/>
+                <Route path='/profile' element={<ProfilePage/>}/>
             </Routes>
         </Router>
     );
