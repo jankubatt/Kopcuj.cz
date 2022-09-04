@@ -10,8 +10,22 @@
     right: 0.25em;
 }
 
+.btnHill {
+    width: 3em;
+    height: 3em;
+    z-index: 2;
+    position: relative;
+    background: green;
+    border-radius: 10%;
+    bottom: 3.25em;
+}
+
 .btnProfile > * {
     padding: 33%;
+}
+
+a, a:hover {
+    color: inherit;
 }
 
 body {

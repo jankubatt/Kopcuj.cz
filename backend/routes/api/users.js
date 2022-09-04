@@ -18,7 +18,7 @@ router.get("/checkEmail/:email", (req, res) => {
         .catch(() => res.status(404).json({error: 'No user found'}));
 });
 
-//gets user by id
+//gets user by authToken
 router.get("/token/:auth", (req, res) => {
     User.findOne({"authToken": req.params.auth})
         .then(user => res.json(user))
@@ -61,6 +61,14 @@ router.post("/login", (req, res) => {
     }).catch(() => {
         res.sendStatus(400);
     })
+});
+
+router.get('/addHill/:authToken/:hillId', (req, res) => {
+    console.log('req backend');
+    User.updateOne({authToken: req.params.authToken}, {$push: {hills: req.params.hillId}}).then(() => {
+        res.redirect('http://localhost:3000/');
+    });
+
 });
 
 module.exports = router;
