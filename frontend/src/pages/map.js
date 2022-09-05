@@ -2,16 +2,14 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Cookies from 'js-cookie';
 
 axios.defaults.withCredentials = true;
 
 function MapPage() {
     const [hills, getHills] = useState([]);
-    const [user, getUser] = useState([]);
-    const [windowSize, setWindowSize] = useState(getWindowSize());
-    let isClimbed = false;
+    const [user, setUser] = useState([]);
+    const [currentHill, setCurrentHill] = useState();
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -27,6 +25,7 @@ function MapPage() {
         fetchData()
             .then((res) => {
                 getHills(res)
+                setCurrentHill(hills[0]);
             })
             .catch((e) => {
                 console.log(e.message)
@@ -40,92 +39,38 @@ function MapPage() {
         }
         fetchData()
             .then((res) => {
-                getUser(res)
+                setUser(res)
             })
             .catch((e) => {
                 console.log(e.message)
             })
     }, [])
 
-    useEffect(() => {
-        function handleWindowResize() {
-            setWindowSize(getWindowSize());
-        }
+    async function mapClicked(e) {
+        let hillName = e.target.title;
+        const hill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
+        console.log(hill.data[0])
+        setCurrentHill(hill.data[0]);
+    }
 
-        window.addEventListener('resize', handleWindowResize);
-
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-    }, []);
-
+    // noinspection JSValidateTypes
     return (
         <>
-            <Map className={'map'} height={"100vh"} center={{lat: 50.555, lng: 13.931}} zoom={14}>
-                <KeyboardControl/>
-                <ZoomControl/>
-                <MouseControl zoom={true} pan={true} wheel={true}/>
-                <MarkerLayer>
-                    {hills.map((hill) => <><Marker key={hill._id} coords={{lat: hill.lat, lng: hill.lon}} card={{
-                        header: () => <>
-                            <h1 className={'d-inline'}>{hill.name}</h1>
-                            <p className={'float-end d-inline'}>{hill.elevation}m</p>
-                        </>,
+            <div onClick={mapClicked}>
+                <Map className={'map'} height={"100vh"} center={{lat: 50.555, lng: 13.931}} zoom={14}>
+                    <KeyboardControl/>
+                    <ZoomControl/>
+                    <MouseControl zoom={true} pan={true} wheel={true}/>
+                    <MarkerLayer>
+                        {hills.map((hill) => <Marker key={hill._id} options={{title: hill.name}}
+                                                     coords={{lat: hill.lat, lng: hill.lon}}/>)}
+                    </MarkerLayer>
+                </Map>
+            </div>
 
-                        body: () => <>
-                            <p>Zeměpisná šířka: {hill.lat}<br/>
-                                Zeměpisná délka: {hill.lon}<br/>
-                                Prominence: {hill.prominence}<br/>
-                                Izolace: {hill.isolation}<br/>
-                                Materiál: {hill.material}<br/>
-                                Povodí: {hill.basin}</p>
 
-                            <hr/>
-
-                            {user.hills.map((climbedHill) => {
-                                console.log(climbedHill)
-                                if (climbedHill === hill._id) {
-                                    <a>Pokoreno</a>
-                                } else {
-                                    <a href={`http://localhost:8082/api/users/addHill/${authToken}/${hill._id}`}>Pokorit</a>
-                                }
-                            })}
-
-                            <hr/>
-
-                            <p>Rating</p>
-                            <p>Komentáře</p>
-                        </>,
-
-                        footer: () => <>
-                            <small className={'text-muted'}>{hill.location}</small>
-                            <small className={'text-muted float-end'}>{hill.district}</small>
-                        </>,
-                        options: {
-                            width: windowSize.innerWidth / 2,
-                            height: windowSize.innerHeight / 2,
-                        }
-                    }}>
-                        <button className={'btnHill'} onClick={() => {
-                            console.log('pica');
-                        }}>Pokorit
-                        </button>
-                    </Marker></>)}
-                </MarkerLayer>
-            </Map>
-
-            <a href={'/profile'}>
-                <div className={'btnProfile'}>
-                    <FontAwesomeIcon icon="fa-solid fa-user fa-xs"/>
-                </div>
-            </a>
         </>
     )
-}
-
-function getWindowSize() {
-    const {innerWidth, innerHeight} = window;
-    return {innerWidth, innerHeight};
 }
 
 export default MapPage;

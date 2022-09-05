@@ -10,14 +10,12 @@
     right: 0.25em;
 }
 
-.btnHill {
-    width: 3em;
-    height: 3em;
-    z-index: 2;
+#hillPage {
     position: relative;
-    background: green;
-    border-radius: 10%;
-    bottom: 3.25em;
+    z-index: 1000;
+    height: 100vh;
+    width: 100vw;
+    background: black;
 }
 
 .btnProfile > * {
@@ -31,4 +29,12 @@ a, a:hover {
 body {
     overflow-y: hidden;
     overflow-x: hidden;
+}
+
+.sidebar {
+    width: 20vw;
+    height: 100%;
+    position: relative;
+    z-index: 20;
+    background-color: white;
 }
