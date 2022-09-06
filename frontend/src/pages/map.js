@@ -3,6 +3,7 @@ import '../App.css';
 import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
+import Sidebar from "../components/Sidebar";
 
 axios.defaults.withCredentials = true;
 
@@ -10,10 +11,11 @@ function MapPage() {
     const [hills, getHills] = useState([]);
     const [user, setUser] = useState([]);
     const [currentHill, setCurrentHill] = useState();
+    const [center, setCenter] = useState(true)
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
-    if (authToken === '') {
+    if (authToken === '' || authToken === undefined || authToken === null) {
         document.location.replace(document.location + 'login');
     }
 
@@ -22,6 +24,8 @@ function MapPage() {
             const response = await axios.get('http://localhost:8082/api/hills/');
             return response.data;
         }
+        setCenter(true)
+        console.log(center)
         fetchData()
             .then((res) => {
                 getHills(res)
@@ -47,17 +51,22 @@ function MapPage() {
     }, [])
 
     async function mapClicked(e) {
-        let hillName = e.target.title;
-        const hill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
-        console.log(hill.data[0])
-        setCurrentHill(hill.data[0]);
+        setCenter(false)
+        if (e.target.toString() === '[object HTMLImageElement]') {
+            let hillName = e.target.title;
+            const hill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
+
+            await setCurrentHill(hill.data[0]);
+        }
     }
 
     // noinspection JSValidateTypes
     return (
         <>
-            <div onClick={mapClicked}>
-                <Map className={'map'} height={"100vh"} center={{lat: 50.555, lng: 13.931}} zoom={14}>
+            <Sidebar hill={currentHill}></Sidebar>
+
+            <div className={"clickMap"} onClick={mapClicked}>
+                <Map className={'map'} height={"100vh"} center={center ? {lat: 50.555, lng: 13.931} : null} zoom={14}>
                     <KeyboardControl/>
                     <ZoomControl/>
                     <MouseControl zoom={true} pan={true} wheel={true}/>
@@ -67,8 +76,6 @@ function MapPage() {
                     </MarkerLayer>
                 </Map>
             </div>
-
-
         </>
     )
 }

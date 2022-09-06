@@ -10,12 +10,12 @@
     right: 0.25em;
 }
 
-#hillPage {
-    position: relative;
-    z-index: 1000;
-    height: 100vh;
-    width: 100vw;
-    background: black;
+.map {
+    z-index: -999;
+}
+
+.clickMap {
+    z-index: -999;
 }
 
 .btnProfile > * {
@@ -27,14 +27,14 @@ a, a:hover {
 }
 
 body {
-    overflow-y: hidden;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .sidebar {
     width: 20vw;
     height: 100%;
-    position: relative;
-    z-index: 20;
-    background-color: white;
+    z-index: 999;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.75);
+    left: 0;
 }

@@ -3,9 +3,9 @@ import '../App.css';
 
 const Sidebar = (props) => {
     const hill = props.hill;
-    console.log(props)
+
     return (
-        <div className={'sidebar'}>
+        <>{props.hill && <div className={'sidebar'}>
             <div className={'hill'}>
                 {hill.name}<br/>
                 {hill.elevation}<br/>
@@ -23,7 +23,7 @@ const Sidebar = (props) => {
                 <div className={'button'}><a href="">Profile</a></div>
                 <div className={'button'}><a href="">Collapse</a></div>
             </div>
-        </div>
+        </div>}</>
     )
 };
 
