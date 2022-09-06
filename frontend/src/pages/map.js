@@ -12,6 +12,7 @@ function MapPage() {
     const [user, setUser] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [center, setCenter] = useState(true)
+    const [climbed, setClimbed] = useState(false);
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -54,16 +55,26 @@ function MapPage() {
         setCenter(false)
         if (e.target.toString() === '[object HTMLImageElement]') {
             let hillName = e.target.title;
-            const hill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
+            const clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
 
-            await setCurrentHill(hill.data[0]);
+            user.hills.map((hill) => {
+                if (hill._id === clickedHill.data[0]._id) {
+                    setClimbed(true);
+                } else {
+                    setClimbed(false);
+                }
+
+                console.log(climbed);
+            })
+
+            await setCurrentHill(clickedHill.data[0]);
         }
     }
 
     // noinspection JSValidateTypes
     return (
         <>
-            <Sidebar hill={currentHill}></Sidebar>
+            <Sidebar hill={currentHill} climbed={climbed}></Sidebar>
 
             <div className={"clickMap"} onClick={mapClicked}>
                 <Map className={'map'} height={"100vh"} center={center ? {lat: 50.555, lng: 13.931} : null} zoom={14}>

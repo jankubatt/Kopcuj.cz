@@ -63,9 +63,9 @@ router.post("/login", (req, res) => {
     })
 });
 
-router.get('/addHill/:authToken/:hillId', (req, res) => {
+router.post('/addHill', (req, res) => {
     console.log('req backend');
-    User.updateOne({authToken: req.params.authToken}, {$push: {hills: req.params.hillId}}).then(() => {
+    User.updateOne({authToken: req.body.authToken}, {$push: {hills: req.body.hillId}}).then(() => {
         res.redirect('http://localhost:3000/');
     });
 
