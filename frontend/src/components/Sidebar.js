@@ -28,9 +28,9 @@ const Sidebar = (props) => {
                 {hill.location}<br/>
             </div>
 
-            //TODO: HERE OPRAV
-            {props.climbed ?
-                <button type="button" className="btn btn-success" onClick={addHill}>Pokořit</button> : null}
+            {!props.climbed ?
+                <button type="button" className="btn btn-success" onClick={addHill}>Pokořit</button> :
+                <button type="button" className="btn btn-success" disabled>Pokořeno</button>}
 
             <div className={'bottom'}>
                 <button type="button" className="btn btn-primary"><a href="">Settings</a></button>

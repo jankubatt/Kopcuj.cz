@@ -12,7 +12,7 @@ function MapPage() {
     const [user, setUser] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [center, setCenter] = useState(true)
-    const [climbed, setClimbed] = useState(false);
+    const [climbed, setClimbed] = useState(true);
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -52,20 +52,29 @@ function MapPage() {
     }, [])
 
     async function mapClicked(e) {
-        setCenter(false)
+        setCenter(false);
+        setClimbed(true);
+        let counter = 0;
         if (e.target.toString() === '[object HTMLImageElement]') {
             let hillName = e.target.title;
             const clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
 
-            user.hills.map((hill) => {
-                if (hill._id === clickedHill.data[0]._id) {
-                    setClimbed(true);
-                } else {
-                    setClimbed(false);
-                }
+            {
+                user.hills
+                    .filter(hill => {
+                        return (
+                            hill === clickedHill.data[0]._id
+                        );
+                    })
+                    .map(() => {
+                        setClimbed(true);
+                        counter++;
+                    })
+            }
 
-                console.log(climbed);
-            })
+            if (counter === 0) {
+                setClimbed(false);
+            }
 
             await setCurrentHill(clickedHill.data[0]);
         }
