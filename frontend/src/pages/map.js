@@ -20,14 +20,19 @@ function MapPage() {
         document.location.replace(document.location + 'login');
     }
 
+    const fetchUser = async () => {
+        const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
+        return response.data;
+    }
+
+    const fetchHills = async () => {
+        const response = await axios.get('http://localhost:8082/api/hills/');
+        return response.data;
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get('http://localhost:8082/api/hills/');
-            return response.data;
-        }
         setCenter(true)
-        console.log(center)
-        fetchData()
+        fetchHills()
             .then((res) => {
                 getHills(res)
                 setCurrentHill(hills[0]);
@@ -35,14 +40,8 @@ function MapPage() {
             .catch((e) => {
                 console.log(e.message)
             })
-    }, [])
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
-            return response.data;
-        }
-        fetchData()
+        fetchUser()
             .then((res) => {
                 setUser(res)
             })
@@ -52,10 +51,9 @@ function MapPage() {
     }, [])
 
     async function mapClicked(e) {
-        setCenter(false);
-        setClimbed(true);
-        let counter = 0;
         if (e.target.toString() === '[object HTMLImageElement]') {
+            setCenter(false);
+            setClimbed(false);
             let hillName = e.target.title;
             const clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
 
@@ -68,13 +66,16 @@ function MapPage() {
                     })
                     .map(() => {
                         setClimbed(true);
-                        counter++;
                     })
             }
 
-            if (counter === 0) {
-                setClimbed(false);
-            }
+            fetchUser()
+                .then((res) => {
+                    setUser(res)
+                })
+                .catch((e) => {
+                    console.log(e.message)
+                })
 
             await setCurrentHill(clickedHill.data[0]);
         }

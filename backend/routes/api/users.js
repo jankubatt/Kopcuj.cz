@@ -66,7 +66,7 @@ router.post("/login", (req, res) => {
 router.post('/addHill', (req, res) => {
     console.log('req backend');
     User.updateOne({authToken: req.body.authToken}, {$push: {hills: req.body.hillId}}).then(() => {
-        res.redirect('http://localhost:3000/');
+        res.sendStatus(200);
     });
 
 });

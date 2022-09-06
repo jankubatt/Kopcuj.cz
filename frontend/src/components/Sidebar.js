@@ -28,13 +28,15 @@ const Sidebar = (props) => {
                 {hill.location}<br/>
             </div>
 
-            {!props.climbed ?
-                <button type="button" className="btn btn-success" onClick={addHill}>Pokořit</button> :
-                <button type="button" className="btn btn-success" disabled>Pokořeno</button>}
+            <button id={'btnClaimHill'} type="button" className="btn btn-success" onClick={addHill}
+                    disabled={props.climbed}>Pokořit
+            </button>
 
             <div className={'bottom'}>
                 <button type="button" className="btn btn-primary"><a href="">Settings</a></button>
-                <button type="button" className="btn btn-primary"><a href="/profile">Profile</a></button>
+                <a href="/profile">
+                    <button type="button" className="btn btn-primary">Profile</button>
+                </a>
                 <button type="button" className="btn btn-primary"><a href="">Collapse</a></button>
             </div>
         </div>}</>

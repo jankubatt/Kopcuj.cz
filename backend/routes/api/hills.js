@@ -5,7 +5,7 @@ const router = express.Router();
 const Hill = require('../../models/Hill');
 
 router.get('/', (req, res) => {
-    Hill.find()
+    Hill.distinct('_id')
         .then(hills => res.json(hills))
         .catch(err => res.status(404).json(err));
 });
