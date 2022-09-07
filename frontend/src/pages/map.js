@@ -4,6 +4,7 @@ import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
 import Sidebar from "../components/Sidebar";
+import '../Map.css';
 
 axios.defaults.withCredentials = true;
 
@@ -85,6 +86,10 @@ function MapPage() {
     return (
         <>
             <Sidebar hill={currentHill} climbed={climbed}></Sidebar>
+
+            {user.isAdmin ? <a href={'/admin'}>
+                <button type="button" className="btn btn-success btnAdmin">Admin</button>
+            </a> : null}
 
             <div className={"clickMap"} onClick={mapClicked}>
                 <Map className={'map'} height={"100vh"} center={center ? {lat: 50.555, lng: 13.931} : null} zoom={14}>

@@ -4,6 +4,12 @@ const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const crypto = require("crypto");
 
+router.get("/", (req, res) => {
+    User.find()
+        .then(users => res.json(users))
+        .catch(() => res.status(404).json({error: 'No user found'}));
+});
+
 //gets user by name
 router.get("/checkName/:name", (req, res) => {
     User.findOne({login: req.params.name})
