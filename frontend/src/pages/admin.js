@@ -8,7 +8,6 @@ axios.defaults.withCredentials = true;
 function AdminPage() {
     const [users, getUsers] = useState([]);
     const [hills, getHills] = useState([]);
-    const [open, setOpen] = useState(false);
 
     const fetchUsers = async () => {
         const response = await axios.get('http://localhost:8082/api/users/');
@@ -40,7 +39,7 @@ function AdminPage() {
 
     return (
         <>
-            <div className={'container'}>
+            <div className={'container-fluid'}>
                 <table className="table table-sm">
                     <thead>
                     <tr>
@@ -61,26 +60,55 @@ function AdminPage() {
                     <tbody>
                     {users?.map((user) => {
                         return (<>
-                            <tr key={user.login} id={user.login}>
+                            <tr key={user.login}>
                                 <td>{user._id}</td>
                                 <td>{user.login}</td>
                                 <td>{user.email}</td>
                                 <td>{user.name}</td>
-                                <td>{user.description}</td>
+                                <td><a className="btn btn-primary" data-bs-toggle="collapse"
+                                       href={`#${user.login}description`}
+                                       role="button" aria-expanded="false" aria-controls={`${user.login}description`}>
+                                    Description
+                                </a>
+                                    <div className="collapse" id={`${user.login}description`}>
+                                        {user.description}
+                                    </div>
+                                </td>
                                 <td>
                                     <a className="btn btn-primary" data-bs-toggle="collapse" href={`#${user.login}`}
                                        role="button" aria-expanded="false" aria-controls={user.login}>
-                                        Link with href
+                                        ({user.hills.length})
                                     </a>
                                     <div className="collapse" id={user.login}>
-                                        <div className="card card-body">
-                                            Some placeholder content for the collapse component. This panel is hidden by
-                                            default but revealed when the user activates the relevant trigger.
-                                        </div>
+                                        {user.hills.map((hill) => {
+                                            return hill + '\n'
+                                        })}
                                     </div>
                                 </td>
-                                <td>{user.comments}</td>
-                                <td>{user.reviews}</td>
+                                <td>
+                                    <a className="btn btn-primary" data-bs-toggle="collapse"
+                                       href={`#${user.login}comment`}
+                                       role="button" aria-expanded="false" aria-controls={`${user.login}commment`}>
+                                        ({user.comments.length})
+                                    </a>
+                                    <div className="collapse" id={`${user.login}commment`}>
+                                        {user.comments.map((comment) => {
+                                            return comment + '\n'
+                                        })}
+                                    </div>
+                                </td>
+                                <td>
+                                    <a className="btn btn-primary" data-bs-toggle="collapse"
+                                       href={`#${user.login}reviews`}
+                                       role="button" aria-expanded="false" aria-controls={`${user.login}reviews`}>
+                                        ({user.reviews.length})
+                                    </a>
+                                    <div className="collapse" id={`${user.login}reviews`}>
+                                        {user.reviews.map((review) => {
+                                            return review + '\n'
+                                        })}
+                                    </div>
+                                </td>
                                 <td>
                                     <div style={{
                                         'backgroundColor': `${user.theme}`,
