@@ -85,7 +85,7 @@ function MapPage() {
     // noinspection JSValidateTypes
     return (
         <>
-            <Sidebar hill={currentHill} climbed={climbed}></Sidebar>
+            <Sidebar hill={currentHill} climbed={climbed} user={user}></Sidebar>
 
             {user.isAdmin ? <a href={'/admin'}>
                 <button type="button" className="btn btn-success btnAdmin">Admin</button>

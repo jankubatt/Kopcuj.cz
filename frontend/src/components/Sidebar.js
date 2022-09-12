@@ -2,14 +2,37 @@ import React from 'react';
 import '../App.css';
 import axios from "axios";
 import Cookies from "js-cookie";
+import {Rating} from "@mui/material";
 
 const Sidebar = (props) => {
     const hill = props.hill;
+    let hillRating = 0;
+
+    if (hill !== undefined) {
+        let value = 0;
+        hill?.rating.map((rating) => {
+            value += rating.stars;
+        })
+        hillRating = (value / hill.rating.length);
+    }
 
     async function addHill() {
         await axios.post('http://localhost:8082/api/users/addHill', {
             authToken: Cookies.get('authToken'),
             hillId: props.hill._id
+        });
+    }
+
+    function setRating(value) {
+        hillRating = value;
+        console.log(hillRating);
+    }
+
+    async function sendRating() {
+        await axios.post(`http://localhost:8082/api/hills/rate`, {
+            rating: hillRating,
+            hillId: props.hill._id,
+            userId: props.user._id
         });
     }
 
@@ -39,7 +62,18 @@ const Sidebar = (props) => {
                 </a>
                 <button type="button" className="btn btn-primary"><a href="">Collapse</a></button>
             </div>
-        </div>}</>
+
+            <hr/>
+
+            <h1>Rating</h1>
+            <div className={'rating'}>
+                <Rating name="size-large" defaultValue={hillRating} size="large" onChange={(event, newValue) => {
+                    setRating(newValue);
+                }}/>
+                <button type="button" className="btn btn-warning" onClick={sendRating}>Odeslat</button>
+            </div>
+        </div>
+        }</>
     )
 };
 

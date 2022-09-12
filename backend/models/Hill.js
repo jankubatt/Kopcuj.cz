@@ -31,6 +31,9 @@ const HillSchema = new mongoose.Schema({
     location: {
         type: String
     },
+    rating: {
+        type: Array
+    }
 });
 
 module.exports = Hill = mongoose.model('hill', HillSchema);
