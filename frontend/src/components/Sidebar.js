@@ -29,10 +29,11 @@ const Sidebar = (props) => {
     }
 
     async function sendRating() {
-        await axios.post(`http://localhost:8082/api/hills/rate`, {
-            rating: hillRating,
+        await axios.post(`http://localhost:8082/api/review/`, {
+            stars: hillRating,
             hillId: props.hill._id,
-            userId: props.user._id
+            userId: props.user._id,
+            text: null
         });
     }
 
@@ -61,6 +62,10 @@ const Sidebar = (props) => {
                     <button type="button" className="btn btn-primary">Profile</button>
                 </a>
                 <button type="button" className="btn btn-primary"><a href="">Collapse</a></button>
+
+                <hr/>
+
+
             </div>
 
             <hr/>
