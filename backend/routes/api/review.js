@@ -8,6 +8,10 @@ router.get('/', (req, res) => {
     res.sendStatus(200);
 })
 
+router.get('/:hillId', (req, res) => {
+    Review.find({id_hill: req.params.hillId}).then(hills => res.json(hills));
+})
+
 router.post('/', (req, res) => {
     Review.updateOne({id_user: req.body.userId, id_hill: req.body.hillId}, {
         $set: {

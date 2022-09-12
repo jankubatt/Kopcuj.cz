@@ -58,6 +58,10 @@ function MapPage() {
             let hillName = e.target.title;
             const clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
 
+            const hillReviews = await axios.get(`http://localhost:8082/api/review/${clickedHill.data[0]._id}`);
+            console.log(hillReviews.data)
+
+
             {
                 user.hills
                     .filter(hill => {

@@ -8,13 +8,6 @@ const Sidebar = (props) => {
     const hill = props.hill;
     let hillRating = 0;
 
-    if (hill !== undefined) {
-        let value = 0;
-        hill?.rating.map((rating) => {
-            value += rating.stars;
-        })
-        hillRating = (value / hill.rating.length);
-    }
 
     async function addHill() {
         await axios.post('http://localhost:8082/api/users/addHill', {
@@ -64,7 +57,6 @@ const Sidebar = (props) => {
                 <button type="button" className="btn btn-primary"><a href="">Collapse</a></button>
 
                 <hr/>
-
 
             </div>
 
