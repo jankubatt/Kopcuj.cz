@@ -22,6 +22,7 @@ function MapPage() {
     const [rating, setRating] = useState(0);
     const [txtArea, setTxtArea] = useState('none');
     const [text, setText] = useState(null);
+    const [allHillReviews, setAllHillReviews] = useState([])
     const [hillReviews, setHillReviews] = useState([])
 
     //Check if user is logged in. If not, redirect user to login page
@@ -59,6 +60,11 @@ function MapPage() {
         return response.data;
     }
 
+    const fetchReviews = async () => {
+        const response = await axios.get(`http://localhost:8082/api/review/`);
+        return response.data;
+    }
+
     const mapClicked = async (e) => {
         if (e.target.toString() === '[object HTMLImageElement]') {
             setCenter(false);
@@ -70,22 +76,22 @@ function MapPage() {
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
-            const response = await axios.get(`http://localhost:8082/api/review/${clickedHill._id}`);
-            setHillReviews(response.data);
+
+            let currentHillReviews = [];
             let starValue = 0;
-            hillReviews.map((review) => {
-                starValue += review.stars;
+            allHillReviews.map((review) => {
+                if (clickedHill._id === review.hillId) {
+                    starValue += review.stars;
+                    currentHillReviews.push(review);
+                }
             })
+            await setHillReviews(currentHillReviews);
             await setRating(Math.floor(starValue / hillReviews.length));
 
             user.hills.filter(hill => {
                 return (hill === clickedHill._id);
             }).map(() => {
                 setClimbed(true);
-            })
-
-            fetchUser().then((res) => {
-                setUser(res)
             })
 
             await setCurrentHill(clickedHill);
@@ -102,6 +108,10 @@ function MapPage() {
 
         fetchUser().then((res) => {
             setUser(res)
+        })
+
+        fetchReviews().then((res) => {
+            setAllHillReviews(res);
         })
     }, [])
 

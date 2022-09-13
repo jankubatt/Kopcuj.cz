@@ -5,7 +5,9 @@ const router = express.Router();
 const Review = require('../../models/Review');
 
 router.get('/', (req, res) => {
-    res.sendStatus(200);
+    Review.find()
+        .then(reviews => res.json(reviews))
+        .catch(err => res.status(404).json(err));
 })
 
 router.get('/:hillId', (req, res) => {
