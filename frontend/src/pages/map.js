@@ -4,17 +4,25 @@ import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
 import '../Map.css';
-import {Rating} from "@mui/material";
+import {Card, CardContent, Rating, Typography} from "@mui/material";
 
 axios.defaults.withCredentials = true;
 
 function MapPage() {
+    //Hill variables
     const [hills, getHills] = useState([]);
-    const [user, setUser] = useState([]);
     const [currentHill, setCurrentHill] = useState();
-    const [center, setCenter] = useState(true)
     const [climbed, setClimbed] = useState(true);
+
+    //Misc variables
+    const [center, setCenter] = useState(true)
+    const [user, setUser] = useState([]);
+
+    //Rating variables
     const [rating, setRating] = useState(0);
+    const [txtArea, setTxtArea] = useState('none');
+    const [text, setText] = useState(null);
+    const [hillReviews, setHillReviews] = useState([])
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -22,20 +30,23 @@ function MapPage() {
         document.location.replace(document.location + 'login');
     }
 
-    async function addHill() {
+    //Functions
+    const addHill = async () => {
         await axios.post('http://localhost:8082/api/users/addHill', {
             authToken: Cookies.get('authToken'),
             hillId: currentHill._id
         });
     }
 
-    async function sendRating() {
+    const sendRating = async () => {
         await axios.post(`http://localhost:8082/api/review/`, {
             stars: rating,
             hillId: currentHill._id,
             userId: user._id,
-            text: null
+            text: text
         });
+
+        setTxtArea('none')
     }
 
     const fetchUser = async () => {
@@ -48,64 +59,51 @@ function MapPage() {
         return response.data;
     }
 
-    useEffect(() => {
-        setCenter(true)
-        fetchHills()
-            .then((res) => {
-                getHills(res)
-                setCurrentHill(hills[0]);
-            })
-            .catch((e) => {
-                console.log(e.message)
-            })
-
-        fetchUser()
-            .then((res) => {
-                setUser(res)
-            })
-            .catch((e) => {
-                console.log(e.message)
-            })
-    }, [])
-
-    async function mapClicked(e) {
+    const mapClicked = async (e) => {
         if (e.target.toString() === '[object HTMLImageElement]') {
             setCenter(false);
             setClimbed(false);
+            setTxtArea('none')
+            setText(null);
+
             let hillName = e.target.title;
-            const clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
+            let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
+            clickedHill = clickedHill.data[0];
 
-            const hillReviews = await axios.get(`http://localhost:8082/api/review/${clickedHill.data[0]._id}`);
-            let starMath = 0;
-            hillReviews.data.map((review) => {
-                console.log(review.stars)
-                starMath += review.stars;
+            const response = await axios.get(`http://localhost:8082/api/review/${clickedHill._id}`);
+            setHillReviews(response.data);
+            let starValue = 0;
+            hillReviews.map((review) => {
+                starValue += review.stars;
             })
-            await setRating(Math.floor(starMath / hillReviews.data.length));
+            await setRating(Math.floor(starValue / hillReviews.length));
 
-            {
-                user.hills
-                    .filter(hill => {
-                        return (
-                            hill === clickedHill.data[0]._id
-                        );
-                    })
-                    .map(() => {
-                        setClimbed(true);
-                    })
-            }
+            user.hills.filter(hill => {
+                return (hill === clickedHill._id);
+            }).map(() => {
+                setClimbed(true);
+            })
 
-            fetchUser()
-                .then((res) => {
-                    setUser(res)
-                })
-                .catch((e) => {
-                    console.log(e.message)
-                })
+            fetchUser().then((res) => {
+                setUser(res)
+            })
 
-            await setCurrentHill(clickedHill.data[0]);
+            await setCurrentHill(clickedHill);
         }
     }
+
+    useEffect(() => {
+        setCenter(true)
+
+        fetchHills().then((res) => {
+            getHills(res)
+            setCurrentHill(hills[0]);
+        })
+
+        fetchUser().then((res) => {
+            setUser(res)
+        })
+    }, [])
 
     // noinspection JSValidateTypes
     return (
@@ -143,14 +141,25 @@ function MapPage() {
 
                 <h1>Rating</h1>
                 <div className={'rating'}>
-                    <Rating
-                        name="simple-controlled"
-                        value={rating}
-                        onChange={(event, newValue) => {
-                            setRating(newValue);
-                        }}
-                    />
+                    <Rating name="size-large simple-controlled" value={rating} onChange={(event, newValue) => {
+                        setRating(newValue);
+                        setTxtArea('block')
+                    }} size={'large'}/><br/>
                     <button type="button" className="btn btn-warning" onClick={sendRating}>Odeslat</button>
+                    <br/>
+                    <textarea style={{'width': '20vw', height: '20vh', display: txtArea}} onChange={(e) => {
+                        setText(e.target.value)
+                    }} value={text || ''}></textarea>
+
+
+                    {hillReviews.map((review) => <><Card>
+                        <CardContent>
+                            <Typography variant="body2">
+                                {review.text}
+                            </Typography>
+                        </CardContent>
+                    </Card><br/></>)}
+
                 </div>
             </div>
             }
