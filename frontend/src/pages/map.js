@@ -4,7 +4,7 @@ import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
 import '../Map.css';
-import {Card, CardContent, Rating, Typography} from "@mui/material";
+import {Card, CardContent, Chip, Rating, Typography} from "@mui/material";
 
 axios.defaults.withCredentials = true;
 
@@ -22,14 +22,31 @@ function MapPage() {
     const [rating, setRating] = useState(0);
     const [txtArea, setTxtArea] = useState('none');
     const [text, setText] = useState(null);
-    const [allHillReviews, setAllHillReviews] = useState([])
-    const [hillReviews, setHillReviews] = useState([])
+    const [allReviews, setAllReviews] = useState([])
+    const [reviews, setReviews] = useState([])
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
     if (authToken === '' || authToken === undefined || authToken === null) {
         document.location.replace(document.location + 'login');
     }
+
+    useEffect(() => {
+        setCenter(true)
+
+        fetchHills().then((res) => {
+            getHills(res)
+            setCurrentHill(hills[1]);
+        })
+
+        fetchUser().then((res) => {
+            setUser(res)
+        })
+
+        fetchReviews().then((res) => {
+            setAllReviews(res);
+        })
+    }, [])
 
     //Functions
     const addHill = async () => {
@@ -40,7 +57,7 @@ function MapPage() {
     }
 
     const sendRating = async () => {
-        await axios.post(`http://localhost:8082/api/review/`, {
+        await axios.post(`http://localhost:8082/api/review/addReview`, {
             stars: rating,
             hillId: currentHill._id,
             userId: user._id,
@@ -67,6 +84,7 @@ function MapPage() {
 
     const mapClicked = async (e) => {
         if (e.target.toString() === '[object HTMLImageElement]') {
+            setCurrentHill(undefined);
             setCenter(false);
             setClimbed(false);
             setTxtArea('none')
@@ -76,44 +94,28 @@ function MapPage() {
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
-
             let currentHillReviews = [];
             let starValue = 0;
-            allHillReviews.map((review) => {
-                if (clickedHill._id === review.hillId) {
+            allReviews?.forEach((review) => {
+                if (clickedHill._id === review.id_hill) {
                     starValue += review.stars;
+                    console.log(review.stars);
                     currentHillReviews.push(review);
                 }
             })
-            await setHillReviews(currentHillReviews);
-            await setRating(Math.floor(starValue / hillReviews.length));
+
+            await setReviews(currentHillReviews);
+            await setRating(Math.floor(starValue / reviews.length));
 
             user.hills.filter(hill => {
                 return (hill === clickedHill._id);
-            }).map(() => {
+            }).forEach(() => {
                 setClimbed(true);
             })
 
             await setCurrentHill(clickedHill);
         }
     }
-
-    useEffect(() => {
-        setCenter(true)
-
-        fetchHills().then((res) => {
-            getHills(res)
-            setCurrentHill(hills[0]);
-        })
-
-        fetchUser().then((res) => {
-            setUser(res)
-        })
-
-        fetchReviews().then((res) => {
-            setAllHillReviews(res);
-        })
-    }, [])
 
     // noinspection JSValidateTypes
     return (
@@ -137,11 +139,11 @@ function MapPage() {
                 </button>
 
                 <div className={'bottom'}>
-                    <button type="button" className="btn btn-primary"><a href="">Settings</a></button>
+                    <button type="button" className="btn btn-primary">Settings</button>
                     <a href="/profile">
                         <button type="button" className="btn btn-primary">Profile</button>
                     </a>
-                    <button type="button" className="btn btn-primary"><a href="">Collapse</a></button>
+                    <button type="button" className="btn btn-primary">Collapse</button>
 
                     <hr/>
 
@@ -151,7 +153,7 @@ function MapPage() {
 
                 <h1>Rating</h1>
                 <div className={'rating'}>
-                    <Rating name="size-large simple-controlled" value={rating} onChange={(event, newValue) => {
+                    <Rating name="size-large simple-controlled" value={rating || 0} onChange={(event, newValue) => {
                         setRating(newValue);
                         setTxtArea('block')
                     }} size={'large'}/><br/>
@@ -161,14 +163,18 @@ function MapPage() {
                         setText(e.target.value)
                     }} value={text || ''}></textarea>
 
+                    <br/>
 
-                    {hillReviews.map((review) => <><Card>
+                    {reviews.map((review) => ((review.text !== null) ? <><Card key={review._id}>
                         <CardContent>
+                            {review.user.name || review.user.login}
+                            {console.log(review.user.isAdmin)}
+                            {review.user.isAdmin ? <Chip label="Admin"/> : ''}
                             <Typography variant="body2">
                                 {review.text}
                             </Typography>
                         </CardContent>
-                    </Card><br/></>)}
+                    </Card><br/></> : ''))}
 
                 </div>
             </div>

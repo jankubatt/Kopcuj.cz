@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-
-// Load hill model
 const Review = require('../../models/Review');
+const User = require('../../models/User');
 
 router.get('/', (req, res) => {
     Review.find()
@@ -11,20 +10,30 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:hillId', (req, res) => {
-    Review.find({id_hill: req.params.hillId}).then(hills => res.json(hills));
+    Review.find({id_hill: req.params.hillId}).then(reviews => res.json(reviews));
 })
 
-router.post('/', (req, res) => {
-    Review.updateOne({id_user: req.body.userId, id_hill: req.body.hillId}, {
-        $set: {
-            id_user: req.body.userId,
-            id_hill: req.body.hillId,
-            stars: req.body.stars,
-            text: req.body.text
-        }
-    }, {upsert: true})
-        .then(res.status(200))
-        .catch(err => res.status(404).json(err));
+router.post('/addReview', (req, res) => {
+    User.findOne({_id: req.body.userId}).then((user) => {
+        console.log(user._id)
+        Review.updateOne({id_hill: req.body.hillId, id_user: req.body.userId}, {
+            $set: {
+                id_user: user._id,
+                user: {
+                    login: user.login,
+                    name: user.name,
+                    pfp: user.pfp,
+                    isAdmin: user.isAdmin
+                },
+                id_hill: req.body.hillId,
+                stars: req.body.stars,
+                text: req.body.text
+            }
+        }, {upsert: true}).then(() => console.log("succ")).catch((err) => {
+            console.log(err)
+        })
+    }).then(res.sendStatus(200))
+        .catch(res.status(404));
 });
 
 module.exports = router;

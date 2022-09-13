@@ -9,6 +9,27 @@ const ReviewSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    user: {
+        login: {
+            type: String,
+            required: true
+        },
+        name: {
+            type: String,
+            required: false,
+            default: null
+        },
+        pfp: {
+            type: String,
+            required: false,
+            default: null
+        },
+        isAdmin: {
+            type: String,
+            required: true,
+            default: false
+        },
+    },
     date_added: {
         type: Date,
         required: true,
