@@ -5,6 +5,7 @@ import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} fr
 import Cookies from 'js-cookie';
 import '../Map.css';
 import {Card, CardContent, Chip, Rating, Typography} from "@mui/material";
+import { fontSize } from '@mui/system';
 
 axios.defaults.withCredentials = true;
 
@@ -121,22 +122,26 @@ function MapPage() {
         }
     }
 
-    // noinspection JSValidateTypes
     return (
         <>
             {currentHill && <div className={'sidebar'}>
-                {console.log(currentHill)}
                 <div className={'hill'}>
-                    {currentHill.name}<br/>
-                    {currentHill.elevation}<br/>
-                    {currentHill.lat}<br/>
-                    {currentHill.lon}<br/>
-                    {currentHill.prominence}<br/>
-                    {currentHill.isolation}<br/>
-                    {currentHill.material}<br/>
-                    {currentHill.basin}<br/>
-                    {currentHill.district}<br/>
-                    {currentHill.location}<br/>
+                    <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
+                    <hr />
+
+                    <a className="btn btn-primary" data-bs-toggle="collapse" href='info' role="button" aria-expanded="false" aria-controls='info'>
+                        Informace
+                    </a>
+                    <div className="collapse" id='info'>
+                        {currentHill.lat}<br/>
+                        {currentHill.lon}<br/>
+                        {currentHill.prominence}<br/>
+                        {currentHill.isolation}<br/>
+                        {currentHill.material}<br/>
+                        {currentHill.basin}<br/>
+                        {currentHill.district}<br/>
+                        {currentHill.location}<br/>
+                    </div>
                 </div>
 
                 <button id={'btnClaimHill'} type="button" className="btn btn-success" onClick={addHill}
@@ -149,9 +154,6 @@ function MapPage() {
                         <button type="button" className="btn btn-primary">Profile</button>
                     </a>
                     <button type="button" className="btn btn-primary">Collapse</button>
-
-                    <hr/>
-
                 </div>
 
                 <hr/>
@@ -170,27 +172,27 @@ function MapPage() {
 
                     <br/>
                     
-                    
-                    {reviews?.map((review) => ((review.text !== null) ? <><Card className='card' key={review._id}>
-                        <CardContent>
-                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div>
-                                    <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
-                                    {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
+                    <div id='reviews'>
+                        {reviews?.map((review) => ((review.text !== null) ? <><Card className='card' key={review._id}>
+                            <CardContent>
+                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                    <div>
+                                        <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
+                                        {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
+                                    </div>
+                                    <div><Rating name="read-only" value={review.stars} readOnly /></div>
                                 </div>
-                                <div><Rating name="read-only" value={review.stars} readOnly /></div>
-                            </div>
 
-                            <div>
-                                {review.text}
-                            </div>
+                                <div>
+                                    {review.text}
+                                </div>
 
-                            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                                <div style={{color: 'GrayText'}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
-                            </div>
-                        </CardContent>
-                    </Card></> : ''))}
-
+                                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                    <div style={{color: 'GrayText'}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
+                                </div>
+                            </CardContent>
+                        </Card></> : ''))}
+                    </div>
                 </div>
             </div>
             }

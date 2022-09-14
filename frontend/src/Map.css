@@ -28,14 +28,41 @@ body {
 }
 
 .sidebar {
-    width: 30vw;
+    width: 27em;
     height: 100%;
     z-index: 999;
     position: absolute;
     background: rgba(255, 255, 255, 0.75);
     left: 0;
+    overflow-y: auto;
+    max-height: fit-content;
+    padding: 10px;
 }
 
 .hill {
     margin: 5px;
+}
+
+.card {
+    margin-top: 10px;
+}
+
+/* width */
+::-webkit-scrollbar {
+width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555; 
 }
