@@ -169,15 +169,25 @@ function MapPage() {
                     }} value={text || ''}></textarea>
 
                     <br/>
-
+                    
+                    
                     {reviews?.map((review) => ((review.text !== null) ? <><Card className='card' key={review._id}>
                         <CardContent>
-                            {review.user.name || review.user.login}&nbsp;
-                            {console.log(review.user.isAdmin)}
-                            {((review.user.isAdmin === true) ? <Chip color="error" label="Admin"/> : '')}
-                            <Typography variant="body2">
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <div>
+                                    <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
+                                    {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
+                                </div>
+                                <div><Rating name="read-only" value={review.stars} readOnly /></div>
+                            </div>
+
+                            <div>
                                 {review.text}
-                            </Typography>
+                            </div>
+
+                            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                <div style={{color: 'GrayText'}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
+                            </div>
                         </CardContent>
                     </Card></> : ''))}
 
