@@ -64,6 +64,10 @@ function MapPage() {
             text: text
         });
 
+        await fetchReviews().then((res) => {
+            setAllReviews(res); 
+        })
+
         setTxtArea('none')
     }
 
@@ -121,6 +125,7 @@ function MapPage() {
     return (
         <>
             {currentHill && <div className={'sidebar'}>
+                {console.log(currentHill)}
                 <div className={'hill'}>
                     {currentHill.name}<br/>
                     {currentHill.elevation}<br/>
@@ -165,16 +170,16 @@ function MapPage() {
 
                     <br/>
 
-                    {reviews.map((review) => ((review.text !== null) ? <><Card key={review._id}>
+                    {reviews?.map((review) => ((review.text !== null) ? <><Card className='card' key={review._id}>
                         <CardContent>
-                            {review.user.name || review.user.login}
+                            {review.user.name || review.user.login}&nbsp;
                             {console.log(review.user.isAdmin)}
-                            {review.user.isAdmin ? <Chip label="Admin"/> : ''}
+                            {((review.user.isAdmin === true) ? <Chip color="error" label="Admin"/> : '')}
                             <Typography variant="body2">
                                 {review.text}
                             </Typography>
                         </CardContent>
-                    </Card><br/></> : ''))}
+                    </Card></> : ''))}
 
                 </div>
             </div>

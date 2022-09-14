@@ -25,7 +25,7 @@ const ReviewSchema = new mongoose.Schema({
             default: null
         },
         isAdmin: {
-            type: String,
+            type: Boolean,
             required: true,
             default: false
         },
