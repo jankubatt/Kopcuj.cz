@@ -37,7 +37,7 @@ function MapPage() {
 
         fetchHills().then((res) => {
             getHills(res)
-            setCurrentHill(hills[1]);
+            setCurrentHill(hills[0]);
         })
 
         fetchUser().then((res) => {
@@ -48,6 +48,16 @@ function MapPage() {
             setAllReviews(res);
         })
     }, [])
+
+    useEffect(() => {
+        let starValue = 0;
+        allReviews?.forEach((review) => {
+            if (currentHill._id === review.id_hill) {
+                starValue += review.stars;
+            }
+        })
+        setRating(Math.floor(starValue / reviews.length));
+    }, [reviews])
 
     //Functions
     const addHill = async () => {
@@ -99,19 +109,6 @@ function MapPage() {
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
-            let currentHillReviews = [];
-            let starValue = 0;
-            allReviews?.forEach((review) => {
-                if (clickedHill._id === review.id_hill) {
-                    starValue += review.stars;
-                    console.log(review.stars);
-                    currentHillReviews.push(review);
-                }
-            })
-
-            await setReviews(currentHillReviews);
-            await setRating(Math.floor(starValue / reviews.length));
-
             user.hills.filter(hill => {
                 return (hill === clickedHill._id);
             }).forEach(() => {
@@ -119,11 +116,26 @@ function MapPage() {
             })
 
             await setCurrentHill(clickedHill);
+
+            let currentHillReviews = [];
+            
+            allReviews?.forEach((review) => {
+                if (clickedHill._id === review.id_hill) {
+                    currentHillReviews.push(review);
+                }
+            })
+            
+            setReviews(currentHillReviews);
         }
     }
 
     return (
         <>
+            {
+                (user === '' || user === undefined || user === null) ?
+                    document.location.replace(document.location + 'login') : null
+                
+            }
             {currentHill && <div className={'sidebar'}>
                 <div className={'hill'}>
                     <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
