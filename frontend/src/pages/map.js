@@ -4,8 +4,7 @@ import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
 import '../Map.css';
-import {Card, CardContent, Chip, Rating, Typography} from "@mui/material";
-import { fontSize } from '@mui/system';
+import {Card, CardContent, Chip, Rating} from "@mui/material";
 
 axios.defaults.withCredentials = true;
 
@@ -65,21 +64,16 @@ function MapPage() {
             setAllReviews(res);
 
             if (currentHill !== undefined) {
-                let a = []
-                let starValue = 0
+                let currentReviews = []
                 res.forEach((review) => {
                     if (review.id_hill === currentHill._id) {
-                        a.push(review);
-                        starValue += review.stars;
+                        currentReviews.push(review);
                     }
                 })
-                setReviews(a);
+                setReviews(currentReviews);
             }
-            
         })
-
-        
-    }, [btnReview]);
+    }, [btnReview, currentHill]);
 
     //Functions
     const addHill = async () => {
@@ -153,7 +147,6 @@ function MapPage() {
             {
                 (user === '' || user === undefined || user === null) ?
                     document.location.replace(document.location + 'login') : null
-                
             }
             {currentHill && <div className={'sidebar'}>
                 <div className={'hill'}>
@@ -195,16 +188,15 @@ function MapPage() {
                         setRating(newValue);
                         setTxtArea('block')
                     }} size={'large'}/><br/>
-                    <button type="button" className="btn btn-warning" onClick={sendRating}>Odeslat</button>
-                    <br/>
+
+                    <button type="button" className="btn btn-warning" onClick={sendRating}>Odeslat</button><br/>
+
                     <textarea style={{'width': '20vw', height: '20vh', display: txtArea}} onChange={(e) => {
                         setText(e.target.value)
-                    }} value={text || ''}></textarea>
-
-                    <br/>
+                    }} value={text || ''}></textarea><br/>
                     
                     <div id='reviews'>
-                        {reviews?.map((review) => ((review.text !== null) ? <><Card className='card' key={review._id}>
+                        {reviews?.map((review) => ((review.text !== null) ? <div key={review._id}><Card className='card'>
                             <CardContent>
                                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                     <div>
@@ -222,7 +214,7 @@ function MapPage() {
                                     <div style={{color: 'GrayText'}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
                                 </div>
                             </CardContent>
-                        </Card></> : ''))}
+                        </Card></div> : ''))}
                     </div>
                 </div>
             </div>
