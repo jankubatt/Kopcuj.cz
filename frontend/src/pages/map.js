@@ -25,6 +25,7 @@ function MapPage() {
     const [text, setText] = useState(null);
     const [allReviews, setAllReviews] = useState([])
     const [reviews, setReviews] = useState([])
+    const [btnReview, setBtnReview] = useState(false);
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -59,6 +60,27 @@ function MapPage() {
         setRating(Math.floor(starValue / reviews.length));
     }, [reviews])
 
+    useEffect(() => {
+        fetchReviews().then((res) => {
+            setAllReviews(res);
+
+            if (currentHill !== undefined) {
+                let a = []
+                let starValue = 0
+                res.forEach((review) => {
+                    if (review.id_hill === currentHill._id) {
+                        a.push(review);
+                        starValue += review.stars;
+                    }
+                })
+                setReviews(a);
+            }
+            
+        })
+
+        
+    }, [btnReview]);
+
     //Functions
     const addHill = async () => {
         await axios.post('http://localhost:8082/api/users/addHill', {
@@ -75,11 +97,8 @@ function MapPage() {
             text: text
         });
 
-        await fetchReviews().then((res) => {
-            setAllReviews(res); 
-        })
-
         setTxtArea('none')
+        setBtnReview(!btnReview);
     }
 
     const fetchUser = async () => {
@@ -115,7 +134,7 @@ function MapPage() {
                 setClimbed(true);
             })
 
-            await setCurrentHill(clickedHill);
+            setCurrentHill(clickedHill);
 
             let currentHillReviews = [];
             
