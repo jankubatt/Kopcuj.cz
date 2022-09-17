@@ -15,7 +15,6 @@ router.get('/:hillId', (req, res) => {
 
 router.post('/addReview', (req, res) => {
     User.findOne({_id: req.body.userId}).then((user) => {
-        console.log(user._id)
         Review.updateOne({id_hill: req.body.hillId, id_user: req.body.userId}, {
             $set: {
                 id_user: user._id,
@@ -27,9 +26,10 @@ router.post('/addReview', (req, res) => {
                 },
                 id_hill: req.body.hillId,
                 stars: req.body.stars,
-                text: req.body.text
+                text: req.body.text,
+                date_added: new Date()
             }
-        }, {upsert: true}).then(() => console.log("succ")).catch((err) => {
+        }, {upsert: true}).then().catch((err) => {
             console.log(err)
         })
     }).then(res.sendStatus(200))

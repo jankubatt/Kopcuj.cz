@@ -56,7 +56,7 @@ router.post("/login", (req, res) => {
         bcrypt.compare(req.body.pass, user.pass).then(function (result) {
             if (result) {
                 const token = crypto.randomUUID();
-                User.updateOne({"_id": user.id}, {$set: {"authToken": token, "date_lastLogin": Date.now()}}).then();
+                User.updateOne({"_id": user.id}, {$set: {"authToken": token, "date_lastLogin": new Date()}}).then();
 
                 res.cookie("authToken", token, {maxAge: 1000 * 3600 * 24, sameSite: false});
                 res.send("/").status(200);

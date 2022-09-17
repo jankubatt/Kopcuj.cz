@@ -1,0 +1,7 @@
+.dark-content {
+    background-color: #1a1a1a;
+}
+
+.dark-content > * {
+    color: white;
+}
