@@ -1,7 +1,17 @@
-.dark-content {
-    background-color: #1a1a1a;
+:root {
+    --c1: #114b5f;
+    --c2: #028090;
+    --c3: #e4fde1;
 }
 
-.dark-content > * {
+body {
+    background-color: var(--c3);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+button {
+    background-color: var(--c1);
     color: white;
+    width: 10em;
+    height: 3em;
 }

@@ -4,7 +4,6 @@ import '../Profile.css';
 import axios from "axios";
 import {Card, CardContent, Chip, Rating} from "@mui/material";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { ThemeContext, themes } from '../components/ThemeContext';
 
 axios.defaults.withCredentials = true;
 
@@ -55,22 +54,22 @@ function AdminPage() {
 
     return (
         <>
-            <div className={'container-fluid'}>
-            <ThemeContext.Consumer>
-            {({ changeTheme }) => (
-              <button
-                color="link"
-                onClick={() => {
-                  setDarkMode(!darkMode);
-                  changeTheme(darkMode ? themes.light : themes.dark);
-                  console.log('jsipica');
-                }}
-              >
-                <i className={darkMode ? 'fas fa-sun' : 'fas fa-moon'}></i>
-                <span className="d-lg-none d-md-block">Switch mode</span>
-              </button>
-            )}
-          </ThemeContext.Consumer>
+        <div className="container-fluid">
+    <div className="row flex-nowrap">
+        <div className="col-auto px-0">
+            <div id="sidebar" className="collapse collapse-horizontal show border-end">
+                <div id="sidebar-nav" className="list-group border-0 rounded-0 text-sm-center min-vh-100">
+                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-bootstrap"></i> <span>Uživatelé</span> </a>
+                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-film"></i> <span>Kopce</span></a>
+                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-heart"></i> <span>Statistiky</span></a>
+                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-bricks"></i> <span>Hodnocení</span></a>
+                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-clock"></i> <span>Diskuze</span></a>
+                </div>
+            </div>
+        </div>
+        <main className="col ps-md-2 pt-2">
+        <div className={'container-fluid'}>
+        <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" className="border rounded-3 p-1 text-decoration-none"><i className="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
                 <table className="table table-sm">
                     <thead>
                     <tr>
@@ -218,6 +217,9 @@ function AdminPage() {
                     </tbody>
                 </table>
             </div>
+        </main>
+    </div>
+</div>
         </>
     )
 }
