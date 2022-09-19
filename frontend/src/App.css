@@ -10,7 +10,7 @@ body {
 }
 
 button {
-    background-color: var(--c1);
+    background-color: var(--c2);
     color: white;
     width: 10em;
     height: 3em;

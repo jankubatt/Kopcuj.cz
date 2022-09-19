@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import '../App.css';
+import '../Login.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 
@@ -38,17 +39,21 @@ function LoginPage() {
 
 
     return (
-        <div className={"container-fluid"}>
+        <div className='wrapper'>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Uživatelské jméno</label>
-                <input onChange={handleChange} type="text" className={"form-control"} name={"username"}
-                       placeholder={"Uživatelské jméno"}/>
+                <div className='input'>
+                    <label htmlFor="username">Uživatelské jméno</label><br />
+                    <input onChange={handleChange} type="text" name={"username"}
+                        placeholder={"Uživatelské jméno"}/>
+                </div>
 
-                <label htmlFor="pass">Heslo</label>
-                <input onChange={handleChange} type="password" className={"form-control"} name={"pass"}
-                       placeholder={"Heslo"}/>
+                <div className='input'>
+                    <label htmlFor="pass">Heslo</label><br/>
+                    <input onChange={handleChange} type="password" name={"pass"}
+                        placeholder={"Heslo"}/>
+                </div>
 
-                <button type="submit" className="btn btn-primary">Přihlásit</button>
+                <button type="submit">Přihlásit</button>
             </form>
 
         </div>
