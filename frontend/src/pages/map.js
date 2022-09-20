@@ -153,10 +153,8 @@ function MapPage() {
                     <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
                     <hr />
 
-                    <a className="btn btn-primary" data-bs-toggle="collapse" href='info' role="button" aria-expanded="false" aria-controls='info'>
-                        Informace
-                    </a>
-                    <div className="collapse" id='info'>
+                    <h2>Informace</h2>
+                    <div>
                         {currentHill.lat}<br/>
                         {currentHill.lon}<br/>
                         {currentHill.prominence}<br/>
@@ -168,16 +166,10 @@ function MapPage() {
                     </div>
                 </div>
 
-                <button id={'btnClaimHill'} type="button" className="btn btn-success" onClick={addHill}
-                        disabled={climbed}>Pokořit
-                </button>
-
-                <div className={'bottom'}>
-                    <button type="button" className="btn btn-primary">Settings</button>
-                    <a href="/profile">
-                        <button type="button" className="btn btn-primary">Profile</button>
-                    </a>
-                    <button type="button" className="btn btn-primary">Collapse</button>
+                <div style={{textAlign: 'center'}}>
+                    <button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
+                            disabled={climbed}>Pokořit
+                    </button>
                 </div>
 
                 <hr/>
@@ -219,6 +211,16 @@ function MapPage() {
                 </div>
             </div>
             }
+
+            <div className={'bottom'}>
+                <div className='bottomItems'>
+                    <button type="button" className="btn">Settings</button>
+                    <a href="/profile"><button type="button" className="btn">Profile</button></a>
+                    <button type="button" className="btn">Collapse</button>
+                </div>
+            </div>
+            
+            
 
             {user.isAdmin ? <a href={'/admin'}>
                 <button type="button" className="btn btn-success btnAdmin">Admin</button>

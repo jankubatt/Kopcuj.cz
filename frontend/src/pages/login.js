@@ -53,7 +53,7 @@ function LoginPage() {
                         placeholder={"Heslo"}/>
                 </div>
 
-                <button type="submit">Přihlásit</button>
+                <button className='btn-hoverable' type="submit">Přihlásit</button>
             </form>
 
         </div>
