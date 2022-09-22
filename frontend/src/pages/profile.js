@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
-import '../Profile.css';
 import axios from "axios";
 import Cookies from 'js-cookie';
 
@@ -86,7 +85,7 @@ function ProfilePage() {
                 </div>
 
                 <a href="/">
-                    <button type="button" className="btn btn-primary">Domov</button>
+                    <button type="button" className="btn">Domov</button>
                 </a>
             </div>
         </>

@@ -4,7 +4,176 @@
     --c3: #ebebeb;
 }
 
+* {
+    border: 1px solid red;
+}
+
 body {
     background-color: var(--c3);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    overflow: hidden !important;
+}
+
+button {
+    cursor: pointer;
+}
+
+form {
+    border: 2px solid var(--c1);
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    background-color: var(--c2);
+    color: white;
+}
+
+label {
+    float: left !important;
+}
+
+input {
+    width: 25vw;
+    font-size: 2em;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+a, a:hover {
+    color: inherit;
+}
+
+.btn {
+    border-radius: 5px;
+    border: none;
+    font-size: 1.2em;
+    background-color: var(--c1);
+    color: white;
+    padding: 10px;
+}
+
+.btn-admin {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    z-index: 999;
+}
+
+.climbed {
+    max-height: 25vh;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.notClimbed {
+    max-height: 25vh;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    display: flex;
+    height: 75vh;
+    justify-content: center;
+    align-items: center;
+}
+
+#btnClaimHill {
+    background-color: var(--c2);
+}
+
+#map {
+    z-index: -999;
+    overflow: hidden;
+    margin: none;
+    padding: none;
+}
+
+.clickMap {
+    z-index: -999;
+    padding: none;
+    margin: none;
+}
+
+#reviews {
+    overflow-y: auto;
+    margin-bottom: 5em;
+}
+
+.bottom {
+    bottom: 0;
+    z-index: 999;
+    position: fixed;
+}
+
+.bottomItems {
+    display: flex;
+    justify-content: space-evenly;
+    width: 27em;
+    padding: 10px;
+    background-color: var(--c3);
+}
+
+.sidebar {
+    width: 27em;
+    height: 100vh;
+    z-index: 999;
+    position: absolute;
+    background: var(--c3);
+    left: 0;
+    padding: 10px;
+    overflow: auto;
+    max-height: 100vh;  
+}
+
+.hill {
+    margin: 5px;
+}
+
+.card {
+    margin-top: 10px;
+    overflow-y: auto;
+}
+
+.btn-hoverable {
+    margin-top: 10px;
+    border-radius: 5px;
+    border: none;
+    font-size: 1.2em;
+    background-color: var(--c1);
+    color: white;
+    width: 8em;
+    height: 2em;
+    transition: 0.5s;
+}
+
+.btn-hoverable:hover {
+    width: 9em;
+    height: 3em;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+.input {
+    margin-top: 10px;
+}
+
+/* width */
+::-webkit-scrollbar {
+width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+background: #f1f1f1; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+background: #555; 
 }

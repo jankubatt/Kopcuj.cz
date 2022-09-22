@@ -3,7 +3,6 @@ import '../App.css';
 import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
-import '../Map.css';
 import {Card, CardContent, Chip, Rating} from "@mui/material";
 
 axios.defaults.withCredentials = true;
@@ -181,7 +180,7 @@ function MapPage() {
                         setTxtArea('block')
                     }} size={'large'}/><br/>
 
-                    <button type="button" className="btn btn-warning" onClick={sendRating}>Odeslat</button><br/>
+                    <button type="button" className="btn" onClick={sendRating}>Odeslat</button><br/>
 
                     <textarea style={{'width': '20vw', height: '20vh', display: txtArea}} onChange={(e) => {
                         setText(e.target.value)
@@ -223,11 +222,11 @@ function MapPage() {
             
 
             {user.isAdmin ? <a href={'/admin'}>
-                <button type="button" className="btn btn-success btnAdmin">Admin</button>
+                <button type="button" className="btn btn-admin">Admin</button>
             </a> : null}
 
             <div className={"clickMap"} onClick={mapClicked}>
-                <Map className={'map'} height={"100vh"} center={center ? {lat: 50.555, lng: 13.931} : null} zoom={14}>
+                <Map id={'map'} height={'100vh'} center={center ? {lat: 50.555, lng: 13.931} : null} zoom={14}>
                     <KeyboardControl/>
                     <ZoomControl/>
                     <MouseControl zoom={true} pan={true} wheel={true}/>

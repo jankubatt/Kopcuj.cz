@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
-import '../Profile.css';
 import axios from "axios";
 import {Card, CardContent, Chip, Rating} from "@mui/material";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -12,7 +11,6 @@ function AdminPage() {
     const [hills, getHills] = useState([]);
     const [allReviews, getAllReviews] = useState([]);
     const [userHills, setUserHills] = useState([]);
-    const [darkMode, setDarkMode] = React.useState(true);
 
     let count = 0;
 
@@ -54,22 +52,8 @@ function AdminPage() {
 
     return (
         <>
-        <div className="container-fluid">
-    <div className="row flex-nowrap">
-        <div className="col-auto px-0">
-            <div id="sidebar" className="collapse collapse-horizontal show border-end">
-                <div id="sidebar-nav" className="list-group border-0 rounded-0 text-sm-center min-vh-100">
-                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-bootstrap"></i> <span>Uživatelé</span> </a>
-                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-film"></i> <span>Kopce</span></a>
-                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-heart"></i> <span>Statistiky</span></a>
-                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-bricks"></i> <span>Hodnocení</span></a>
-                    <a href="#" className="list-group-item border-end-0 d-inline-block text-truncate" data-bs-parent="#sidebar"><i className="bi bi-clock"></i> <span>Diskuze</span></a>
-                </div>
-            </div>
-        </div>
-        <main className="col ps-md-2 pt-2">
         <div className={'container-fluid'}>
-        <a href="#" data-bs-target="#sidebar" data-bs-toggle="collapse" className="border rounded-3 p-1 text-decoration-none"><i className="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
+        <a href="#sidebar" data-bs-target="#sidebar" data-bs-toggle="collapse" className="border rounded-3 p-1 text-decoration-none"><i className="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
                 <table className="table table-sm">
                     <thead>
                     <tr>
@@ -217,9 +201,6 @@ function AdminPage() {
                     </tbody>
                 </table>
             </div>
-        </main>
-    </div>
-</div>
         </>
     )
 }
