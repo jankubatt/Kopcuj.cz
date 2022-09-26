@@ -4,10 +4,6 @@
     --c3: #ebebeb;
 }
 
-* {
-    border: 1px solid red;
-}
-
 body {
     background-color: var(--c3);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -16,6 +12,14 @@ body {
 
 button {
     cursor: pointer;
+}
+
+table {
+    border:1px solid black;
+}
+
+th, td {
+    border-bottom: 1px solid black;
 }
 
 form {

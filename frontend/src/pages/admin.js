@@ -2,7 +2,40 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import {Card, CardContent, Chip, Rating} from "@mui/material";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+
+const columns = [
+  { id: 'id_user', label: 'ID', minWidth: 170 },
+  { id: 'login', label: 'Login', minWidth: 100 },
+  { id: 'name', label: 'Nickname', minWidth: 100 },
+  { id: 'email', label: 'E-Mail', minWidth: 100 },
+  { id: 'desc', label: 'Desc', minWidth: 100 },
+  { id: 'hills', label: 'Hills', minWidth: 100 },
+  { id: 'comments', label: 'Comments', minWidth: 100 },
+  { id: 'reviews', label: 'Reviews', minWidth: 100 },
+  { id: 'date_registered', label: 'Registered', minWidth: 100 },
+  { id: 'date_lastLogin', label: 'LL', minWidth: 100 },
+  { id: 'isAdmin', label: 'Admin', minWidth: 100 },
+];
+
+function createData(id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin) {
+  return { id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin };
+}
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
 
 axios.defaults.withCredentials = true;
 
@@ -11,6 +44,18 @@ function AdminPage() {
     const [hills, getHills] = useState([]);
     const [allReviews, getAllReviews] = useState([]);
     const [userHills, setUserHills] = useState([]);
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rows, setRows] = useState([]);
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
 
     let count = 0;
 
@@ -50,157 +95,81 @@ function AdminPage() {
         setUserHills(temp);
     }, [hills, users])
 
+    useEffect(() => {
+        let tempRows = [];
+        let userClimbed = [];
+
+        users.map((user) => {
+            userHills.map((hill) => {
+                if (hill.user === user.login) {
+                    console.log(hill);
+                    userClimbed.push(hill.hill.name + '\n');
+                }
+            })
+
+            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, 'test', 'test', DateTime(user.date_registered), DateTime(user.date_lastLogin), ((user.isAdmin) ? 'true' : 'false')))
+            userClimbed = [];
+        })
+        
+        setRows(tempRows);
+    }, [users, userHills])
+
     return (
         <>
+        <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
         <div className={'container-fluid'}>
         <a href="#sidebar" data-bs-target="#sidebar" data-bs-toggle="collapse" className="border rounded-3 p-1 text-decoration-none"><i className="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
-                <table className="table table-sm">
-                    <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Login</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Desc</th>
-                        <th scope="col">Hills</th>
-                        <th scope="col">Comments</th>
-                        <th scope="col">Reviews</th>
-                        <th scope="col">Theme</th>
-                        <th scope="col">Reg Date</th>
-                        <th scope="col">Last Login</th>
-                        <th scope="col">Admin</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            hills && allReviews && users?.map((user) => {
-                                return (
-                                    <>
-                                        <tr>
-                                            <td><p>{user._id}</p></td>
-                                            <td>{user.login}</td>
-                                            <td>{user.email}</td>
-                                            <td>{user.name}</td>
-                                            
-                                            <td>
-                                                <a className="btn btn-primary" data-bs-toggle="collapse" href={`#${user.login}description`}
-                                                        role="button" aria-expanded="false" aria-controls={`${user.login}description`}>
-                                                    <FontAwesomeIcon icon="fa-solid fa-bars" />
-                                                </a>
-                                                <div className="collapse" id={`${user.login}description`}>
-                                                    {user.description}
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a className="btn btn-primary" data-bs-toggle="collapse" href={`#${user.login}Hills`}
-                                                        role="button" aria-expanded="false" aria-controls={`${user.login}Hills`}>
-                                                    {
-                                                        userHills?.map((item) => {
-                                                            if (item.user === user.login) {
-                                                                count++
-                                                            }
-                                                            return null
-                                                        })
-                                                    }
-                                                    {count}
-                                                </a>
-                                                <div className="collapse" id={`${user.login}Hills`}>
-                                                    <Card className='card'>
-                                                        <CardContent>
-                                                            {
-                                                                userHills?.map((item) => {
-                                                                    count = 0
-                                                                    if (item.user === user.login) {
-                                                                        return (
-                                                                            <div key={item.hill._id}>
-                                                                                <b>{item.hill.name}</b>
-                                                                                <hr />
-                                                                            </div>
-                                                                        )
-                                                                    }
-                                                                    return null
-                                                                })
-                                                            }
-                                                        </CardContent>
-                                                    </Card>
-                                                </div>
-                                                </td>
-                                                <td>
-                                                    <a className="btn btn-primary" data-bs-toggle="collapse" href={`#${user.login}comment`}
-                                                        role="button" aria-expanded="false" aria-controls={`${user.login}commment`}>
-                                                        {user.comments.length}
-                                                    </a>
-                                                    <div className="collapse" id={`${user.login}commment`}>
-                                                        {
-                                                            user.comments.map((comment) => {
-                                                                return comment + '\n'
-                                                            })
-                                                        }
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <a className="btn btn-primary" data-bs-toggle="collapse" href={`#${user.login}reviews`}
-                                                        role="button" aria-expanded="false" aria-controls={`${user.login}reviews`}>
-                                                        {
-                                                            allReviews.forEach((review) => {
-                                                                if (user._id === review.id_user) {
-                                                                    return count++;
-                                                                }
-                                                            })
-                                                        }
-                                                        {count}
-                                                    </a>
-                                                    <div className="collapse" id={`${user.login}reviews`}>
-                                                        {
-                                                            allReviews.map((review) => {
-                                                                if (user._id === review.id_user) {
-                                                                    count = 0;
-                                                                    return ( 
-                                                                        <div key={review._id}>
-                                                                            <Card className='card'>
-                                                                                <CardContent>
-                                                                                    <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                                                                        <div>
-                                                                                            <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
-                                                                                            {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
-                                                                                        </div>
-                                                                                        <div>
-                                                                                            <Rating name="read-only" value={review.stars} readOnly />
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div>
-                                                                                        {review.text}
-                                                                                    </div>
-                                                                                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                                                                                        <div style={{color: 'GrayText'}}>
-                                                                                            {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </CardContent>
-                                                                            </Card>
-                                                                        </div>
-                                                                    )
-                                                                }
-                                                                return null
-                                                            })
-
-                                                        }
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div style={{'backgroundColor': `${user.theme}`, 'height': '20px', 'width': 'auto'}}></div>
-                                                </td>
-                                                <td>{DateTime(user.date_registered)}</td>
-                                                <td>{DateTime(user.date_lastLogin)}</td>
-                                                <td>{user.isAdmin ? '✅' : '❌'}</td>
-                                        </tr>
-                                    </>
-                                )   
-                            })
-                        }
-                    </tbody>
-                </table>
+        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+            <TableContainer sx={{ maxHeight: 440 }}>
+                <Table stickyHeader aria-label="sticky table">
+                <TableHead>
+                    <TableRow>
+                    {columns.map((column) => (
+                        <TableCell
+                        key={column.id}
+                        align={column.align}
+                        style={{ minWidth: column.minWidth }}
+                        >
+                        {column.label}
+                        </TableCell>
+                    ))}
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {rows
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((row) => {
+                        return (
+                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                            {columns.map((column) => {
+                            const value = row[column.id];
+                            return (
+                                <TableCell key={column.id} align={column.align}>
+                                {column.format && typeof value === 'number'
+                                    ? column.format(value)
+                                    : value}
+                                </TableCell>
+                            );
+                            })}
+                        </TableRow>
+                        );
+                    })}
+                </TableBody>
+                </Table>
+            </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+            </Paper>
             </div>
+            </ThemeProvider>
         </>
     )
 }
