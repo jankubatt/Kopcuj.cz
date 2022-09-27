@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import { Collapse } from '@mui/material';
 
 const columns = [
   { id: 'id_user', label: 'ID', minWidth: 170 },
@@ -19,7 +20,7 @@ const columns = [
   { id: 'name', label: 'Nickname', minWidth: 100 },
   { id: 'email', label: 'E-Mail', minWidth: 100 },
   { id: 'desc', label: 'Desc', minWidth: 100 },
-  { id: 'hills', label: 'Hills', minWidth: 100 },
+  { id: 'hills', label: 'Hills', minWidth: 200 },
   { id: 'comments', label: 'Comments', minWidth: 100 },
   { id: 'reviews', label: 'Reviews', minWidth: 100 },
   { id: 'date_registered', label: 'Registered', minWidth: 100 },
@@ -98,17 +99,46 @@ function AdminPage() {
     useEffect(() => {
         let tempRows = [];
         let userClimbed = [];
+        let userReviews = [];
 
         users.map((user) => {
             userHills.map((hill) => {
                 if (hill.user === user.login) {
-                    console.log(hill);
-                    userClimbed.push(hill.hill.name + '\n');
+                    userClimbed.push(<li>{hill.hill.name}</li>);
                 }
             })
 
-            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, 'test', 'test', DateTime(user.date_registered), DateTime(user.date_lastLogin), ((user.isAdmin) ? 'true' : 'false')))
+            allReviews.map((review) => {
+                if (review.user.login === user.login) {
+                    console.log(review);
+                    userReviews.push(<Card key={review._id} className='card'>
+                    <CardContent>
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <div>
+                                <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
+                                {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
+                            </div>
+                            <div>
+                                <Rating name="read-only" value={review.stars} readOnly />
+                            </div>
+                        </div>
+                        <div>
+                            {review.text}
+                        </div>
+                        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                            <div style={{color: 'GrayText'}}>
+                                {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+                                    );
+                }
+            })
+
+            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, "test", userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), ((user.isAdmin) ? 'true' : 'false')))
             userClimbed = [];
+            userReviews = [];
         })
         
         setRows(tempRows);
