@@ -115,15 +115,14 @@ function AdminPage() {
                     <CardContent>
                         <div style={{display: 'flex', justifyContent: 'space-between'}}>
                             <div>
-                                <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
-                                {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
+                                
                             </div>
                             <div>
                                 <Rating name="read-only" value={review.stars} readOnly />
                             </div>
                         </div>
                         <div>
-                            {review.text}
+                            {ellipsify(review.text)}
                         </div>
                         <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                             <div style={{color: 'GrayText'}}>
@@ -136,7 +135,7 @@ function AdminPage() {
                 }
             })
 
-            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, "test", userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), ((user.isAdmin) ? 'true' : 'false')))
+            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, "In Progress", userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), ((user.isAdmin) ? 'true' : 'false')))
             userClimbed = [];
             userReviews = [];
         })
@@ -151,7 +150,7 @@ function AdminPage() {
         <div className={'container-fluid'}>
         <a href="#sidebar" data-bs-target="#sidebar" data-bs-toggle="collapse" className="border rounded-3 p-1 text-decoration-none"><i className="bi bi-list bi-lg py-2 p-1"></i> Menu</a>
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
+            <TableContainer>
                 <Table stickyHeader aria-label="sticky table">
                 <TableHead>
                     <TableRow>
@@ -209,6 +208,15 @@ function DateTime(dateTime) {
     return (
         `${(dt.getDate() < 10) ? '0' + dt.getDate() : dt.getDate()}.${(dt.getMonth()+1 < 10 ? '0' + (dt.getMonth()+1) : dt.getMonth()+1)}.${dt.getFullYear()} 
         [${(dt.getHours()) < 10 ? '0' + dt.getHours() : dt.getHours()}:${(dt.getMinutes() < 10) ? '0' + dt.getMinutes() : dt.getMinutes()}:${(dt.getSeconds() < 10) ? '0' + dt.getSeconds() : dt.getSeconds()}]`)
+}
+
+function ellipsify(str) {
+    if (str.length > 10) {
+        return (str.substring(0, 10) + "...");
+    }
+    else {
+        return str;
+    }
 }
 
 export default AdminPage;
