@@ -4,6 +4,7 @@ import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
 import {Card, CardContent, Chip, Rating} from "@mui/material";
+import pfp from '../img/pfp-default.png';
 
 axios.defaults.withCredentials = true;
 
@@ -214,13 +215,11 @@ function MapPage() {
             <div className={'bottom'}>
                 <div className='bottomItems'>
                     <button type="button" className="btn">Settings</button>
-                    <a href="/profile"><button type="button" className="btn">Profile</button></a>
+                    <a href={'/profile'}><img className='btn-profile' src={pfp}></img></a>
                     <button type="button" className="btn">Collapse</button>
                 </div>
             </div>
             
-            
-
             {user.isAdmin ? <a href={'/admin'}>
                 <button type="button" className="btn btn-admin">Admin</button>
             </a> : null}

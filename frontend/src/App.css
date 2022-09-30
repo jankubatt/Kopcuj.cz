@@ -63,6 +63,13 @@ a, a:hover {
     z-index: 999;
 }
 
+.btn-profile {
+    width: 3em;
+    background-color: white;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+
 .climbed {
     max-height: 25vh;
     overflow: scroll;
