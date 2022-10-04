@@ -39,13 +39,12 @@ function ProfilePage() {
             })
     }, [])
 
-    user.hills?.map((hillId) => {
+   
         hills?.map((hill) => {
-            if (hillId === hill._id) {
+            if (user.hills.includes(hill._id)) {
                 climbedHills.push(hill);
             }
         })
-    })
 
     let a;
     hills.map((hill) => {

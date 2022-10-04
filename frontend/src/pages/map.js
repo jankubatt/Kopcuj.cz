@@ -122,11 +122,7 @@ function MapPage() {
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
-            user.hills.filter(hill => {
-                return (hill === clickedHill._id);
-            }).forEach(() => {
-                setClimbed(true);
-            })
+            if (user.hills.includes(clickedHill._id)) setClimbed(true);
 
             setCurrentHill(clickedHill);
             console.log(currentHill);
