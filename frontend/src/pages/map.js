@@ -129,6 +129,7 @@ function MapPage() {
             })
 
             setCurrentHill(clickedHill);
+            console.log(currentHill);
 
             let currentHillReviews = [];
             
@@ -230,8 +231,20 @@ function MapPage() {
                     <ZoomControl/>
                     <MouseControl zoom={true} pan={true} wheel={true}/>
                     <MarkerLayer>
-                        {hills.map((hill) => <Marker key={hill._id} options={{title: hill.name}}
-                                                     coords={{lat: hill.lat, lng: hill.lon}}/>)}
+                        {hills?.map((hill) => {
+                            if (user.hills.includes(hill._id)) {
+                                return (
+                                    <Marker key={hill._id} options={{title: hill.name, url: "https://api.mapy.cz/img/api/marker/drop-blue.png"}}
+                                    coords={{lat: hill.lat, lng: hill.lon}}/>
+                                )
+                            }
+                            else {
+                                return (
+                                    <Marker key={hill._id} options={{title: hill.name}}
+                                    coords={{lat: hill.lat, lng: hill.lon}}/>
+                                )
+                            }
+                        })}
                     </MarkerLayer>
                 </Map>
             </div>
