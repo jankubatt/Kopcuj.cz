@@ -8,6 +8,7 @@ body {
     background-color: var(--c3);
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     overflow: hidden !important;
+    margin: auto;
 }
 
 button {
@@ -96,14 +97,10 @@ a, a:hover {
 #map {
     z-index: -999;
     overflow: hidden;
-    margin: none;
-    padding: none;
 }
 
 .clickMap {
     z-index: -999;
-    padding: none;
-    margin: none;
 }
 
 #reviews {
