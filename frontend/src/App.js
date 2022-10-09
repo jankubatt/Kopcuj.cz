@@ -6,12 +6,14 @@ import RegisterPage from "./pages/register";
 import LoginPage from "./pages/login";
 import ProfilePage from "./pages/profile";
 import AdminPage from "./pages/admin";
+import HomePage from "./pages/home";
 import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
     return (
         <Router>
             <Routes>
+                <Route path='/home' element={<HomePage/>}/>
                 <Route exact path='/' element={<MapPage/>}/>
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/login' element={<LoginPage/>}/>

@@ -47,6 +47,58 @@ a, a:hover {
     color: inherit;
 }
 
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    height: 10vh;
+    background-color: var(--c2);
+    color: white;
+}
+
+.navbrand {
+    font-size: xx-large;
+    margin-left: 20px;
+}
+
+.navbar-item {
+    display: inline;
+    margin: 0px 5px 0px 5px;
+}
+
+.header {
+    background-image: url('./img/header.jpg');
+    height: 60vh;
+    display: flex;
+    justify-content: space-around;
+    color: white;
+    align-items: center;
+}
+
+.header-content {
+    background-color: var(--c1);
+    padding: 20px;
+}
+
+.header-content-heading {
+    font-weight: bold;
+    font-size: xx-large;
+}
+
+.register-form {
+    width: 40vw;
+}
+
+.register-form > form {
+    border: none;
+    border-radius: 0px;
+}
+
+.register-form > input {
+    
+}
+
 .btn {
     border-radius: 5px;
     border: none;
@@ -54,6 +106,7 @@ a, a:hover {
     background-color: var(--c1);
     color: white;
     padding: 10px;
+    cursor: pointer;
 }
 
 .btn-admin {
