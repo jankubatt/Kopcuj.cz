@@ -87,7 +87,7 @@ a, a:hover {
 }
 
 .register-form {
-    width: 40vw;
+    width: 30vw;
 }
 
 .register-form > form {
@@ -95,8 +95,13 @@ a, a:hover {
     border-radius: 0px;
 }
 
-.register-form > input {
-    
+.register-form input {
+    width: 25vw;
+    font-size: 1.2em;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 0px;
+    border: none;
 }
 
 .btn {
