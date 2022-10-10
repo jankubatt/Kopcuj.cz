@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
-
+import Cookies from 'js-cookie';
 
 function HomePage() {
     //State for storing form values
@@ -61,8 +61,13 @@ function HomePage() {
                 <div className='navbar'>
                     <div className='navbrand'>Kopcuj.cz</div>
                     <div>
-                        <div className='navbar-item btn'>Přihlásit</div>
-                        <div className='navbar-item btn'>Zaregistrovat</div>
+                    {
+                        ((Cookies.get('authToken')) ? <a href='/'><div className='navbar-item btn'>Mapa</div></a> : 
+                        <>
+                            <a href='/login'><div className='navbar-item btn'>Přihlásit</div></a>
+                            <a href='/register'><div className='navbar-item btn'>Zaregistrovat</div></a>
+                        </>)
+                    }
                     </div>
                 </div>
 
@@ -92,6 +97,27 @@ function HomePage() {
                             <button type="submit" className="btn btn-primary">Zaregistrovat</button>
                         </form>
                     </div>
+                </div>
+
+                <div className='info'>
+                    <div className='card'>
+                        <div className='card-header'>Header</div>
+                        <div className='card-text'>Loremp Ipsum</div>
+                    </div>
+                    
+                    <div className='card'>
+                        <div className='card-header'>Header</div>
+                        <div className='card-text'>Loremp Ipsum</div>
+                    </div>
+
+                    <div className='card'>
+                        <div className='card-header'>Header</div>
+                        <div className='card-text'>Loremp Ipsum</div>
+                    </div>
+                </div>
+
+                <div className='footer'>
+                    
                 </div>
            </div>
         </>
