@@ -5,7 +5,6 @@ import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} fr
 import Cookies from 'js-cookie';
 import {Card, CardContent, Chip, Rating} from "@mui/material";
 import pfp from '../img/pfp-default.png';
-import brick from '../img/brick.jpg'
 
 axios.defaults.withCredentials = true;
 
@@ -14,6 +13,7 @@ function MapPage() {
     const [hills, getHills] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [climbed, setClimbed] = useState(true);
+    const [imgUrl, setImgUrl] = useState("");
 
     //Misc variables
     const [center, setCenter] = useState(true)
@@ -149,8 +149,9 @@ function MapPage() {
             {currentHill && <div className={'sidebar'}>
                 <div className={'hill'}>
                     <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
-                    <hr />
-                    <img src={''} width={'100%'}></img>
+                    <hr/>
+                    <img src={require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.jpg`)}
+                         alt="" width={'100%'} height={"200px"}/>
                     <h2>Informace</h2>
                     <div>
                         {currentHill.lat}<br/>
@@ -238,7 +239,7 @@ function MapPage() {
                             else {
                                 return (
                                     <Marker key={hill._id} options={{title: hill.name}}
-                                    coords={{lat: hill.lat, lng: hill.lon}}/>
+                                            coords={{lat: hill.lat, lng: hill.lon}}/>
                                 )
                             }
                         })}
@@ -247,6 +248,13 @@ function MapPage() {
             </div>
         </>
     )
+}
+
+function processHillName(name) {
+    let hill = name.toLowerCase();
+    hill = hill.replace(" ", "-");
+    hill = hill.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    return hill;
 }
 
 export default MapPage;
