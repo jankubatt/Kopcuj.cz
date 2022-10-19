@@ -5,6 +5,7 @@ import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} fr
 import Cookies from 'js-cookie';
 import {Card, CardContent, Chip, Rating} from "@mui/material";
 import pfp from '../img/pfp-default.png';
+import brick from '../img/brick.jpg'
 
 axios.defaults.withCredentials = true;
 
@@ -149,7 +150,7 @@ function MapPage() {
                 <div className={'hill'}>
                     <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
                     <hr />
-
+                    <img src={''} width={'100%'}></img>
                     <h2>Informace</h2>
                     <div>
                         {currentHill.lat}<br/>
