@@ -150,8 +150,15 @@ function MapPage() {
                 <div className={'hill'}>
                     <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
                     <hr/>
-                    <img src={require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.jpg`)}
-                         alt="" width={'100%'} height={"200px"}/>
+                    <div style={{
+                        width: "100%",
+                        height: "200px",
+                        backgroundImage: `url(${require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center"
+                    }}>
+
+                    </div>
                     <h2>Informace</h2>
                     <div>
                         {currentHill.lat}<br/>
