@@ -3,6 +3,21 @@ const router = express.Router();
 const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+require('dotenv').config()
+console.log(process.env);
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+      auth: {
+        type: 'OAuth2',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+        clientId: process.env.EMAIL_CLIENT_ID,
+        clientSecret: process.env.EMAIL_SECRET,
+        refreshToken: process.env.EMAIL_REFRESH_TOKEN
+      }
+});
 
 router.get("/", (req, res) => {
     User.find()
@@ -38,12 +53,34 @@ router.get("/:id", (req, res) => {
         .catch(() => res.status(404).json({error: 'No user found'}));
 });
 
+router.get("/verify/:token", (req, res) => {
+    User.findOne({verifyToken: req.params.token}).then((user) => {
+        User.updateOne({"_id": user.id}, {$set: {"isVerified": true}}).then(() => {res.redirect("http://localhost:3000/")});
+    })
+})
+
 //registers a user
 router.post("/register", (req, res) => {
+    let token = crypto.randomUUID();
     bcrypt.hash(req.body.pass, 10).then(function (hash) {
+        let mailOptions = {
+            from: "kopcuj@gmail.com",
+            to: req.body.email,
+            subject: 'Ověření emailové adresy',
+            html: `Děkujeme za vaši registraci, prosím ověřte email.\n<a href="http://localhost:8082/api/users/verify/${token}">ZDE</a>`
+          };
+
+        transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
         User.create({
             ...req.body,
             pass: hash,
+            verifyToken: token,
             date_registered: Date.now()
         }).then(() => res.send("/login")).catch(() => {
             res.status(400);
