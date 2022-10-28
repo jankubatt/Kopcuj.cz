@@ -16,4 +16,8 @@ router.get('/name/:name', (req, res) => {
         .catch(err => res.status(404).json(err));
 })
 
+router.post('/create', (req, res) => {
+    Hill.create({...req.body}).then(res.sendStatus(200));
+})
+
 module.exports = router;

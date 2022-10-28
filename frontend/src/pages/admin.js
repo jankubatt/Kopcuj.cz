@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -53,6 +54,44 @@ function AdminPage() {
     const [page, setPage] = React.useState(0);                  //Page of a table
     const [rowsPerPage, setRowsPerPage] = React.useState(10);   //Row per page of a table
     const [rows, setRows] = useState([]);                       //Rows of a table
+
+    //State for storing form values
+    const [state, setState] = useState({});
+    let navigate = useNavigate();
+
+    //function that handles changes in input boxes, when input changes, it gets written into state variable
+    const handleChange = (event) => {
+        const name = event.target.name;
+        const value = event.target.value;
+        setState({...state, [name]: value});
+    };
+
+    //handles submit button
+    const handleSubmit = (event) => {
+        event.preventDefault(); //prevent reload of page
+
+        const data = {
+            name: state.name,
+            elevation: state.elevation,
+            lat: state.lat,
+            lon: state.lon,
+            prominence: state.prominence,
+            isolation: state.isolation,
+            material: state.material,
+            basin: state.basin,
+            district: state.district,
+            location: state.location
+        };
+
+        //post data to database
+        axios.post("http://localhost:8082/api/hills/create", data)
+            .then(() => {
+                return navigate("/");
+            })
+            .catch(err => {
+                console.log("Error in register user!\n" + err);
+            });
+    }
 
     //Handle page change of a table
     const handleChangePage = (event, newPage) => {
@@ -201,6 +240,21 @@ function AdminPage() {
                         />
                     </Paper>
                 </div>
+                
+                <h2>Přidat kopec</h2>
+                <form onSubmit={handleSubmit}>
+                    <input onChange={handleChange} placeholder='Jméno' name='name'></input>
+                    <input onChange={handleChange} placeholder='Výška' name='elevation'></input>
+                    <input onChange={handleChange} placeholder='Lat' name='lat'></input>
+                    <input onChange={handleChange} placeholder='Lon' name='lon'></input>
+                    <input onChange={handleChange} placeholder='Prominence' name='prominence'></input>
+                    <input onChange={handleChange} placeholder='Izolace' name='isolation'></input>
+                    <input onChange={handleChange} placeholder='Materiál' name='material'></input>
+                    <input onChange={handleChange} placeholder='Povodí' name='basin'></input>
+                    <input onChange={handleChange} placeholder='Okres' name='district'></input>
+                    <input onChange={handleChange} placeholder='Lokace' name='location'></input>
+                    <br/><button type="submit">Pridat kopec</button>
+                </form>
             </ThemeProvider>
         </>
     )

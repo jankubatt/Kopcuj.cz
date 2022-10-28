@@ -140,6 +140,14 @@ function MapPage() {
         }
     }
 
+    const tryRequire = (path) => {
+        try {
+         return require(`${path}`);
+        } catch (err) {
+         return null;
+        }
+      };
+
     return (
         <>
             {
@@ -153,7 +161,7 @@ function MapPage() {
                     <div style={{
                         width: "100%",
                         height: "200px",
-                        backgroundImage: `url(${require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)})`,
+                        backgroundImage: ((tryRequire(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)) ? `url(${require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)})` : 'none'),
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                     }}>

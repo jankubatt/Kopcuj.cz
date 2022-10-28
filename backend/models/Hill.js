@@ -32,7 +32,9 @@ const HillSchema = new mongoose.Schema({
         type: String
     },
     rating: {
-        type: Array
+        type: Array,
+        required: false,
+        default: []
     }
 });
 
