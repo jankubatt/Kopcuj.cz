@@ -5,10 +5,13 @@ import {useNavigate} from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
-function LoginPage() {
+function ChangePassword() {
     //State for storing form values
     const [state, setState] = useState({username: null, pass: null});
     let navigate = useNavigate();
+    const qs = require('query-string');
+    const parsed = qs.parse(document.location.search);
+    console.log(parsed);
 
     //function that handles changes in input boxes, when input changes, it gets written into state variable
     const handleChange = (event) => {
@@ -22,43 +25,48 @@ function LoginPage() {
         event.preventDefault(); //prevent reload of page
 
         const data = {
-            login: state.username,
-            pass: state.pass
+            pass: state.pass,
+            passAgain: state.passAgain,
+            token: parsed.token
         };
 
-        //post data to database
-        axios.post("http://localhost:8082/api/users/login", data)
+        if (data.pass === data.passAgain) {
+            //post data to database
+            axios.post("http://localhost:8082/api/users/change-password", data)
             .then(() => {
-                return navigate("/");
+                return navigate("/login");
             })
             .catch(err => {
-                console.log("Error in register user!\n" + err);
+                console.log("Error in change password user!\n" + err);
             });
+        }
+        else {
+            alert("Hesla se neshodují!");
+        }
+        
     }
 
 
     return (
         <div className='wrapper'>
             <form onSubmit={handleSubmit}>
-                <div className='input'>
-                    <label htmlFor="username">Uživatelské jméno</label><br />
-                    <input onChange={handleChange} type="text" name={"username"}
-                        placeholder={"Uživatelské jméno"}/>
-                </div>
-
-                <div className='input'>
+            <div className='input'>
                     <label htmlFor="pass">Heslo</label><br/>
                     <input onChange={handleChange} type="password" name={"pass"}
                         placeholder={"Heslo"}/>
                 </div>
 
-                <br/><a href='/forgot-password'>Zapomenuté heslo</a><br/>
+                <div className='input'>
+                    <label htmlFor="passAgain">Heslo znovu</label><br/>
+                    <input onChange={handleChange} type="password" name={"passAgain"}
+                        placeholder={"Heslo znovu"}/>
+                </div>
 
-                <button className='btn-hoverable' type="submit">Přihlásit</button>
+                <button className='btn-hoverable' type="submit">Změnit</button>
             </form>
 
         </div>
     )
 }
 
-export default LoginPage;
+export default ChangePassword;

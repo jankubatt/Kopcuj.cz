@@ -8,6 +8,8 @@ import ProfilePage from "./pages/profile";
 import AdminPage from "./pages/admin";
 import HomePage from "./pages/home";
 import PrivateRoute from "./components/PrivateRoute";
+import ForgotPassword from './pages/forgot-password';
+import ChangePassword from './pages/change-password';
 
 function App() {
     return (
@@ -18,6 +20,8 @@ function App() {
                 <Route path='/register' element={<RegisterPage/>}/>
                 <Route path='/login' element={<LoginPage/>}/>
                 <Route path='/profile' element={<ProfilePage/>}/>
+                <Route path='/forgot-password' element={<ForgotPassword/>}/>
+                <Route path='/change-password' element={<ChangePassword/>}/>
                 <Route path='/admin' element={<PrivateRoute><AdminPage/></PrivateRoute>}/>
             </Routes>
         </Router>

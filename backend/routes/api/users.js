@@ -88,6 +88,34 @@ router.post("/register", (req, res) => {
     });
 });
 
+router.post("/forgot-password", (req, res) => {
+    let token = crypto.randomUUID();
+
+   console.log(req.body.email);
+            User.updateOne({"email": req.body.email}, {$set: {"forgotPassToken": token}}).then(() => {
+                let mailOptions = {
+                    from: "kopcuj@gmail.com",
+                    to: req.body.email,
+                    subject: 'Zapomenuté heslo',
+                    html: `Na tomto odkazu si můžete změnit heslo. Přejeme úspěšné chození.\n<a href="http://localhost:3000/change-password?token=${token}">http://localhost:3000/change-password?token=${token}</a>`
+                  };
+        
+                transporter.sendMail(mailOptions, function(error, info){
+                    if (error) {
+                      console.log(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                  });
+            });
+})
+
+router.post("/change-password", (req, res) => {
+    bcrypt.hash(req.body.pass, 10).then(function (hash) {
+        User.updateOne({"forgotPassToken": req.body.token}, {$set: {"pass": hash}}).then(() => {res.sendStatus(200)});
+    });
+})
+
 router.post("/login", (req, res) => {
     User.findOne({login: req.body.login}).then((user) => {
         bcrypt.compare(req.body.pass, user.pass).then(function (result) {

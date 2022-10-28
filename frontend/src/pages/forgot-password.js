@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
-function LoginPage() {
+function ForgotPassword() {
     //State for storing form values
     const [state, setState] = useState({username: null, pass: null});
     let navigate = useNavigate();
@@ -22,14 +22,12 @@ function LoginPage() {
         event.preventDefault(); //prevent reload of page
 
         const data = {
-            login: state.username,
-            pass: state.pass
+            email: state.email,
         };
-
+        console.log(data);
         //post data to database
-        axios.post("http://localhost:8082/api/users/login", data)
+        axios.post("http://localhost:8082/api/users/forgot-password", data)
             .then(() => {
-                return navigate("/");
             })
             .catch(err => {
                 console.log("Error in register user!\n" + err);
@@ -41,24 +39,15 @@ function LoginPage() {
         <div className='wrapper'>
             <form onSubmit={handleSubmit}>
                 <div className='input'>
-                    <label htmlFor="username">Uživatelské jméno</label><br />
-                    <input onChange={handleChange} type="text" name={"username"}
-                        placeholder={"Uživatelské jméno"}/>
+                    <label htmlFor="email">E-Mail</label><br />
+                    <input onChange={handleChange} type="text" name={"email"}
+                        placeholder={"E-Mail"}/>
                 </div>
 
-                <div className='input'>
-                    <label htmlFor="pass">Heslo</label><br/>
-                    <input onChange={handleChange} type="password" name={"pass"}
-                        placeholder={"Heslo"}/>
-                </div>
-
-                <br/><a href='/forgot-password'>Zapomenuté heslo</a><br/>
-
-                <button className='btn-hoverable' type="submit">Přihlásit</button>
+                <button className='btn-hoverable' type="submit">Odeslat</button>
             </form>
-
         </div>
     )
 }
 
-export default LoginPage;
+export default ForgotPassword;

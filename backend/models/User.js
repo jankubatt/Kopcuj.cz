@@ -63,6 +63,11 @@ const UserSchema = new mongoose.Schema({
         required: false,
         default: null
     },
+    forgotPassToken: {
+        type: String,
+        required: false,
+        default: null
+    },
     verifyToken: {
         type: String,
         required: false,
