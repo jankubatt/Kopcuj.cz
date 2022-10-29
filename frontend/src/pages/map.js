@@ -4,6 +4,8 @@ import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
 import {Card, CardContent, Chip, Rating} from "@mui/material";
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import pfp from '../img/pfp-default.png';
 
 axios.defaults.withCredentials = true;
@@ -13,11 +15,13 @@ function MapPage() {
     const [hills, getHills] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [climbed, setClimbed] = useState(true);
-    const [imgUrl, setImgUrl] = useState("");
+    const [searchData, setSearchData] = useState([]);
 
     //Misc variables
     const [center, setCenter] = useState(true)
+    const [centerValue, setCenterValue] = useState(null)
     const [user, setUser] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
 
     //Rating variables
     const [rating, setRating] = useState(0);
@@ -48,6 +52,12 @@ function MapPage() {
         fetchReviews().then((res) => {
             setAllReviews(res);
         })
+
+        let temp = [];
+        hills.forEach((hill) => {
+            temp.push({key: hill.name.toLowerCase(), value: hill.name})
+        })
+        setSearchData(temp);
     }, [])
 
     useEffect(() => {
@@ -142,18 +152,51 @@ function MapPage() {
 
     const tryRequire = (path) => {
         try {
-         return require(`${path}`);
+            return `url(${require(`${path}`)})`
         } catch (err) {
          return null;
         }
       };
 
+      const updateSearch = event => {
+        setSearchTerm(event.target.value)
+      }
+
+      const searchHill = (name) => {
+            console.log(name);
+            hills.forEach((hill) => {
+                if (hill.name.includes(name)) {
+                    setCenterValue({lat: hill.lat, lng: hill.lon})
+                    setCenter(false);
+                }
+            })
+      }
     return (
         <>
             {
                 (user === '' || user === undefined || user === null) ?
                     document.location.replace(document.location + 'login') : null
             }
+
+        <Autocomplete
+        freeSolo
+        id="free-solo-2-demo"
+        disableClearable
+        options={hills.map((option) => option.name)}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Search input"
+            id={'search'}
+            onChange={updateSearch}
+            InputProps={{
+              ...params.InputProps,
+              type: 'search',
+            }}
+          />
+        )}
+      />
+          <div className={'btn'} onClick={() => {searchHill(searchTerm)}}>Hledat</div>  
             {currentHill && <div className={'sidebar'}>
                 <div className={'hill'}>
                     <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
@@ -161,7 +204,7 @@ function MapPage() {
                     <div style={{
                         width: "100%",
                         height: "200px",
-                        backgroundImage: ((tryRequire(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)) ? `url(${require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)})` : 'none'),
+                        backgroundImage: tryRequire(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`),
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                     }}>
@@ -239,7 +282,7 @@ function MapPage() {
             </a> : null}
 
             <div className={"clickMap"} onClick={mapClicked}>
-                <Map id={'map'} height={'100vh'} center={center ? {lat: 50.555, lng: 13.931} : null} zoom={14}>
+                {user.hills ? <Map id={'map'} height={'100vh'} center={center ? {lat: 50.555, lng: 13.931} : centerValue} zoom={14}>
                     <KeyboardControl/>
                     <ZoomControl/>
                     <MouseControl zoom={true} pan={true} wheel={true}/>
@@ -259,7 +302,7 @@ function MapPage() {
                             }
                         })}
                     </MarkerLayer>
-                </Map>
+                </Map> : "Loading map..."}
             </div>
         </>
     )
