@@ -151,11 +151,11 @@ function MapPage() {
         }
     }
 
-    const tryRequire = (path) => {
+    const tryHillImage = () => {
         try {
-            return `url(${require(`${path}`)})`
+            return require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`);
         } catch (err) {
-         return null;
+         return require(`../img/nohill.webp`);;
         }
       };
 
@@ -204,7 +204,7 @@ function MapPage() {
                     <div style={{
                         width: "100%",
                         height: "200px",
-                        backgroundImage: tryRequire(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`),
+                        backgroundImage: `url(${tryHillImage()/*tryRequire(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)*/})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                     }}>
