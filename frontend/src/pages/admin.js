@@ -2,34 +2,35 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import {    Card, 
-            CardContent,  
-            Rating, 
-            Paper, 
-            Table, 
-            TableBody, 
-            TableCell, 
-            TableContainer, 
-            TableHead, 
-            TablePagination, 
-            TableRow, 
-            CssBaseline 
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {
+    Card,
+    CardContent,
+    CssBaseline,
+    Paper,
+    Rating,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TablePagination,
+    TableRow
 } from '@mui/material/';
 
 //Main table columns
 const columns = [
-  { id: 'id_user', label: 'ID', minWidth: 170 },
-  { id: 'login', label: 'Login', minWidth: 100 },
-  { id: 'name', label: 'Nickname', minWidth: 100 },
-  { id: 'email', label: 'E-Mail', minWidth: 100 },
-  { id: 'desc', label: 'Desc', minWidth: 100 },
-  { id: 'hills', label: 'Hills', minWidth: 200 },
-  { id: 'comments', label: 'Comments', minWidth: 100 },
-  { id: 'reviews', label: 'Reviews', minWidth: 100 },
-  { id: 'date_registered', label: 'Registered', minWidth: 100 },
-  { id: 'date_lastLogin', label: 'LL', minWidth: 100 },
-  { id: 'isAdmin', label: 'Admin', minWidth: 100 },
+    {id: 'id_user', label: 'ID', minWidth: 170},
+    {id: 'login', label: 'Login', minWidth: 100},
+    {id: 'name', label: 'Nickname', minWidth: 100},
+    {id: 'email', label: 'E-Mail', minWidth: 100},
+    {id: 'desc', label: 'Desc', minWidth: 100},
+    {id: 'hills', label: 'Hills', minWidth: 200},
+    {id: 'comments', label: 'Comments', minWidth: 100},
+    {id: 'reviews', label: 'Reviews', minWidth: 100},
+    {id: 'date_registered', label: 'Registered', minWidth: 100},
+    {id: 'date_lastLogin', label: 'LL', minWidth: 100},
+    {id: 'isAdmin', label: 'Admin', minWidth: 100},
 ];
 
 //formats pushable row into table
@@ -240,20 +241,21 @@ function AdminPage() {
                         />
                     </Paper>
                 </div>
-                
+
                 <h2>Přidat kopec</h2>
                 <form onSubmit={handleSubmit}>
-                    <input onChange={handleChange} placeholder='Jméno' name='name'></input>
-                    <input onChange={handleChange} placeholder='Výška' name='elevation'></input>
-                    <input onChange={handleChange} placeholder='Lat' name='lat'></input>
-                    <input onChange={handleChange} placeholder='Lon' name='lon'></input>
-                    <input onChange={handleChange} placeholder='Prominence' name='prominence'></input>
-                    <input onChange={handleChange} placeholder='Izolace' name='isolation'></input>
-                    <input onChange={handleChange} placeholder='Materiál' name='material'></input>
-                    <input onChange={handleChange} placeholder='Povodí' name='basin'></input>
-                    <input onChange={handleChange} placeholder='Okres' name='district'></input>
-                    <input onChange={handleChange} placeholder='Lokace' name='location'></input>
-                    <br/><button type="submit">Pridat kopec</button>
+                    <input onChange={handleChange} placeholder='Jméno' name='name'></input><br/>
+                    <input onChange={handleChange} placeholder='Výška' name='elevation'></input><br/>
+                    <input onChange={handleChange} placeholder='Lat' name='lat'></input><br/>
+                    <input onChange={handleChange} placeholder='Lon' name='lon'></input><br/>
+                    <input onChange={handleChange} placeholder='Prominence' name='prominence'></input><br/>
+                    <input onChange={handleChange} placeholder='Izolace' name='isolation'></input><br/>
+                    <input onChange={handleChange} placeholder='Materiál' name='material'></input><br/>
+                    <input onChange={handleChange} placeholder='Povodí' name='basin'></input><br/>
+                    <input onChange={handleChange} placeholder='Okres' name='district'></input><br/>
+                    <input onChange={handleChange} placeholder='Lokace' name='location'></input><br/>
+                    <br/>
+                    <button type="submit">Pridat kopec</button>
                 </form>
             </ThemeProvider>
         </>

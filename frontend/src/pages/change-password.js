@@ -43,9 +43,7 @@ function ChangePassword() {
         else {
             alert("Hesla se neshodují!");
         }
-        
     }
-
 
     return (
         <div className='wrapper'>

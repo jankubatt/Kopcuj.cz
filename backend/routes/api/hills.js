@@ -11,10 +11,7 @@ router.get('/', (req, res) => {
 });
 
 router.get('/name/:name', (req, res) => {
-    let name = req.params.name.split("-")[0];
-    let elevation = req.params.name.split("-")[1].replace('m', '');
-
-    Hill.find({name: name, elevation: elevation})
+    Hill.find({name: req.params.name.split("-")[0], elevation: req.params.name.split("-")[1].replace('m', '')})
         .then(hills => res.json(hills))
         .catch(err => res.status(404).json(err));
 })

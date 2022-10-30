@@ -15,7 +15,6 @@ function MapPage() {
     const [hills, getHills] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [climbed, setClimbed] = useState(true);
-    const [searchData, setSearchData] = useState([]);
 
     //Misc variables
     const [center, setCenter] = useState(true)
@@ -53,12 +52,6 @@ function MapPage() {
         fetchReviews().then((res) => {
             setAllReviews(res);
         })
-
-        let temp = [];
-        hills.forEach((hill) => {
-            temp.push({key: hill.name.toLowerCase(), value: hill.name})
-        })
-        setSearchData(temp);
     }, [])
 
     useEffect(() => {
@@ -69,7 +62,7 @@ function MapPage() {
             }
         })
         setRating(Math.floor(starValue / reviews.length));
-    }, [reviews])
+    }, [reviews, currentHill])
 
     useEffect(() => {
         fetchReviews().then((res) => {
@@ -155,23 +148,20 @@ function MapPage() {
         try {
             return require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`);
         } catch (err) {
-         return require(`../img/nohill.webp`);;
+            return require(`../img/nohill.webp`);
         }
-      };
+    };
 
-      const updateSearch = event => {
-        setSearchTerm(event.target.value)
-      }
+    const searchHill = (name) => {
+        name = name.split(" ")[0];
+        hills.forEach((hill) => {
+            if (hill.name.includes(name)) {
+                setCenterValue({lat: hill.lat, lng: hill.lon})
+                setCenter(false);
+            }
+        })
+    }
 
-      const searchHill = (name) => {
-            name = name.split(" ")[0];
-            hills.forEach((hill) => {
-                if (hill.name.includes(name)) {
-                    setCenterValue({lat: hill.lat, lng: hill.lon})
-                    setCenter(false);
-                }
-            })
-      }
     return (
         <>
             {
@@ -180,21 +170,23 @@ function MapPage() {
             }
 
             <div className={'searchBar'}>
-            <Autocomplete
-                value={searchTerm}
-                onChange={(event, newValue) => {
-                setSearchTerm(newValue);
-                }}
-                inputValue={inputSearchValue}
-                onInputChange={(event, newInputValue) => {
-                setInputSearchValue(newInputValue);
-                }}
-                id="controllable-states-demo"
-                options={hills.map(hill => `${hill.name} ${hill.elevation}m`)}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label={'Hledat'} />}
-            />
-                <div className={'btn'} onClick={() => {searchHill(searchTerm)}}>Hledat</div> 
+                <Autocomplete
+                    value={searchTerm}
+                    onChange={(event, newValue) => {
+                        setSearchTerm(newValue);
+                    }}
+                    inputValue={inputSearchValue}
+                    onInputChange={(event, newInputValue) => {
+                        setInputSearchValue(newInputValue);
+                    }}
+                    options={hills.map(hill => `${hill.name} ${hill.elevation}m`)}
+                    sx={{width: 300, backgroundColor: "white"}}
+                    renderInput={(params) => <TextField {...params} label={'Hledat'}/>}
+                />
+                <div className={'btn'} onClick={() => {
+                    searchHill(searchTerm)
+                }}>Hledat
+                </div>
             </div> 
 
             {currentHill && <div className={'sidebar'}>
@@ -272,7 +264,7 @@ function MapPage() {
             <div className={'bottom'}>
                 <div className='bottomItems'>
                     <button type="button" className="btn">Settings</button>
-                    <a href={'/profile'}><img className='btn-profile' src={pfp}></img></a>
+                    <a href={'/profile'}><img alt={"profile picture"} className='btn-profile' src={pfp}></img></a>
                     <button type="button" className="btn">Collapse</button>
                 </div>
             </div>

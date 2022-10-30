@@ -4,19 +4,19 @@ const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-require('dotenv').config()
-
 const transporter = nodemailer.createTransport({
     service: 'gmail',
-      auth: {
+    auth: {
         type: 'OAuth2',
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
         clientId: process.env.EMAIL_CLIENT_ID,
         clientSecret: process.env.EMAIL_SECRET,
         refreshToken: process.env.EMAIL_REFRESH_TOKEN
-      }
+    }
 });
+
+require('dotenv').config()
 
 router.get("/", (req, res) => {
     User.find()
@@ -67,15 +67,16 @@ router.post("/register", (req, res) => {
             to: req.body.email,
             subject: 'Ověření emailové adresy',
             html: `Děkujeme za vaši registraci, prosím ověřte email.\n<a href="http://localhost:8082/api/users/verify/${token}">ZDE</a>`
-          };
+        };
 
-        transporter.sendMail(mailOptions, function(error, info){
+        transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-              console.log(error);
+                console.log(error);
             } else {
-              console.log('Email sent: ' + info.response);
+                console.log('User Verification Email sent: ' + info.response);
             }
-          });
+        });
+
         User.create({
             ...req.body,
             pass: hash,
@@ -90,23 +91,24 @@ router.post("/register", (req, res) => {
 router.post("/forgot-password", (req, res) => {
     let token = crypto.randomUUID();
 
-   console.log(req.body.email);
-            User.updateOne({"email": req.body.email}, {$set: {"forgotPassToken": token}}).then(() => {
-                let mailOptions = {
-                    from: "kopcuj@gmail.com",
-                    to: req.body.email,
-                    subject: 'Zapomenuté heslo',
-                    html: `Na tomto odkazu si můžete změnit heslo. Přejeme úspěšné chození.\n<a href="http://localhost:3000/change-password?token=${token}">http://localhost:3000/change-password?token=${token}</a>`
-                  };
-        
-                transporter.sendMail(mailOptions, function(error, info){
-                    if (error) {
-                      console.log(error);
-                    } else {
-                      console.log('Email sent: ' + info.response);
-                    }
-                  });
-            });
+    User.updateOne({"email": req.body.email}, {$set: {"forgotPassToken": token}}).then(() => {
+        let mailOptions = {
+            from: "kopcuj@gmail.com",
+            to: req.body.email,
+            subject: 'Zapomenuté heslo',
+            html: `Na tomto odkazu si můžete změnit heslo. Přejeme úspěšné chození.\n<a href="http://localhost:3000/change-password?token=${token}">http://localhost:3000/change-password?token=${token}</a>`
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Forgotten Password Email sent: ' + info.response);
+            }
+        });
+
+        res.sendStatus(200);
+    });
 })
 
 router.post("/change-password", (req, res) => {
@@ -134,11 +136,9 @@ router.post("/login", (req, res) => {
 });
 
 router.post('/addHill', (req, res) => {
-    console.log('req backend');
     User.updateOne({authToken: req.body.authToken}, {$push: {hills: req.body.hillId}}).then(() => {
         res.sendStatus(200);
     });
-
 });
 
 module.exports = router;
