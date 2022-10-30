@@ -22,6 +22,7 @@ function MapPage() {
     const [centerValue, setCenterValue] = useState(null)
     const [user, setUser] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [inputSearchValue, setInputSearchValue] = useState('');
 
     //Rating variables
     const [rating, setRating] = useState(0);
@@ -163,7 +164,7 @@ function MapPage() {
       }
 
       const searchHill = (name) => {
-            console.log(name);
+            name = name.split(" ")[0];
             hills.forEach((hill) => {
                 if (hill.name.includes(name)) {
                     setCenterValue({lat: hill.lat, lng: hill.lon})
@@ -178,25 +179,24 @@ function MapPage() {
                     document.location.replace(document.location + 'login') : null
             }
 
-        <Autocomplete
-        freeSolo
-        id="free-solo-2-demo"
-        disableClearable
-        options={hills.map((option) => option.name)}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search input"
-            id={'search'}
-            onChange={updateSearch}
-            InputProps={{
-              ...params.InputProps,
-              type: 'search',
-            }}
-          />
-        )}
-      />
-          <div className={'btn'} onClick={() => {searchHill(searchTerm)}}>Hledat</div>  
+            <div className={'searchBar'}>
+            <Autocomplete
+                value={searchTerm}
+                onChange={(event, newValue) => {
+                setSearchTerm(newValue);
+                }}
+                inputValue={inputSearchValue}
+                onInputChange={(event, newInputValue) => {
+                setInputSearchValue(newInputValue);
+                }}
+                id="controllable-states-demo"
+                options={hills.map(hill => `${hill.name} ${hill.elevation}m`)}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label={'Hledat'} />}
+            />
+                <div className={'btn'} onClick={() => {searchHill(searchTerm)}}>Hledat</div> 
+            </div> 
+
             {currentHill && <div className={'sidebar'}>
                 <div className={'hill'}>
                     <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>

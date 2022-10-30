@@ -48,6 +48,19 @@ a, a:hover {
     text-decoration: none;
 }
 
+.searchBar {
+    display: flex;
+    z-index: 999;
+    position: absolute;
+    right: 0;
+    padding: 10px;
+}
+
+.searchInput {
+    width: 25vw !important;
+    background-color: white;
+}
+
 .container {
     overflow-y: auto !important;
     overflow-x: hidden !important;
