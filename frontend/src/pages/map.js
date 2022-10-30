@@ -290,13 +290,13 @@ function MapPage() {
                         {hills?.map((hill) => {
                             if (user.hills.includes(hill._id)) {
                                 return (
-                                    <Marker key={hill._id} options={{title: hill.name, url: "https://api.mapy.cz/img/api/marker/drop-blue.png"}}
+                                    <Marker key={hill._id} options={{title: `${hill.name}-${hill.elevation}m`, url: "https://api.mapy.cz/img/api/marker/drop-blue.png"}}
                                     coords={{lat: hill.lat, lng: hill.lon}}/>
                                 )
                             }
                             else {
                                 return (
-                                    <Marker key={hill._id} options={{title: hill.name}}
+                                    <Marker key={hill._id} options={{title: `${hill.name}-${hill.elevation}m`}}
                                             coords={{lat: hill.lat, lng: hill.lon}}/>
                                 )
                             }
