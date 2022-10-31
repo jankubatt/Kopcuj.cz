@@ -200,6 +200,10 @@ a, a:hover {
     background-color: var(--c2);
 }
 
+#btnClaimHill:disabled {
+    display: none;
+}
+
 #map {
     z-index: -999;
     overflow: hidden;

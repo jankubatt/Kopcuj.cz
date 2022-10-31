@@ -15,6 +15,8 @@ function MapPage() {
     const [hills, getHills] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [climbed, setClimbed] = useState(true);
+    const [btnClimb, setBtnClimb] = useState(false);
+
 
     //Misc variables
     const [center, setCenter] = useState(true)
@@ -55,14 +57,16 @@ function MapPage() {
     }, [])
 
     useEffect(() => {
-        let starValue = 0;
-        allReviews?.forEach((review) => {
-            if (currentHill._id === review.id_hill) {
-                starValue += review.stars;
-            }
-        })
-        setRating(Math.floor(starValue / reviews.length));
-    }, [reviews, currentHill])
+        if (currentHill !== undefined) {
+            let starValue = 0;
+            allReviews?.forEach((review) => {
+                if (currentHill._id === review.id_hill) {
+                    starValue += review.stars;
+                }
+            })
+            setRating(Math.floor(starValue / reviews.length));
+        }
+    }, [reviews])
 
     useEffect(() => {
         fetchReviews().then((res) => {
@@ -80,12 +84,25 @@ function MapPage() {
         })
     }, [btnReview, currentHill]);
 
+    useEffect(() => {
+        fetchHills().then((res) => {
+            getHills(res);
+            setClimbed(true);
+        })
+
+        fetchUser().then((res) => {
+            setUser(res)
+        })
+    }, [btnClimb])
+
     //Functions
     const addHill = async () => {
         await axios.post('http://localhost:8082/api/users/addHill', {
             authToken: Cookies.get('authToken'),
             hillId: currentHill._id
         });
+
+        setBtnClimb(!btnClimb)
     }
 
     const sendRating = async () => {
@@ -130,7 +147,6 @@ function MapPage() {
             if (user.hills.includes(clickedHill._id)) setClimbed(true);
 
             setCurrentHill(clickedHill);
-            console.log(currentHill);
 
             let currentHillReviews = [];
             
@@ -171,6 +187,7 @@ function MapPage() {
 
             <div className={'searchBar'}>
                 <Autocomplete
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
                     value={searchTerm}
                     onChange={(event, newValue) => {
                         setSearchTerm(newValue);
@@ -196,7 +213,7 @@ function MapPage() {
                     <div style={{
                         width: "100%",
                         height: "200px",
-                        backgroundImage: `url(${tryHillImage()/*tryRequire(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`)*/})`,
+                        backgroundImage: `url(${tryHillImage()})`,
                         backgroundSize: "cover",
                         backgroundPosition: "center"
                     }}>
