@@ -50,9 +50,9 @@ a, a:hover {
 
 .searchBar {
     display: flex;
+    right: 100px;
     z-index: 999;
     position: absolute;
-    right: 0;
     padding: 10px;
 }
 

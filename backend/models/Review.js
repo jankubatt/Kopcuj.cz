@@ -39,6 +39,10 @@ const ReviewSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    helpful: {
+        type: Number,
+        default: 0
+    },
     text: {
         type: String,
         required: false,

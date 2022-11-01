@@ -3,7 +3,8 @@ import '../App.css';
 import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
-import {Card, CardContent, Chip, Rating} from "@mui/material";
+import {Card, CardContent, Chip, Rating, IconButton} from "@mui/material";
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import pfp from '../img/pfp-default.png';
@@ -268,11 +269,12 @@ function MapPage() {
                                     {review.text}
                                 </div>
 
-                                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                                    <div style={{color: 'GrayText'}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
+                                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
+                                    <IconButton style={{alignSelf: "flex-end"}} aria-label="thumbs up" disabled={true}><ThumbUpIcon /> {review.helpful}</IconButton>
+                                    <div style={{color: 'GrayText', alignSelf: "flex-end"}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
                                 </div>
                             </CardContent>
-                        </Card></div> : ''))}
+                        </Card></div> : 'Loading...'))}
                     </div>
                 </div>
             </div>
