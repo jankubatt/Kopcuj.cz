@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
@@ -29,7 +29,7 @@ function MapPage() {
     //Rating variables
     const [rating, setRating] = useState(0);
     const [txtArea, setTxtArea] = useState('none');
-    const [text, setText] = useState(null);
+    const reviewText = useRef();
     const [allReviews, setAllReviews] = useState([])
     const [reviews, setReviews] = useState([])
     const [btnReview, setBtnReview] = useState(false);
@@ -111,7 +111,7 @@ function MapPage() {
             stars: rating,
             hillId: currentHill._id,
             userId: user._id,
-            text: text
+            text: reviewText.current.value
         });
 
         setTxtArea('none')
@@ -139,7 +139,6 @@ function MapPage() {
             setCenter(false);
             setClimbed(false);
             setTxtArea('none')
-            setText(null);
 
             let hillName = e.target.title;
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
@@ -250,9 +249,7 @@ function MapPage() {
 
                     <button type="button" className="btn" onClick={sendRating}>Odeslat</button><br/>
 
-                    <textarea style={{'width': '20vw', height: '20vh', display: txtArea}} onChange={(e) => {
-                        setText(e.target.value)
-                    }} value={text || ''}></textarea><br/>
+                    <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: txtArea}}></textarea><br/>
                     
                     <div id='reviews'>
                         {reviews?.map((review) => ((review.text !== null) ? <div key={review._id}><Card className='card'>
