@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -6,27 +6,17 @@ import {useNavigate} from "react-router-dom";
 axios.defaults.withCredentials = true;
 
 function ForgotPassword() {
-    //State for storing form values
-    const [state, setState] = useState({username: null, pass: null});
-    let navigate = useNavigate();
+    //Ref for storing form values
+    const email = useRef();
 
-    //function that handles changes in input boxes, when input changes, it gets written into state variable
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setState({...state, [name]: value});
-    };
+    let navigate = useNavigate();
 
     //handles submit button
     const handleSubmit = (event) => {
         event.preventDefault(); //prevent reload of page
 
-        const data = {
-            email: state.email,
-        };
-        console.log(data);
         //post data to database
-        axios.post("http://localhost:8082/api/users/forgot-password", data)
+        axios.post("http://localhost:8082/api/users/forgot-password", email.current.value)
             .then(() => {
             })
             .catch(err => {
@@ -34,13 +24,12 @@ function ForgotPassword() {
             });
     }
 
-
     return (
         <div className='wrapper'>
             <form onSubmit={handleSubmit}>
                 <div className='input'>
                     <label htmlFor="email">E-Mail</label><br />
-                    <input onChange={handleChange} type="text" name={"email"}
+                    <input ref={email} type="text" name={"email"}
                         placeholder={"E-Mail"}/>
                 </div>
 

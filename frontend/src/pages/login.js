@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -6,24 +6,19 @@ import {useNavigate} from "react-router-dom";
 axios.defaults.withCredentials = true;
 
 function LoginPage() {
-    //State for storing form values
-    const [state, setState] = useState({username: null, pass: null});
-    let navigate = useNavigate();
+    //Ref for storing form values
+    const username = useRef();
+    const password = useRef();
 
-    //function that handles changes in input boxes, when input changes, it gets written into state variable
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setState({...state, [name]: value});
-    };
+    let navigate = useNavigate();
 
     //handles submit button
     const handleSubmit = (event) => {
         event.preventDefault(); //prevent reload of page
 
         const data = {
-            login: state.username,
-            pass: state.pass
+            login: username.current.value,
+            pass: password.current.value
         };
 
         //post data to database
@@ -32,7 +27,7 @@ function LoginPage() {
                 return navigate("/");
             })
             .catch(err => {
-                console.log("Error in register user!\n" + err);
+                console.log("Error in login user!\n" + err);
             });
     }
 
@@ -42,13 +37,13 @@ function LoginPage() {
             <form onSubmit={handleSubmit}>
                 <div className='input'>
                     <label htmlFor="username">Uživatelské jméno</label><br />
-                    <input onChange={handleChange} type="text" name={"username"}
+                    <input ref={username} type="text" name={"username"}
                         placeholder={"Uživatelské jméno"}/>
                 </div>
 
                 <div className='input'>
                     <label htmlFor="pass">Heslo</label><br/>
-                    <input onChange={handleChange} type="password" name={"pass"}
+                    <input ref={password} type="password" name={"pass"}
                         placeholder={"Heslo"}/>
                 </div>
 
@@ -56,7 +51,6 @@ function LoginPage() {
 
                 <button className='btn-hoverable' type="submit">Přihlásit</button>
             </form>
-
         </div>
     )
 }

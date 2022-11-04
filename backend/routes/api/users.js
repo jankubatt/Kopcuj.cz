@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const express = require('express');
 const router = express.Router();
 const User = require('../../models/User');
@@ -15,8 +17,6 @@ const transporter = nodemailer.createTransport({
         refreshToken: process.env.EMAIL_REFRESH_TOKEN
     }
 });
-
-require('dotenv').config()
 
 router.get("/", (req, res) => {
     User.find()
