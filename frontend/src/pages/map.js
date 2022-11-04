@@ -33,6 +33,7 @@ function MapPage() {
     const [allReviews, setAllReviews] = useState([])
     const [reviews, setReviews] = useState([])
     const [btnReview, setBtnReview] = useState(false);
+    const [btnHelpful, setBtnHelpful] = useState(false);
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -83,7 +84,7 @@ function MapPage() {
                 setReviews(currentReviews);
             }
         })
-    }, [btnReview, currentHill]);
+    }, [btnReview, currentHill, btnHelpful]);
 
     useEffect(() => {
         fetchHills().then((res) => {
@@ -178,6 +179,25 @@ function MapPage() {
         })
     }
 
+    const helpfulClicked = async (review) => {
+        console.log(review)
+        await axios.post(`http://localhost:8082/api/review/addHelpful`, {
+            hillId: currentHill._id,
+            userId: user._id,
+            reviewId: review
+        }).then(async (res) => {
+            if (res.data === 'remove') {
+                await axios.post(`http://localhost:8082/api/review/removeHelpful`, {
+                    hillId: currentHill._id,
+                    userId: user._id,
+                    reviewId: review
+                })
+            }
+        });
+
+        setBtnHelpful(!btnHelpful);
+    }
+
     return (
         <>
             {
@@ -267,7 +287,7 @@ function MapPage() {
                                 </div>
 
                                 <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
-                                    <IconButton style={{alignSelf: "flex-end"}} aria-label="thumbs up" disabled={true}><ThumbUpIcon /> {review.helpful}</IconButton>
+                                    <IconButton style={{alignSelf: "flex-end"}} onClick={() => {helpfulClicked(review._id)}} aria-label="thumbs up" disabled={false}><ThumbUpIcon />{review.helpful.length}</IconButton>
                                     <div style={{color: 'GrayText', alignSelf: "flex-end"}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
                                 </div>
                             </CardContent>

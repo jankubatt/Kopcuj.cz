@@ -36,4 +36,30 @@ router.post('/addReview', (req, res) => {
         .catch(res.status(404));
 });
 
+router.post('/addHelpful', (req, res) => {
+    Review.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
+        $addToSet: {
+            helpful: req.body.userId
+        }
+    }).then((response) => {
+        if (response.modifiedCount == 0) {
+            res.send("remove");
+        } else {
+            res.sendStatus(200);
+        } 
+    }).catch((err) => {
+        console.log(err);
+    })
+});
+
+router.post('/removeHelpful', (req, res) => {
+    Review.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
+        $pull: {
+            helpful: { $in: [req.body.userId] }
+        }
+    }).then(() => {res.sendStatus(200)}).catch((err) => {
+        console.log(err);
+    })
+});
+
 module.exports = router;
