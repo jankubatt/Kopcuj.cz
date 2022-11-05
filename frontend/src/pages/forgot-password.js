@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react';
+import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -16,7 +16,7 @@ function ForgotPassword() {
         event.preventDefault(); //prevent reload of page
 
         //post data to database
-        axios.post("http://localhost:8082/api/users/forgot-password", email.current.value)
+        axios.post("http://localhost:8082/api/users/forgot-password", {email: email.current.value})
             .then(() => {
             })
             .catch(err => {

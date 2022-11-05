@@ -7,14 +7,11 @@ const bcrypt = require('bcrypt');
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.web4u.cz',
+    port: 25,
     auth: {
-        type: 'OAuth2',
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-        clientId: process.env.EMAIL_CLIENT_ID,
-        clientSecret: process.env.EMAIL_SECRET,
-        refreshToken: process.env.EMAIL_REFRESH_TOKEN
+        user:process.env.EMAIL_USER,
+        pass:process.env.EMAIL_PASS
     }
 });
 
@@ -63,7 +60,7 @@ router.post("/register", (req, res) => {
     let token = crypto.randomUUID();
     bcrypt.hash(req.body.pass, 10).then(function (hash) {
         let mailOptions = {
-            from: "kopcuj@gmail.com",
+            from: process.env.EMAIL_USER,
             to: req.body.email,
             subject: 'Ověření emailové adresy',
             html: `Děkujeme za vaši registraci, prosím ověřte email.\n<a href="http://localhost:8082/api/users/verify/${token}">ZDE</a>`
@@ -93,7 +90,7 @@ router.post("/forgot-password", (req, res) => {
 
     User.updateOne({"email": req.body.email}, {$set: {"forgotPassToken": token}}).then(() => {
         let mailOptions = {
-            from: "kopcuj@gmail.com",
+            from: process.env.EMAIL_USER,
             to: req.body.email,
             subject: 'Zapomenuté heslo',
             html: `Na tomto odkazu si můžete změnit heslo. Přejeme úspěšné chození.\n<a href="http://localhost:3000/change-password?token=${token}">http://localhost:3000/change-password?token=${token}</a>`
@@ -103,7 +100,7 @@ router.post("/forgot-password", (req, res) => {
             if (error) {
                 console.log(error);
             } else {
-                console.log('Forgotten Password Email sent: ' + info.response);
+                console.log('Forgotten Password Email sent: ' + JSON.stringify(info));
             }
         });
 
