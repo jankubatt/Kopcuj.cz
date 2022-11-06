@@ -28,6 +28,13 @@ router.post('/addReview', (req, res) => {
                 stars: req.body.stars,
                 text: req.body.text,
                 date_added: new Date()
+            },
+            $addToSet: {
+                difficulty: req.body.difficulty,
+                path: req.body.path,
+                stroller: req.body.stroller,
+                parking: req.body.parking,
+                food: req.body.food
             }
         }, {upsert: true}).then().catch((err) => {
             console.log(err)

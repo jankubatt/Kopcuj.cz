@@ -3,7 +3,7 @@ import '../App.css';
 import axios from "axios";
 import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
 import Cookies from 'js-cookie';
-import {Card, CardContent, Chip, Rating, IconButton} from "@mui/material";
+import {Card, CardContent, Chip, Rating, IconButton, Checkbox} from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -29,11 +29,16 @@ function MapPage() {
     //Rating variables
     const [rating, setRating] = useState(0);
     const [txtArea, setTxtArea] = useState('none');
-    const reviewText = useRef();
     const [allReviews, setAllReviews] = useState([])
     const [reviews, setReviews] = useState([])
     const [btnReview, setBtnReview] = useState(false);
     const [btnHelpful, setBtnHelpful] = useState(false);
+    const reviewText = useRef();
+    const chbDifficulty = useRef();
+    const chbPath = useRef();
+    const chbStroller = useRef();
+    const chbParking = useRef();
+    const chbFood = useRef();
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -112,7 +117,12 @@ function MapPage() {
             stars: rating,
             hillId: currentHill._id,
             userId: user._id,
-            text: reviewText.current.value
+            text: reviewText.current.value,
+            difficulty: chbDifficulty.current.className.includes("Mui-checked") ? user._id : null,
+            path: chbPath.current.className.includes("Mui-checked") ? user._id : null,
+            stroller: chbStroller.current.className.includes("Mui-checked") ? user._id : null,
+            parking: chbParking.current.className.includes("Mui-checked") ? user._id : null,
+            food: chbFood.current.className.includes("Mui-checked") ? user._id : null
         });
 
         setTxtArea('none')
@@ -268,6 +278,14 @@ function MapPage() {
                     }} size={'large'}/><br/>
 
                     <button type="button" className="btn" onClick={sendRating}>Odeslat</button><br/>
+
+                    <div style={{display: txtArea}}>
+                        <Checkbox ref={chbDifficulty} /> Obtížné <br/>
+                        <Checkbox ref={chbPath} /> Dostupná cesta <br/>
+                        <Checkbox ref={chbStroller} /> Vhodné pro kočárky <br/>
+                        <Checkbox ref={chbParking} /> Parkoviště <br/>
+                        <Checkbox ref={chbFood} /> Občerstvení <br/>
+                    </div>
 
                     <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: txtArea}}></textarea><br/>
                     
