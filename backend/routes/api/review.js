@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Review = require('../../models/Review');
 const User = require('../../models/User');
+const Hill = require('../../models/Hill');
 
 router.get('/', (req, res) => {
     Review.find()
@@ -28,17 +29,28 @@ router.post('/addReview', (req, res) => {
                 stars: req.body.stars,
                 text: req.body.text,
                 date_added: new Date()
-            },
-            $addToSet: {
-                difficulty: req.body.difficulty,
-                path: req.body.path,
-                stroller: req.body.stroller,
-                parking: req.body.parking,
-                food: req.body.food
             }
-        }, {upsert: true}).then().catch((err) => {
-            console.log(err)
-        })
+        }, {upsert: true}).then().catch((err) => {console.log(err)})
+
+        if (req.body.difficulty !== null) {
+            Hill.updateOne({_id: req.body.hillId}, {$addToSet : { difficulty: req.body.difficulty }}).then().catch((err) => {console.log(err)})
+        }
+
+        if (req.body.food !== null) {
+            Hill.updateOne({_id: req.body.hillId}, {$addToSet : { food: req.body.food}}).then().catch((err) => {console.log(err)})
+        }
+
+        if (req.body.parking !== null) {
+            Hill.updateOne({_id: req.body.hillId}, {$addToSet : {parking: req.body.parking}}).then().catch((err) => {console.log(err)})
+        }
+
+        if (req.body.path !== null) {
+            Hill.updateOne({_id: req.body.hillId}, {$addToSet : {path: req.body.path}}).then().catch((err) => {console.log(err)})
+        }
+
+        if (req.body.stroller !== null) {
+            Hill.updateOne({_id: req.body.hillId}, {$addToSet : {stroller: req.body.stroller}}).then().catch((err) => {console.log(err)})
+        }
     }).then(res.sendStatus(200))
         .catch(res.status(404));
 });

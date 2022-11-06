@@ -262,6 +262,12 @@ function MapPage() {
                     </div>
                 </div>
 
+                {currentHill.difficulty.length > 0 ? "Obtížné " : ""}
+                {currentHill.path.length > 0 ? "Dostupná cesta " : ""}
+                {currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}
+                {currentHill.parking.length > 0 ? "Parkoviště " : ""}
+                {currentHill.stroller.length > 0 ? "Občerstvení " : ""}<br />
+
                 <div style={{textAlign: 'center'}}>
                     <button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
                             disabled={climbed}>Pokořit

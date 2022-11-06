@@ -35,6 +35,31 @@ const HillSchema = new mongoose.Schema({
         type: Array,
         required: false,
         default: []
+    },
+    difficulty: {
+        type: Array,
+        required: true,
+        default: []
+    },
+    path: {
+        type: Array,
+        required: true,
+        default: []
+    },
+    stroller: {
+        type: Array,
+        required: true,
+        default: []
+    },
+    parking: {
+        type: Array,
+        required: true,
+        default: []
+    },
+    food: {
+        type: Array,
+        required: true,
+        default: []
     }
 });
 

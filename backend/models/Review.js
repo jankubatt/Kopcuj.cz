@@ -44,31 +44,6 @@ const ReviewSchema = new mongoose.Schema({
         required: true,
         default: []
     },
-    difficulty: {
-        type: Array,
-        required: true,
-        default: []
-    },
-    path: {
-        type: Array,
-        required: true,
-        default: []
-    },
-    stroller: {
-        type: Array,
-        required: true,
-        default: []
-    },
-    parking: {
-        type: Array,
-        required: true,
-        default: []
-    },
-    food: {
-        type: Array,
-        required: true,
-        default: []
-    },
     text: {
         type: String,
         required: false,
