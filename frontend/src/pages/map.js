@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import '../App.css';
 import axios from "axios";
-import {KeyboardControl, Map, Marker, MarkerLayer, MouseControl, ZoomControl} from 'react-mapycz'
+import Map from '../components/Map'
 import Cookies from 'js-cookie';
 import {Card, CardContent, Chip, Rating, IconButton, Checkbox} from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
@@ -334,27 +334,7 @@ function MapPage() {
             </a> : null}
 
             <div className={"clickMap"} onClick={mapClicked}>
-                {user.hills ? <Map id={'map'} height={'100vh'} center={center ? {lat: 50.555, lng: 13.931} : centerValue} zoom={14}>
-                    <KeyboardControl/>
-                    <ZoomControl/>
-                    <MouseControl zoom={true} pan={true} wheel={true}/>
-                    <MarkerLayer>
-                        {hills?.map((hill) => {
-                            if (user.hills.includes(hill._id)) {
-                                return (
-                                    <Marker key={hill._id} options={{title: `${hill.name}-${hill.elevation}m`, url: "https://api.mapy.cz/img/api/marker/drop-blue.png"}}
-                                    coords={{lat: hill.lat, lng: hill.lon}}/>
-                                )
-                            }
-                            else {
-                                return (
-                                    <Marker key={hill._id} options={{title: `${hill.name}-${hill.elevation}m`}}
-                                            coords={{lat: hill.lat, lng: hill.lon}}/>
-                                )
-                            }
-                        })}
-                    </MarkerLayer>
-                </Map> : "Loading map..."}
+                {user.hills ? <Map center={center} centerValue={centerValue} user={user} hills={hills} /> : "Loading map..."}
             </div>
         </>
     )
