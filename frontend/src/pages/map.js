@@ -5,9 +5,8 @@ import Map from '../components/Map'
 import Cookies from 'js-cookie';
 import {Card, CardContent, Chip, Rating, IconButton, Checkbox} from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import pfp from '../img/pfp-default.png';
+import Searchbar from '../components/Searchbar';
 
 axios.defaults.withCredentials = true;
 
@@ -23,8 +22,6 @@ function MapPage() {
     const [center, setCenter] = useState(true)
     const [centerValue, setCenterValue] = useState(null)
     const [user, setUser] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [inputSearchValue, setInputSearchValue] = useState('');
 
     //Rating variables
     const [rating, setRating] = useState(0);
@@ -179,16 +176,6 @@ function MapPage() {
         }
     };
 
-    const searchHill = (name) => {
-        name = name.split(" ")[0];
-        hills.forEach((hill) => {
-            if (hill.name.includes(name)) {
-                setCenterValue({lat: hill.lat, lng: hill.lon})
-                setCenter(false);
-            }
-        })
-    }
-
     const helpfulClicked = async (review) => {
         console.log(review)
         await axios.post(`http://localhost:8082/api/review/addHelpful`, {
@@ -215,26 +202,7 @@ function MapPage() {
                     document.location.replace(document.location + 'login') : null
             }
 
-            <div className={'searchBar'}>
-                <Autocomplete
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                    value={searchTerm}
-                    onChange={(event, newValue) => {
-                        setSearchTerm(newValue);
-                    }}
-                    inputValue={inputSearchValue}
-                    onInputChange={(event, newInputValue) => {
-                        setInputSearchValue(newInputValue);
-                    }}
-                    options={hills.map(hill => `${hill.name} ${hill.elevation}m`)}
-                    sx={{width: 300, backgroundColor: "white"}}
-                    renderInput={(params) => <TextField {...params} label={'Hledat'}/>}
-                />
-                <div className={'btn'} onClick={() => {
-                    searchHill(searchTerm)
-                }}>Hledat
-                </div>
-            </div> 
+            <Searchbar hills={hills} setCenter={setCenter} setCenterValue={setCenterValue} />
 
             {currentHill && <div className={'sidebar'}>
                 <div className={'hill'}>
