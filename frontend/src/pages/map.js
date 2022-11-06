@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import Map from '../components/Map'
@@ -163,7 +163,7 @@ function MapPage() {
             <div className={'bottom'}>
                 <div className='bottomItems'>
                     <button type="button" className="btn">Settings</button>
-                    <a href={'/profile'}><img alt={"profile picture"} className='btn-profile' src={pfp}></img></a>
+                    <a href={'/profile'}><img alt={"profile"} className='btn-profile' src={pfp}></img></a>
                     <button type="button" className="btn">Collapse</button>
                 </div>
             </div>
