@@ -2,8 +2,16 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import {Card, CardContent, Chip, Rating, IconButton, Checkbox} from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import React, {useEffect, useState, useRef} from 'react';
 
 const Sidebar = (props) => {
+    const chbDifficulty = useRef();
+    const chbPath = useRef();
+    const chbStroller = useRef();
+    const chbParking = useRef();
+    const chbFood = useRef();
+    const reviewText = useRef();
+
     const tryHillImage = () => {
         try {
             return require(`../img/hills/${processHillName(props.currentHill.name)}-${props.currentHill.elevation}.webp`);
@@ -26,12 +34,12 @@ const Sidebar = (props) => {
             stars: props.rating,
             hillId: props.currentHill._id,
             userId: props.user._id,
-            text: props.reviewText.current.value,
-            difficulty: props.chbDifficulty.current.className.includes("Mui-checked") ? props.user._id : null,
-            path: props.chbPath.current.className.includes("Mui-checked") ? props.user._id : null,
-            stroller: props.chbStroller.current.className.includes("Mui-checked") ? props.user._id : null,
-            parking: props.chbParking.current.className.includes("Mui-checked") ? props.user._id : null,
-            food: props.chbFood.current.className.includes("Mui-checked") ? props.user._id : null
+            text: reviewText.current.value,
+            difficulty: chbDifficulty.current.className.includes("Mui-checked") ? props.user._id : null,
+            path: chbPath.current.className.includes("Mui-checked") ? props.user._id : null,
+            stroller: chbStroller.current.className.includes("Mui-checked") ? props.user._id : null,
+            parking: chbParking.current.className.includes("Mui-checked") ? props.user._id : null,
+            food: chbFood.current.className.includes("Mui-checked") ? props.user._id : null
         });
 
         props.setTxtArea('none')
@@ -107,14 +115,14 @@ const Sidebar = (props) => {
                     <button type="button" className="btn" onClick={sendRating}>Odeslat</button><br/>
 
                     <div style={{display: props.txtArea}}>
-                        <Checkbox ref={props.chbDifficulty} /> Obtížné <br/>
-                        <Checkbox ref={props.chbPath} /> Dostupná cesta <br/>
-                        <Checkbox ref={props.chbStroller} /> Vhodné pro kočárky <br/>
-                        <Checkbox ref={props.chbParking} /> Parkoviště <br/>
-                        <Checkbox ref={props.chbFood} /> Občerstvení <br/>
+                        <Checkbox ref={chbDifficulty} /> Obtížné <br/>
+                        <Checkbox ref={chbPath} /> Dostupná cesta <br/>
+                        <Checkbox ref={chbStroller} /> Vhodné pro kočárky <br/>
+                        <Checkbox ref={chbParking} /> Parkoviště <br/>
+                        <Checkbox ref={chbFood} /> Občerstvení <br/>
                     </div>
 
-                    <textarea ref={props.reviewText} style={{'width': '20vw', height: '20vh', display: props.txtArea}}></textarea><br/>
+                    <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: props.txtArea}}></textarea><br/>
                     
                     <div id='reviews'>
                         {props.reviews?.map((review) => ((review.text !== null) ? <div key={review._id}><Card className='card'>
