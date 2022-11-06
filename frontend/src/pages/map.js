@@ -3,10 +3,9 @@ import '../App.css';
 import axios from "axios";
 import Map from '../components/Map'
 import Cookies from 'js-cookie';
-import {Card, CardContent, Chip, Rating, IconButton, Checkbox} from "@mui/material";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import pfp from '../img/pfp-default.png';
 import Searchbar from '../components/Searchbar';
+import Sidebar from '../components/Sidebar';
 
 axios.defaults.withCredentials = true;
 
@@ -100,32 +99,6 @@ function MapPage() {
     }, [btnClimb])
 
     //Functions
-    const addHill = async () => {
-        await axios.post('http://localhost:8082/api/users/addHill', {
-            authToken: Cookies.get('authToken'),
-            hillId: currentHill._id
-        });
-
-        setBtnClimb(!btnClimb)
-    }
-
-    const sendRating = async () => {
-        await axios.post(`http://localhost:8082/api/review/addReview`, {
-            stars: rating,
-            hillId: currentHill._id,
-            userId: user._id,
-            text: reviewText.current.value,
-            difficulty: chbDifficulty.current.className.includes("Mui-checked") ? user._id : null,
-            path: chbPath.current.className.includes("Mui-checked") ? user._id : null,
-            stroller: chbStroller.current.className.includes("Mui-checked") ? user._id : null,
-            parking: chbParking.current.className.includes("Mui-checked") ? user._id : null,
-            food: chbFood.current.className.includes("Mui-checked") ? user._id : null
-        });
-
-        setTxtArea('none')
-        setBtnReview(!btnReview);
-    }
-
     const fetchUser = async () => {
         const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
         return response.data;
@@ -168,33 +141,6 @@ function MapPage() {
         }
     }
 
-    const tryHillImage = () => {
-        try {
-            return require(`../img/hills/${processHillName(currentHill.name)}-${currentHill.elevation}.webp`);
-        } catch (err) {
-            return require(`../img/nohill.webp`);
-        }
-    };
-
-    const helpfulClicked = async (review) => {
-        console.log(review)
-        await axios.post(`http://localhost:8082/api/review/addHelpful`, {
-            hillId: currentHill._id,
-            userId: user._id,
-            reviewId: review
-        }).then(async (res) => {
-            if (res.data === 'remove') {
-                await axios.post(`http://localhost:8082/api/review/removeHelpful`, {
-                    hillId: currentHill._id,
-                    userId: user._id,
-                    reviewId: review
-                })
-            }
-        });
-
-        setBtnHelpful(!btnHelpful);
-    }
-
     return (
         <>
             {
@@ -204,89 +150,109 @@ function MapPage() {
 
             <Searchbar hills={hills} setCenter={setCenter} setCenterValue={setCenterValue} />
 
-            {currentHill && <div className={'sidebar'}>
-                <div className={'hill'}>
-                    <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
-                    <hr/>
-                    <div style={{
-                        width: "100%",
-                        height: "200px",
-                        backgroundImage: `url(${tryHillImage()})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center"
-                    }}>
+            {currentHill && <Sidebar    currentHill={currentHill}
+                                        setBtnClimb={setBtnClimb}
+                                        btnClimb={btnClimb}
+                                        rating={rating}
+                                        user={user}
+                                        reviewText={reviewText}
+                                        chbDifficulty={chbDifficulty}
+                                        chbPath={chbPath}
+                                        chbStroller={chbStroller}
+                                        chbParking={chbParking}
+                                        chbFood={chbFood}
+                                        setTxtArea={setTxtArea}
+                                        setBtnReview={setBtnReview}
+                                        btnReview={btnReview}
+                                        btnHelpful={btnHelpful}
+                                        setBtnHelpful={setBtnHelpful}
+                                        climbed={climbed}
+                                        setRating={setRating}
+                                        txtArea={txtArea}
+                                        reviews={reviews} />
+            // <div className={'sidebar'}>
+            //     <div className={'hill'}>
+            //         <h1>{currentHill.name}<small style={{fontSize: 'medium'}}>({currentHill.elevation}m)</small></h1>
+            //         <hr/>
+            //         <div style={{
+            //             width: "100%",
+            //             height: "200px",
+            //             backgroundImage: `url(${tryHillImage()})`,
+            //             backgroundSize: "cover",
+            //             backgroundPosition: "center"
+            //         }}>
 
-                    </div>
-                    <h2>Informace</h2>
-                    <div>
-                        {currentHill.lat}<br/>
-                        {currentHill.lon}<br/>
-                        {currentHill.prominence}<br/>
-                        {currentHill.isolation}<br/>
-                        {currentHill.material}<br/>
-                        {currentHill.basin}<br/>
-                        {currentHill.district}<br/>
-                        {currentHill.location}<br/>
-                    </div>
-                </div>
+            //         </div>
+            //         <h2>Informace</h2>
+            //         <div>
+            //             {currentHill.lat}<br/>
+            //             {currentHill.lon}<br/>
+            //             {currentHill.prominence}<br/>
+            //             {currentHill.isolation}<br/>
+            //             {currentHill.material}<br/>
+            //             {currentHill.basin}<br/>
+            //             {currentHill.district}<br/>
+            //             {currentHill.location}<br/>
+            //         </div>
+            //     </div>
 
-                {currentHill.difficulty.length > 0 ? "Obtížné " : ""}
-                {currentHill.path.length > 0 ? "Dostupná cesta " : ""}
-                {currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}
-                {currentHill.parking.length > 0 ? "Parkoviště " : ""}
-                {currentHill.stroller.length > 0 ? "Občerstvení " : ""}<br />
+            //     {currentHill.difficulty.length > 0 ? "Obtížné " : ""}
+            //     {currentHill.path.length > 0 ? "Dostupná cesta " : ""}
+            //     {currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}
+            //     {currentHill.parking.length > 0 ? "Parkoviště " : ""}
+            //     {currentHill.stroller.length > 0 ? "Občerstvení " : ""}<br />
 
-                <div style={{textAlign: 'center'}}>
-                    <button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
-                            disabled={climbed}>Pokořit
-                    </button>
-                </div>
+            //     <div style={{textAlign: 'center'}}>
+            //         <button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
+            //                 disabled={climbed}>Pokořit
+            //         </button>
+            //     </div>
 
-                <hr/>
+            //     <hr/>
 
-                <h1>Rating</h1>
-                <div className={'rating'}>
-                    <Rating name="size-large simple-controlled" value={rating || 0} onChange={(event, newValue) => {
-                        setRating(newValue);
-                        setTxtArea('block')
-                    }} size={'large'}/><br/>
+            //     <h1>Rating</h1>
+            //     <div className={'rating'}>
+            //         <Rating name="size-large simple-controlled" value={rating || 0} onChange={(event, newValue) => {
+            //             setRating(newValue);
+            //             setTxtArea('block')
+            //         }} size={'large'}/><br/>
 
-                    <button type="button" className="btn" onClick={sendRating}>Odeslat</button><br/>
+            //         <button type="button" className="btn" onClick={sendRating}>Odeslat</button><br/>
 
-                    <div style={{display: txtArea}}>
-                        <Checkbox ref={chbDifficulty} /> Obtížné <br/>
-                        <Checkbox ref={chbPath} /> Dostupná cesta <br/>
-                        <Checkbox ref={chbStroller} /> Vhodné pro kočárky <br/>
-                        <Checkbox ref={chbParking} /> Parkoviště <br/>
-                        <Checkbox ref={chbFood} /> Občerstvení <br/>
-                    </div>
+            //         <div style={{display: txtArea}}>
+            //             <Checkbox ref={chbDifficulty} /> Obtížné <br/>
+            //             <Checkbox ref={chbPath} /> Dostupná cesta <br/>
+            //             <Checkbox ref={chbStroller} /> Vhodné pro kočárky <br/>
+            //             <Checkbox ref={chbParking} /> Parkoviště <br/>
+            //             <Checkbox ref={chbFood} /> Občerstvení <br/>
+            //         </div>
 
-                    <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: txtArea}}></textarea><br/>
+            //         <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: txtArea}}></textarea><br/>
                     
-                    <div id='reviews'>
-                        {reviews?.map((review) => ((review.text !== null) ? <div key={review._id}><Card className='card'>
-                            <CardContent>
-                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <div>
-                                        <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
-                                        {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
-                                    </div>
-                                    <div><Rating name="read-only" value={review.stars} readOnly /></div>
-                                </div>
+            //         <div id='reviews'>
+            //             {reviews?.map((review) => ((review.text !== null) ? <div key={review._id}><Card className='card'>
+            //                 <CardContent>
+            //                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
+            //                         <div>
+            //                             <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
+            //                             {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
+            //                         </div>
+            //                         <div><Rating name="read-only" value={review.stars} readOnly /></div>
+            //                     </div>
 
-                                <div>
-                                    {review.text}
-                                </div>
+            //                     <div>
+            //                         {review.text}
+            //                     </div>
 
-                                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
-                                    <IconButton style={{alignSelf: "flex-end"}} onClick={() => {helpfulClicked(review._id)}} aria-label="thumbs up" disabled={false}><ThumbUpIcon />{review.helpful.length}</IconButton>
-                                    <div style={{color: 'GrayText', alignSelf: "flex-end"}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
-                                </div>
-                            </CardContent>
-                        </Card></div> : 'Loading...'))}
-                    </div>
-                </div>
-            </div>
+            //                     <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
+            //                         <IconButton style={{alignSelf: "flex-end"}} onClick={() => {helpfulClicked(review._id)}} aria-label="thumbs up" disabled={false}><ThumbUpIcon />{review.helpful.length}</IconButton>
+            //                         <div style={{color: 'GrayText', alignSelf: "flex-end"}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
+            //                     </div>
+            //                 </CardContent>
+            //             </Card></div> : 'Loading...'))}
+            //         </div>
+            //     </div>
+            // </div>
             }
 
             <div className={'bottom'}>
@@ -306,13 +272,6 @@ function MapPage() {
             </div>
         </>
     )
-}
-
-function processHillName(name) {
-    let hill = name.toLowerCase();
-    hill = hill.replace(" ", "-");
-    hill = hill.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    return hill;
 }
 
 export default MapPage;
