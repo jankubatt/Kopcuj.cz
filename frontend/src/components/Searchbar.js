@@ -6,10 +6,13 @@ const Searchbar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [inputSearchValue, setInputSearchValue] = useState('');
 
-    const searchHill = (name) => {
-        name = name.split(" ")[0];
+    const searchHill = (n) => {
+        let name = n.split("-")[0];
+        let elevation = n.split("-")[1].replace('m', '')
+        console.log(n);
         props.hills.forEach((hill) => {
-            if (hill.name.includes(name)) {
+            console.log(hill.elevation == elevation)
+            if (hill.name.includes(name) && hill.elevation == elevation) {
                 props.setCenterValue({lat: hill.lat, lng: hill.lon})
                 props.setCenter(false);
             }
@@ -28,7 +31,7 @@ const Searchbar = (props) => {
                     onInputChange={(event, newInputValue) => {
                         setInputSearchValue(newInputValue);
                     }}
-                    options={props.hills.map(hill => `${hill.name} ${hill.elevation}m`)}
+                    options={props.hills.map(hill => `${hill.name}-${hill.elevation}m`)}
                     sx={{width: 300, backgroundColor: "white"}}
                     renderInput={(params) => <TextField {...params} label={'Hledat'}/>}
                 />
