@@ -164,7 +164,7 @@ function MapPage() {
                 <div className='bottomItems'>
                     <button type="button" className="btn">Settings</button>
                     <a href={'/profile'}><img alt={"profile"} className='btn-profile' src={pfp}></img></a>
-                    <button type="button" className="btn">Collapse</button>
+                    <a href={'/discussion'}><button type="button" className="btn">Diskuze</button></a>
                 </div>
             </div>
             
