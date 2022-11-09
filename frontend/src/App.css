@@ -196,6 +196,13 @@ a, a:hover {
     align-items: center;
 }
 
+.discussion {
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 5px;
+    padding: 5px;
+}
+
 #btnClaimHill {
     background-color: var(--c2);
 }
