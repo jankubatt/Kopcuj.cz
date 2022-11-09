@@ -1,9 +1,57 @@
-import React from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import '../App.css';
 import Discussion from '../components/Discussion';
 import { TextField, Container, Button } from '@mui/material';
+import axios from "axios";
+import Cookies from 'js-cookie';
 
 function DiscussionPage() {
+    const [user, setUser] = useState([]);
+    const [discussions, setDiscussions] = useState([]);
+    const subject = useRef();
+    const text = useRef();
+
+    //Check if user is logged in. If not, redirect user to login page
+    let authToken = Cookies.get('authToken');
+    if (authToken === '' || authToken === undefined || authToken === null) {
+        document.location.replace(document.location + 'login');
+    }
+
+    const fetchUser = async () => {
+        const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
+        return response.data;
+    }
+
+    const fetchDiscussions = async () => {
+        const response = await axios.get(`http://localhost:8082/api/discussions/`);
+        return response.data;
+    }
+
+    useEffect(() => {
+        fetchUser().then((res) => {
+            setUser(res)
+        })
+
+        fetchDiscussions().then((res) => {
+            setDiscussions(res);
+        })
+    }, [])
+
+    const createDiscussion = () => {
+        console.log(text.current)
+        axios.post("http://localhost:8082/api/discussions/create", {
+            id_user: user._id,
+            user: {
+                login: user.login,
+                name: user.name,
+                pfp: user.pfp,
+                isAdmin: user.isAdmin
+            },
+            subject: subject.current.value,
+            text: text.current.value
+        });
+    }
+
     return (
         <>
             <div className='navbar'>
@@ -15,14 +63,14 @@ function DiscussionPage() {
                 <div className='formDiscussion'>
                     <h1>Vytvořit diskuzi</h1>
                     
-                    <TextField id="outlined-basic" style={{width: "50%"}} label="Téma" variant="outlined" /><br/>
-                    <TextField label="Myšlenka" multiline rows={10} maxRows={10} style={{marginTop: "10px", width: "100%"}} /><br/>
-                    <Button variant="contained" style={{marginTop: "10px"}}>Vytvořit</Button>
+                    <input ref={subject} id="outlined-basic" style={{width: "50%"}} label="Téma" variant="outlined" /><br/>
+                    <input ref={text} label="Myšlenka" multiline rows={10} style={{marginTop: "10px", width: "100%"}} /><br/>
+                    <Button variant="contained" style={{marginTop: "10px"}} onClick={createDiscussion}>Vytvořit</Button>
                 </div>
 
                 <hr/>
 
-                <Discussion />                
+                {discussions?.map((discussion) => <Discussion data={discussion}/>)}         
             </Container>
         </>
     )

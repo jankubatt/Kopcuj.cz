@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const hills = require('./routes/api/hills');
 const users = require('./routes/api/users');
 const review = require('./routes/api/review');
+const discussion = require('./routes/api/discussions');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.get('/', (req, res) => res.send('Hello world!'));
 app.use('/api/hills', hills);
 app.use('/api/users', users);
 app.use('/api/review', review);
+app.use('/api/discussions', discussion)
 
 const port = process.env.PORT || 8082;
 
