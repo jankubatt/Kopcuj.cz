@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
     Discussion.find({_id: req.params.id})
-        .then(discussions => res.json(discussions))
+        .then(discussion => res.json(discussion[0]))
         .catch(err => res.status(404).json(err));
 })
 
