@@ -5,7 +5,7 @@ const router = express.Router();
 const Discussion = require('../../models/Discussion');
 
 router.get('/', (req, res) => {
-    Discussion.find()
+    Discussion.find().sort({date_added: -1})
         .then(discussions => res.json(discussions))
         .catch(err => res.status(404).json(err));
 });

@@ -1,5 +1,6 @@
 import axios from "axios";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
+import {Button, Container} from '@mui/material'
 
 const DiscussionPage = () => {
     const qs = require('query-string');
@@ -20,7 +21,14 @@ const DiscussionPage = () => {
 
     return (
         <>
-            {discussion !== undefined ? <p>{discussion.subject}</p> : "Loading..."}
+            {discussion !== undefined ?
+                <Container>
+                    <h1>{discussion.subject}</h1>
+                    <p>{discussion.text}</p>
+                    <input placeholder={'Odpovědět'}/>
+                    <Button variant="contained" style={{marginTop: "10px"}}>Odpovědět</Button>
+                </Container>
+                : "Loading..."}
         </>
 
     )

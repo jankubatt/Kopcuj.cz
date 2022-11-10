@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 function DiscussionsPage() {
     const [user, setUser] = useState([]);
     const [discussions, setDiscussions] = useState([]);
+    const [btn, setBtn] = useState(false);
     const subject = useRef();
     const text = useRef();
 
@@ -37,8 +38,13 @@ function DiscussionsPage() {
         })
     }, [])
 
+    useEffect(() => {
+        fetchDiscussions().then((res) => {
+            setDiscussions(res);
+        })
+    }, [btn])
+
     const createDiscussion = () => {
-        console.log(text.current)
         axios.post("http://localhost:8082/api/discussions/create", {
             id_user: user._id,
             user: {
@@ -50,6 +56,8 @@ function DiscussionsPage() {
             subject: subject.current.value,
             text: text.current.value
         });
+
+        setBtn(!btn);
     }
 
     return (
