@@ -1,30 +1,10 @@
 const mongoose = require('mongoose');
 
 const DiscussionSchema = new mongoose.Schema({
-    id_user: {
-        type: String,
-        required: true
-    },
     user: {
-        login: {
-            type: String,
-            required: true
-        },
-        name: {
-            type: String,
-            required: false,
-            default: null
-        },
-        pfp: {
-            type: String,
-            required: false,
-            default: null
-        },
-        isAdmin: {
-            type: Boolean,
-            required: true,
-            default: false
-        },
+        type: Object,
+        required: true,
+        default: {}
     },
     date_added: {
         type: Date,

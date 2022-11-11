@@ -30,24 +30,20 @@ const DiscussionPage = () => {
     }
 
     useEffect(() => {
+        fetchUser().then((res) => {
+            setUser(res);
+        })
+
         fetchDiscussion().then((res) => {
             setDiscussion(res);
             setReplies(res.replies);
-            console.log(res.replies)
-        })
-
-        fetchUser().then((res) => {
-            setUser(res);
         })
     }, [])
 
     useEffect(() => {
         fetchDiscussion().then((res) => {
-            setDiscussion(res);
             setReplies(res.replies);
         })
-
-
     }, [btn])
 
     const SendReply = async () => {
@@ -58,22 +54,39 @@ const DiscussionPage = () => {
                 text: reply.current.value,
                 date_added: `${new Date().getDate()}.${new Date().getMonth() + 1}.${new Date().getFullYear()}`
             }
+        }).then(() => {
+            setBtn(!btn)
         })
-
-        setBtn(!btn);
     }
 
     return (
         <>
+            <div className='navbar'>
+                <div className='navbrand'>Kopcuj.cz</div>
+                <a href={"http://localhost:3000/discussions"}>
+                    <div className='navbrand' style={{marginRight: "20px"}}>Diskuze</div>
+                </a>
+            </div>
+
             {discussion !== undefined ?
                 <Container>
                     <h1>{discussion.subject}</h1>
-                    <p>{discussion.text}</p>
-                    <TextField inputRef={reply} minRows={8} multiline style={{width: "100%"}}></TextField><br/>
-                    <Button variant="contained" style={{marginTop: "10px"}} onClick={SendReply}>Odpovědět</Button>
+
+                    <Card>
+                        <CardContent>
+                            <Typography>
+                                {discussion.user !== undefined ? discussion.user.name : "Loading..."}
+                            </Typography>
+                            <Typography variant="body2">
+                                {discussion.text}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+
+                    <hr/>
 
                     <div style={{marginTop: "20px"}}>
-                        {replies?.map((reply) => <Card sx={{marginTop: "10px"}}>
+                        {replies?.map((reply) => <Card key={reply._id} sx={{marginTop: "10px"}}>
                             <CardContent>
                                 <Typography variant="h5" component="div">
                                     {reply.user.name}
@@ -84,10 +97,12 @@ const DiscussionPage = () => {
                             </CardContent>
                         </Card>)}
                     </div>
+
+                    <TextField inputRef={reply} minRows={8} multiline
+                               style={{width: "100%", marginTop: "20px"}}></TextField><br/>
+                    <Button variant="contained" style={{marginTop: "10px"}} onClick={SendReply}>Odpovědět</Button>
                 </Container>
                 : "Loading..."}
-
-
         </>
 
 

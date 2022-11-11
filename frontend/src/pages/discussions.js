@@ -42,17 +42,13 @@ function DiscussionsPage() {
         fetchDiscussions().then((res) => {
             setDiscussions(res);
         })
+
+        console.log("update")
     }, [btn])
 
-    const createDiscussion = () => {
-        axios.post("http://localhost:8082/api/discussions/create", {
-            id_user: user._id,
-            user: {
-                login: user.login,
-                name: user.name,
-                pfp: user.pfp,
-                isAdmin: user.isAdmin
-            },
+    const createDiscussion = async () => {
+        await axios.post("http://localhost:8082/api/discussions/create", {
+            user: user,
             subject: subject.current.value,
             text: text.current.value
         });

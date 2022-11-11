@@ -4,7 +4,7 @@ import {Button, Card, CardContent, Typography} from '@mui/material';
 const Discussion = (props) => {
     return (
         <>
-            <Card sx={{marginTop: "10px"}}>
+            <Card key={props.data._id} sx={{marginTop: "10px"}}>
                 <CardContent>
                     <Typography variant="h5" component="div">
                         {props.data.subject}
