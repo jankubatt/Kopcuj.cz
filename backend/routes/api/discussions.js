@@ -20,4 +20,10 @@ router.post('/create', (req, res) => {
     Discussion.create({...req.body}).then(res.sendStatus(200));
 })
 
+router.post('/reply', (req, res) => {
+    Discussion.updateOne({_id: req.body.id_discussion}, {
+        $push: {replies: req.body.reply}
+    }).then(res.sendStatus(200))
+})
+
 module.exports = router;

@@ -40,6 +40,11 @@ const DiscussionSchema = new mongoose.Schema({
         type: String,
         required: false,
         default: null
+    },
+    replies: {
+        type: Array,
+        required: false,
+        default: []
     }
 });
 
