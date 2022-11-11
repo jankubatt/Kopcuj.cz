@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
-import {Button, Container} from '@mui/material'
+import {Button, Card, CardContent, Container, TextField, Typography} from '@mui/material'
 import Cookies from "js-cookie";
 
 const DiscussionPage = () => {
@@ -54,7 +54,7 @@ const DiscussionPage = () => {
         await axios.post('http://localhost:8082/api/discussions/reply', {
             id_discussion: discussion._id,
             reply: {
-                user: user._id,
+                user: user,
                 text: reply.current.value,
                 date_added: `${new Date().getDate()}.${new Date().getMonth() + 1}.${new Date().getFullYear()}`
             }
@@ -69,10 +69,21 @@ const DiscussionPage = () => {
                 <Container>
                     <h1>{discussion.subject}</h1>
                     <p>{discussion.text}</p>
-                    <input ref={reply} placeholder={'Odpovědět'}/>
+                    <TextField inputRef={reply} minRows={8} multiline style={{width: "100%"}}></TextField><br/>
                     <Button variant="contained" style={{marginTop: "10px"}} onClick={SendReply}>Odpovědět</Button>
 
-                    {replies?.map((reply) => <div><h2>{reply.user}</h2><p>{reply.text}</p></div>)}
+                    <div style={{marginTop: "20px"}}>
+                        {replies?.map((reply) => <Card sx={{marginTop: "10px"}}>
+                            <CardContent>
+                                <Typography variant="h5" component="div">
+                                    {reply.user.name}
+                                </Typography>
+                                <Typography variant="body2">
+                                    {reply.text}
+                                </Typography>
+                            </CardContent>
+                        </Card>)}
+                    </div>
                 </Container>
                 : "Loading..."}
 

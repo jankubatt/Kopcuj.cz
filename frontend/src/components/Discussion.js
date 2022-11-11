@@ -1,15 +1,23 @@
 import React from 'react';
-import {Button} from '@mui/material';
+import {Button, Card, CardContent, Typography} from '@mui/material';
 
-const Discussion = (props) => {   
-    return (      
-        <div className="discussion">
-            <p>{props.data.subject}</p>
-            <p>{props.data.text}</p>
-            <p>{props.data.user.name}</p>
-            <p>{new Date(props.data.date_added).getDate()}.{new Date(props.data.date_added).getMonth() + 1}.{new Date(props.data.date_added).getFullYear()}</p>
-            <Button><a href={`http://localhost:3000/discussion?id=${props.data._id}`}>K diskuzi</a></Button>
-        </div>
+const Discussion = (props) => {
+    return (
+        <>
+            <Card sx={{marginTop: "10px"}}>
+                <CardContent>
+                    <Typography variant="h5" component="div">
+                        {props.data.subject}
+                    </Typography>
+                    <Typography variant="body2">
+                        {props.data.text}
+                    </Typography>
+
+                    <Button sx={{marginTop: "5px"}} variant="contained"><a
+                        href={`http://localhost:3000/discussion?id=${props.data._id}`}>K diskuzi</a></Button>
+                </CardContent>
+            </Card>
+        </>
     )
 }
 

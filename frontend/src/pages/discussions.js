@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../App.css';
 import Discussion from '../components/Discussion';
-import {Button, Container} from '@mui/material';
+import {Button, Container, TextField} from '@mui/material';
 import axios from "axios";
 import Cookies from 'js-cookie';
 
@@ -71,10 +71,9 @@ function DiscussionsPage() {
                 <div className='formDiscussion'>
                     <h1>Vytvořit diskuzi</h1>
 
-                    <input ref={subject} id="outlined-basic" style={{width: "50%"}} label="Téma"
-                           variant="outlined"/><br/>
-                    <input ref={text} label="Myšlenka" multiline rows={10}
-                           style={{marginTop: "10px", width: "100%"}}/><br/>
+                    <TextField inputRef={subject} style={{width: "50%"}} label="Téma" variant="outlined"/><br/>
+                    <TextField inputRef={text} label="Myšlenka" multiline rows={10}
+                               style={{marginTop: "10px", width: "100%"}}/><br/>
                     <Button variant="contained" style={{marginTop: "10px"}} onClick={createDiscussion}>Vytvořit</Button>
                 </div>
 
