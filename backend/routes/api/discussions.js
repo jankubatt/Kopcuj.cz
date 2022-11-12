@@ -3,6 +3,7 @@ const router = express.Router();
 
 // Load hill model
 const Discussion = require('../../models/Discussion');
+const crypto = require("crypto");
 
 router.get('/', (req, res) => {
     Discussion.find().sort({date_added: -1})
@@ -22,7 +23,29 @@ router.post('/create', (req, res) => {
 
 router.post('/reply', (req, res) => {
     Discussion.updateOne({_id: req.body.id_discussion}, {
-        $push: {replies: req.body.reply}
+        $push: {replies: {_id: crypto.randomUUID(), ...req.body.reply, downVotes: [], upVotes: []}}
+    }).then(res.sendStatus(200))
+})
+
+router.post('/reply/downvote', (req, res) => {
+    Discussion.updateOne({"replies._id": req.body.id_reply}, {
+        $addToSet: {
+            "replies.$.downVotes": req.body.userId
+        },
+        $pull: {
+            "replies.$.upVotes": {$in: [req.body.userId]}
+        }
+    }).then(res.sendStatus(200))
+})
+
+router.post('/reply/upvote', (req, res) => {
+    Discussion.updateOne({"replies._id": req.body.id_reply}, {
+        $addToSet: {
+            "replies.$.upVotes": req.body.userId
+        },
+        $pull: {
+            "replies.$.downVotes": {$in: [req.body.userId]}
+        }
     }).then(res.sendStatus(200))
 })
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import {Button, Card, CardContent, Container, TextField, Typography} from '@mui/material'
 import Cookies from "js-cookie";
+import Reply from "../components/Reply";
 
 const DiscussionPage = () => {
     const qs = require('query-string');
@@ -59,6 +60,26 @@ const DiscussionPage = () => {
         })
     }
 
+    const SendUpvote = async (replyId) => {
+        await axios.post('http://localhost:8082/api/discussions/reply/upvote', {
+            id_discussion: discussion._id,
+            id_reply: replyId,
+            userId: user._id
+        }).then(() => {
+            setBtn(!btn)
+        })
+    }
+
+    const SendDownvote = async (replyId) => {
+        await axios.post('http://localhost:8082/api/discussions/reply/downvote', {
+            id_discussion: discussion._id,
+            id_reply: replyId,
+            userId: user._id
+        }).then(() => {
+            setBtn(!btn)
+        })
+    }
+
     return (
         <>
             <div className='navbar'>
@@ -86,16 +107,11 @@ const DiscussionPage = () => {
                     <hr/>
 
                     <div style={{marginTop: "20px"}}>
-                        {replies?.map((reply) => <Card key={reply._id} sx={{marginTop: "10px"}}>
-                            <CardContent>
-                                <Typography variant="h5" component="div">
-                                    {reply.user.name}
-                                </Typography>
-                                <Typography variant="body2">
-                                    {reply.text}
-                                </Typography>
-                            </CardContent>
-                        </Card>)}
+                        {replies?.map((reply) => <Reply id={reply._id} upVote={() => {
+                            SendUpvote(reply._id)
+                        }} downVote={() => {
+                            SendDownvote(reply._id)
+                        }} reply={reply}/>)}
                     </div>
 
                     <TextField inputRef={reply} minRows={8} multiline
