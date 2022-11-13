@@ -23,7 +23,9 @@ router.post('/addReview', (req, res) => {
                 text: req.body.text,
                 date_added: new Date()
             }
-        }, {upsert: true}).then().catch((err) => {console.log(err)})
+        }, {upsert: true}).then(res.sendStatus(200)).catch((err) => {
+            console.log(err)
+        })
 
         if (req.body.difficulty !== null) {
             Hill.updateOne({_id: req.body.hillId}, {$addToSet : { difficulty: req.body.difficulty }}).then().catch((err) => {console.log(err)})

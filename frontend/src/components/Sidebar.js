@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Card, CardContent, Checkbox, Chip, IconButton, Rating} from "@mui/material";
+import {Button, Card, CardContent, Checkbox, Chip, IconButton, Rating} from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import React, {useRef} from 'react';
 
@@ -40,10 +40,10 @@ const Sidebar = (props) => {
             stroller: chbStroller.current.className.includes("Mui-checked") ? props.user._id : null,
             parking: chbParking.current.className.includes("Mui-checked") ? props.user._id : null,
             food: chbFood.current.className.includes("Mui-checked") ? props.user._id : null
+        }).then(() => {
+            props.setTxtArea('none')
+            props.setBtnReview(!props.btnReview);
         });
-
-        props.setTxtArea('none')
-        props.setBtnReview(!props.btnReview);
     }
 
     const helpfulClicked = async (review) => {
@@ -108,22 +108,22 @@ const Sidebar = (props) => {
             <hr/>
 
             <h1>Rating</h1>
-            
+
             <div className={'rating'}>
                 <Rating name="size-large simple-controlled" value={props.rating || 0} onChange={(event, newValue) => {
-                        props.setRating(newValue);
-                        props.setTxtArea('block')
-                    }} size={'large'}
+                    props.setRating(newValue);
+                    props.setTxtArea('block')
+                }} size={'large'}
                 /><br/>
 
-                <button type="button" className="btn" onClick={sendRating}>Odeslat</button><br/>
+                <Button type="button" className="btn" onClick={sendRating}>Odeslat</Button><br/>
 
                 <div style={{display: props.txtArea}}>
-                    <Checkbox ref={chbDifficulty} /> Obtížné <br/>
-                    <Checkbox ref={chbPath} /> Dostupná cesta <br/>
-                    <Checkbox ref={chbStroller} /> Vhodné pro kočárky <br/>
-                    <Checkbox ref={chbParking} /> Parkoviště <br/>
-                    <Checkbox ref={chbFood} /> Občerstvení <br/>
+                    <Checkbox ref={chbDifficulty}/> Obtížné <br/>
+                    <Checkbox ref={chbPath}/> Dostupná cesta <br/>
+                    <Checkbox ref={chbStroller}/> Vhodné pro kočárky <br/>
+                    <Checkbox ref={chbParking}/> Parkoviště <br/>
+                    <Checkbox ref={chbFood}/> Občerstvení <br/>
                 </div>
 
                 <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: props.txtArea}}></textarea><br/>
