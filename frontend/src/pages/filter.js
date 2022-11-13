@@ -12,100 +12,30 @@ import {
     TableCell,
     TableContainer,
     TableHead,
-    TableRow,
-    TableSortLabel
+    TableRow
 } from "@mui/material";
 
 function createData(name, rating, food, difficulty, parking, path, stroller) {
     return {name, rating, food, difficulty, parking, path, stroller};
 }
 
+function processHillName(name) {
+    let hill = name.toLowerCase();
+    hill = hill.replace(" ", "-");
+    hill = hill.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    return hill;
+}
+
 const FilterPage = () => {
-    const [type, setType] = useState([]);
+    const [type, setType] = useState('asc');
     const [rowData, setRowData] = useState([]);
-    const [orderName, setOrderName] = useState("asc");
-    const [orderRating, setOrderRating] = useState("asc");
-    const [orderFood, setOrderFood] = useState("asc");
-    const [orderDifficulty, setOrderDifficulty] = useState("asc");
-    const [orderParking, setOrderParking] = useState("asc");
-    const [orderPath, setOrderPath] = useState("asc");
-    const [orderStroller, setOrderStroller] = useState("asc");
-    const [filter, setFilter] = React.useState('');
+    const [filter, setFilter] = useState('name');
+    const [refresh, setRefresh] = useState(false);
 
-    const handleChange = () => {
-        console.log("btn")
-        setRowData(sortArray(rowData, type, filter));
-
-        if (filter === 'name') {
-            setOrderName(type)
-            setOrderPath('')
-            setOrderDifficulty('')
-            setOrderStroller('')
-            setOrderRating('')
-            setOrderParking('')
-            setOrderFood('')
-        }
-
-        if (filter === 'path') {
-            setOrderName('')
-            setOrderPath(type)
-            setOrderDifficulty('')
-            setOrderStroller('')
-            setOrderRating('')
-            setOrderParking('')
-            setOrderFood('')
-        }
-
-        if (filter === 'difficulty') {
-            setOrderName('')
-            setOrderPath('')
-            setOrderDifficulty(type)
-            setOrderStroller('')
-            setOrderRating('')
-            setOrderParking('')
-            setOrderFood('')
-        }
-
-        if (filter === 'stroller') {
-            setOrderName('')
-            setOrderPath('')
-            setOrderDifficulty('')
-            setOrderStroller(type)
-            setOrderRating('')
-            setOrderParking('')
-            setOrderFood('')
-        }
-
-        if (filter === 'rating') {
-            setOrderName('')
-            setOrderPath('')
-            setOrderDifficulty('')
-            setOrderStroller('')
-            setOrderRating(type)
-            setOrderParking('')
-            setOrderFood('')
-        }
-
-        if (filter === 'parking') {
-            setOrderName('')
-            setOrderPath('')
-            setOrderDifficulty('')
-            setOrderStroller('')
-            setOrderRating('')
-            setOrderParking(type)
-            setOrderFood('')
-        }
-
-        if (filter === 'food') {
-            setOrderName('')
-            setOrderPath('')
-            setOrderDifficulty('')
-            setOrderStroller('')
-            setOrderRating('')
-            setOrderParking('')
-            setOrderFood(type)
-        }
-    };
+    const handleChange = async () => {
+        await setRowData(sortArray(rowData, type, filter));
+        setRefresh(!refresh)
+    }
 
     const handleType = (event) => {
         setType(event.target.value);
@@ -121,7 +51,7 @@ const FilterPage = () => {
             default:
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+                        processHillName(a.name) > processHillName(b.name) ? 1 : processHillName(b.name) > processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -157,7 +87,7 @@ const FilterPage = () => {
             case "desc":
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        a.name < b.name ? 1 : b.name < a.name ? -1 : 0
+                        processHillName(a.name) < processHillName(b.name) ? 1 : processHillName(b.name) < processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -222,7 +152,7 @@ const FilterPage = () => {
                     if (counter === 0) counter = 1
 
                     tmp.push(createData(
-                        `${hill.name}-${hill.elevation}m`,
+                        `${hill.name} ${hill.elevation}m`,
                         Math.floor(starValue / counter),
                         hill.food.length,
                         hill.difficulty.length,
@@ -235,17 +165,14 @@ const FilterPage = () => {
                 })
 
                 setRowData(tmp);
-                console.log(rowData)
             })
         })
-
-
     }, [])
 
     return (
         <>
             {rowData !== undefined ? <>
-                <FormControl>
+                <FormControl sx={{width: "10vw"}}>
                     <InputLabel id="filter-label">Filtr</InputLabel>
                     <Select
                         labelId="filter-label"
@@ -263,7 +190,7 @@ const FilterPage = () => {
                         <MenuItem value={'stroller'}>Stroller</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl>
+                <FormControl sx={{width: "10vw"}}>
                     <InputLabel id="filter-label2">Typ</InputLabel>
                     <Select
                         labelId="filter-label2"
@@ -276,56 +203,44 @@ const FilterPage = () => {
                         <MenuItem value={'desc'}>Zestupne</MenuItem>
                     </Select>
                 </FormControl>
+
                 <Button onClick={handleChange}>Seradit</Button>
+
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                <TableCell align="center">
-                                    <TableSortLabel active={true} direction={orderName}>
-                                        Name
-                                    </TableSortLabel>
+                                <TableCell align="center" aria-describedby={refresh}>
+                                    <b>Jméno</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <TableSortLabel active={true} direction={orderRating}>
-                                        Rating
-                                    </TableSortLabel>
+                                    <b>Hodnocení</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <TableSortLabel active={true} direction={orderFood}>
-                                        Food
-                                    </TableSortLabel>
+                                    <b>Jídlo</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <TableSortLabel active={true} direction={orderDifficulty}>
-                                        Difficulty
-                                    </TableSortLabel>
+                                    <b>Obtížnost</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <TableSortLabel active={true} direction={orderParking}>
-                                        Parking
-                                    </TableSortLabel>
+                                    <b>Parkování</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <TableSortLabel active={true} direction={orderPath}>
-                                        Path
-                                    </TableSortLabel>
+                                    <b>Cesta</b>
                                 </TableCell>
 
                                 <TableCell align="center">
-                                    <TableSortLabel active={true} direction={orderStroller}>
-                                        Stroller
-                                    </TableSortLabel>
+                                    <b>Kočárek</b>
                                 </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rowData.map((row) => (
+                            {rowData?.map((row) => (
                                 <TableRow key={row.name}>
                                     <TableCell component="th" scope="row" align="center">
                                         {row.name}
@@ -340,7 +255,7 @@ const FilterPage = () => {
                             ))}
                         </TableBody>
                     </Table>
-                </TableContainer></> : "Lopading.,."
+                </TableContainer></> : "Loading..."
             }
 
         </>
