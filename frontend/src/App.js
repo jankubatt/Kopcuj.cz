@@ -12,6 +12,7 @@ import ForgotPassword from './pages/forgot-password';
 import ChangePassword from './pages/change-password';
 import DiscussionsPage from './pages/discussions';
 import DiscussionPage from "./pages/discussion";
+import FilterPage from "./pages/filter";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route path='/change-password' element={<ChangePassword/>}/>
                 <Route path='/discussions' element={<DiscussionsPage/>}/>
                 <Route path='/discussion' element={<DiscussionPage/>}/>
+                <Route path='/filter' element={<FilterPage/>}/>
                 <Route path='/admin' element={<PrivateRoute><AdminPage/></PrivateRoute>}/>
             </Routes>
         </Router>

@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Card, CardContent, Chip, Rating, IconButton, Checkbox} from "@mui/material";
+import {Card, CardContent, Checkbox, Chip, IconButton, Rating} from "@mui/material";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useRef} from 'react';
 
 const Sidebar = (props) => {
     const chbDifficulty = useRef();
@@ -32,8 +32,8 @@ const Sidebar = (props) => {
     const sendRating = async () => {
         await axios.post(`http://localhost:8082/api/review/addReview`, {
             stars: props.rating,
-            hillId: props.currentHill._id,
-            userId: props.user._id,
+            hill: props.currentHill,
+            user: props.user,
             text: reviewText.current.value,
             difficulty: chbDifficulty.current.className.includes("Mui-checked") ? props.user._id : null,
             path: chbPath.current.className.includes("Mui-checked") ? props.user._id : null,

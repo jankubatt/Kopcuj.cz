@@ -1,34 +1,15 @@
 const mongoose = require('mongoose');
 
 const ReviewSchema = new mongoose.Schema({
-    id_hill: {
-        type: String,
-        required: true
-    },
-    id_user: {
-        type: String,
-        required: true
+    hill: {
+        type: Object,
+        required: true,
+        default: {}
     },
     user: {
-        login: {
-            type: String,
-            required: true
-        },
-        name: {
-            type: String,
-            required: false,
-            default: null
-        },
-        pfp: {
-            type: String,
-            required: false,
-            default: null
-        },
-        isAdmin: {
-            type: Boolean,
-            required: true,
-            default: false
-        },
+        type: Object,
+        required: true,
+        default: {}
     },
     date_added: {
         type: Date,

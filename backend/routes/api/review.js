@@ -15,17 +15,10 @@ router.get('/:hillId', (req, res) => {
 })
 
 router.post('/addReview', (req, res) => {
-    User.findOne({_id: req.body.userId}).then((user) => {
-        Review.updateOne({id_hill: req.body.hillId, id_user: req.body.userId}, {
+        Review.updateOne({"hill._id": req.body.hill._id, "user._id": req.body.user._id}, {
             $set: {
-                id_user: user._id,
-                user: {
-                    login: user.login,
-                    name: user.name,
-                    pfp: user.pfp,
-                    isAdmin: user.isAdmin
-                },
-                id_hill: req.body.hillId,
+                user: req.body.user,
+                hill: req.body.hill,
                 stars: req.body.stars,
                 text: req.body.text,
                 date_added: new Date()
@@ -49,10 +42,10 @@ router.post('/addReview', (req, res) => {
         }
 
         if (req.body.stroller !== null) {
-            Hill.updateOne({_id: req.body.hillId}, {$addToSet : {stroller: req.body.stroller}}).then().catch((err) => {console.log(err)})
+            Hill.updateOne({_id: req.body.hillId}, {$addToSet: {stroller: req.body.stroller}}).then().catch((err) => {
+                console.log(err)
+            })
         }
-    }).then(res.sendStatus(200))
-        .catch(res.status(404));
 });
 
 router.post('/addHelpful', (req, res) => {
