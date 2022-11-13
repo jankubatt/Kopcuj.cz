@@ -57,7 +57,7 @@ function MapPage() {
         if (currentHill !== undefined) {
             let starValue = 0;
             allReviews?.forEach((review) => {
-                if (currentHill._id === review.id_hill) {
+                if (currentHill._id === review.hill._id) {
                     starValue += review.stars;
                 }
             })
@@ -72,7 +72,8 @@ function MapPage() {
             if (currentHill !== undefined) {
                 let currentReviews = []
                 res.forEach((review) => {
-                    if (review.id_hill === currentHill._id) {
+                    console.log(review.hill._id)
+                    if (review.hill._id === currentHill._id) {
                         currentReviews.push(review);
                     }
                 })
@@ -126,7 +127,7 @@ function MapPage() {
             let currentHillReviews = [];
             
             allReviews?.forEach((review) => {
-                if (clickedHill._id === review.id_hill) {
+                if (clickedHill._id === review.hill._id) {
                     currentHillReviews.push(review);
                 }
             })

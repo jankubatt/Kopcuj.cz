@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {
+    Button,
     FormControl,
     InputLabel,
     MenuItem,
@@ -20,7 +21,7 @@ function createData(name, rating, food, difficulty, parking, path, stroller) {
 }
 
 const FilterPage = () => {
-    const [hills, setHills] = useState([]);
+    const [type, setType] = useState([]);
     const [rowData, setRowData] = useState([]);
     const [orderName, setOrderName] = useState("asc");
     const [orderRating, setOrderRating] = useState("asc");
@@ -31,66 +32,227 @@ const FilterPage = () => {
     const [orderStroller, setOrderStroller] = useState("asc");
     const [filter, setFilter] = React.useState('');
 
-    const handleChange = (event) => {
-        setFilter(event.target.value);
+    const handleChange = () => {
+        console.log("btn")
+        setRowData(sortArray(rowData, type, filter));
 
-        setRowData(sortArray(rowData, "asc"));
-        setOrderFood(orderFood === "asc" ? "desc" : "asc");
-    };
+        if (filter === 'name') {
+            setOrderName(type)
+            setOrderPath('')
+            setOrderDifficulty('')
+            setOrderStroller('')
+            setOrderRating('')
+            setOrderParking('')
+            setOrderFood('')
+        }
 
-    const sortArray = (arr, orderBy) => {
-        switch (orderBy) {
-            case "asc":
-            default:
-                return arr.sort((a, b) =>
-                    a.food > b.food ? 1 : b.food > a.food ? -1 : 0
-                );
-            case "desc":
-                return arr.sort((a, b) =>
-                    a.food < b.food ? 1 : b.food < a.food ? -1 : 0
-                );
+        if (filter === 'path') {
+            setOrderName('')
+            setOrderPath(type)
+            setOrderDifficulty('')
+            setOrderStroller('')
+            setOrderRating('')
+            setOrderParking('')
+            setOrderFood('')
+        }
+
+        if (filter === 'difficulty') {
+            setOrderName('')
+            setOrderPath('')
+            setOrderDifficulty(type)
+            setOrderStroller('')
+            setOrderRating('')
+            setOrderParking('')
+            setOrderFood('')
+        }
+
+        if (filter === 'stroller') {
+            setOrderName('')
+            setOrderPath('')
+            setOrderDifficulty('')
+            setOrderStroller(type)
+            setOrderRating('')
+            setOrderParking('')
+            setOrderFood('')
+        }
+
+        if (filter === 'rating') {
+            setOrderName('')
+            setOrderPath('')
+            setOrderDifficulty('')
+            setOrderStroller('')
+            setOrderRating(type)
+            setOrderParking('')
+            setOrderFood('')
+        }
+
+        if (filter === 'parking') {
+            setOrderName('')
+            setOrderPath('')
+            setOrderDifficulty('')
+            setOrderStroller('')
+            setOrderRating('')
+            setOrderParking(type)
+            setOrderFood('')
+        }
+
+        if (filter === 'food') {
+            setOrderName('')
+            setOrderPath('')
+            setOrderDifficulty('')
+            setOrderStroller('')
+            setOrderRating('')
+            setOrderParking('')
+            setOrderFood(type)
         }
     };
 
-    useEffect(() => {
-        fetchHills().then((res) => {
-            setHills(res)
-            let tmp = [];
-            hills.map((hill) => {
-                tmp = rowData;
+    const handleType = (event) => {
+        setType(event.target.value);
+    }
 
-                let starValue = 0;
-                hill.rating.forEach((rating) => {
-                    starValue += rating.stars
-                })
+    const handleFilter = (event) => {
+        setFilter(event.target.value);
+    }
 
-                tmp.push(createData(`${hill.name} - ${hill.elevation}m`, Math.floor(starValue / hill.rating.length), hill.food.length, hill.difficulty.length, hill.parking.length, hill.path.length, hill.stroller.length))
-                setRowData(tmp);
+    const sortArray = (arr, orderBy, orderType) => {
+        switch (orderBy) {
+            case "asc":
+            default:
+                if (orderType === 'name') {
+                    return arr.sort((a, b) =>
+                        a.name > b.name ? 1 : b.name > a.name ? -1 : 0
+                    );
+                }
+                if (orderType === 'rating') {
+                    return arr.sort((a, b) =>
+                        a.rating > b.rating ? 1 : b.rating > a.rating ? -1 : 0
+                    );
+                }
+                if (orderType === 'food') {
+                    return arr.sort((a, b) =>
+                        a.food > b.food ? 1 : b.food > a.food ? -1 : 0
+                    );
+                }
+                if (orderType === 'difficulty') {
+                    return arr.sort((a, b) =>
+                        a.difficulty > b.difficulty ? 1 : b.difficulty > a.difficulty ? -1 : 0
+                    );
+                }
+                if (orderType === 'parking') {
+                    return arr.sort((a, b) =>
+                        a.parking > b.parking ? 1 : b.parking > a.parking ? -1 : 0
+                    );
+                }
+                if (orderType === 'path') {
+                    return arr.sort((a, b) =>
+                        a.path > b.path ? 1 : b.path > a.path ? -1 : 0
+                    );
+                }
+                if (orderType === 'stroller') {
+                    return arr.sort((a, b) =>
+                        a.stroller > b.stroller ? 1 : b.stroller > a.stroller ? -1 : 0
+                    );
+                }
+            case "desc":
+                if (orderType === 'name') {
+                    return arr.sort((a, b) =>
+                        a.name < b.name ? 1 : b.name < a.name ? -1 : 0
+                    );
+                }
+                if (orderType === 'rating') {
+                    return arr.sort((a, b) =>
+                        a.rating < b.rating ? 1 : b.rating < a.rating ? -1 : 0
+                    );
+                }
+                if (orderType === 'food') {
+                    return arr.sort((a, b) =>
+                        a.food < b.food ? 1 : b.food < a.food ? -1 : 0
+                    );
+                }
+                if (orderType === 'difficulty') {
+                    return arr.sort((a, b) =>
+                        a.difficulty < b.difficulty ? 1 : b.difficulty < a.difficulty ? -1 : 0
+                    );
+                }
+                if (orderType === 'parking') {
+                    return arr.sort((a, b) =>
+                        a.parking < b.parking ? 1 : b.parking < a.parking ? -1 : 0
+                    );
+                }
+                if (orderType === 'path') {
+                    return arr.sort((a, b) =>
+                        a.path < b.path ? 1 : b.path < a.path ? -1 : 0
+                    );
+                }
+                if (orderType === 'stroller') {
+                    return arr.sort((a, b) =>
+                        a.stroller < b.stroller ? 1 : b.stroller < a.stroller ? -1 : 0
+                    );
+                }
+        }
+    };
 
-                tmp = []
-                console.log(rowData)
-            })
-
-
-        })
-    }, [])
-
-    const fetchHills = async () => {
-        const response = await axios.get('http://localhost:8082/api/hills/');
+    const fetchReviews = async () => {
+        const response = await axios.get('http://localhost:8082/api/review/');
         return response.data;
     }
+
+    const fetchHills = async () => {
+        const response = await axios.get('http://localhost:8082/api/hills');
+        return response.data;
+    }
+
+    useEffect(() => {
+        fetchHills().then((hills) => {
+            fetchReviews().then((reviews) => {
+                let tmp = [];
+
+                hills.forEach((hill) => {
+                    let starValue = 0;
+                    let counter = 0;
+
+                    reviews.forEach((review) => {
+                        if (hill._id === review.hill._id) {
+                            starValue += review.stars;
+                            counter++;
+                        }
+                    })
+
+                    if (counter === 0) counter = 1
+
+                    tmp.push(createData(
+                        `${hill.name}-${hill.elevation}m`,
+                        Math.floor(starValue / counter),
+                        hill.food.length,
+                        hill.difficulty.length,
+                        hill.parking.length,
+                        hill.path.length,
+                        hill.stroller.length
+                    ))
+
+
+                })
+
+                setRowData(tmp);
+                console.log(rowData)
+            })
+        })
+
+
+    }, [])
 
     return (
         <>
             {rowData !== undefined ? <>
-                <FormControl fullWidth>
-                    <InputLabel id="demo-simple-select-label">Filtr</InputLabel>
+                <FormControl>
+                    <InputLabel id="filter-label">Filtr</InputLabel>
                     <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        labelId="filter-label"
+                        id="filter"
                         value={filter}
                         label="Filtr"
-                        onChange={handleChange}
+                        onChange={handleFilter}
                     >
                         <MenuItem value={'name'}>Name</MenuItem>
                         <MenuItem value={'rating'}>Rating</MenuItem>
@@ -101,6 +263,20 @@ const FilterPage = () => {
                         <MenuItem value={'stroller'}>Stroller</MenuItem>
                     </Select>
                 </FormControl>
+                <FormControl>
+                    <InputLabel id="filter-label2">Typ</InputLabel>
+                    <Select
+                        labelId="filter-label2"
+                        id="filter2"
+                        value={type}
+                        label="Filtr"
+                        onChange={handleType}
+                    >
+                        <MenuItem value={'asc'}>Vzestupne</MenuItem>
+                        <MenuItem value={'desc'}>Zestupne</MenuItem>
+                    </Select>
+                </FormControl>
+                <Button onClick={handleChange}>Seradit</Button>
                 <TableContainer component={Paper}>
                     <Table aria-label="simple table">
                         <TableHead>
