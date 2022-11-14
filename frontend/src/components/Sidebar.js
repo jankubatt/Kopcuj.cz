@@ -1,8 +1,8 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Button, Card, CardContent, Checkbox, Chip, IconButton, Rating} from "@mui/material";
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import {Button, Checkbox, Rating} from "@mui/material";
 import React, {useRef} from 'react';
+import Review from "./Review";
 
 const Sidebar = (props) => {
     const chbDifficulty = useRef();
@@ -43,6 +43,7 @@ const Sidebar = (props) => {
         }).then(() => {
             props.setTxtArea('none')
             props.setBtnReview(!props.btnReview);
+            reviewText.current.value = "";
         });
     }
 
@@ -129,26 +130,8 @@ const Sidebar = (props) => {
                 <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: props.txtArea}}></textarea><br/>
                     
                 <div id='reviews'>
-                    {props.reviews?.map((review) => ((review.text !== null) ? <div key={review._id}><Card className='card'>
-                        <CardContent>
-                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                <div>
-                                    <b style={{fontSize: '1.25em'}}>{review.user.name || review.user.login}</b>&nbsp;
-                                        {((review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
-                                    </div>
-                                    <div><Rating name="read-only" value={review.stars} readOnly /></div>
-                                </div>
-
-                                <div>
-                                    {review.text}
-                                </div>
-
-                                <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
-                                    <IconButton style={{alignSelf: "flex-end"}} onClick={() => {helpfulClicked(review._id)}} aria-label="thumbs up" disabled={false}><ThumbUpIcon />{review.helpful.length}</IconButton>
-                                    <div style={{color: 'GrayText', alignSelf: "flex-end"}}>{new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}</div>
-                                </div>
-                            </CardContent>
-                        </Card></div> : 'Loading...'))}
+                    {props.reviews?.map((review) => ((review.text !== null) ?
+                        <Review review={review} helpfulClicked={helpfulClicked}/> : 'Loading...'))}
                     </div>
                 </div>
             </div>
