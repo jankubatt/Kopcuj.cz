@@ -1,21 +1,21 @@
 import React from 'react';
-import {Button, Card, CardContent, Typography} from '@mui/material';
+import {Button, Card} from "react-bootstrap";
 
 const Discussion = (props) => {
     return (
         <>
             <Card key={props.data._id} sx={{marginTop: "10px"}}>
-                <CardContent>
-                    <Typography variant="h5" component="div">
+                <Card.Body>
+                    <Card.Title>
                         {props.data.subject}
-                    </Typography>
-                    <Typography variant="body2">
+                    </Card.Title>
+                    <Card.Text variant="body2">
                         {props.data.text}
-                    </Typography>
+                    </Card.Text>
 
                     <Button sx={{marginTop: "5px"}} variant="contained"><a
                         href={`http://localhost:3000/discussion?id=${props.data._id}`}>K diskuzi</a></Button>
-                </CardContent>
+                </Card.Body>
             </Card>
         </>
     )

@@ -2,21 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {
-    Card,
-    CardContent,
-    CssBaseline,
-    Paper,
-    Rating,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow
-} from '@mui/material/';
+import {Card, Table} from "react-bootstrap";
 
 //Main table columns
 const columns = [
@@ -37,13 +23,6 @@ const columns = [
 function createData(id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin) {
   return { id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin };
 }
-
-//dark theme
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
 
 axios.defaults.withCredentials = true;
 
@@ -164,10 +143,10 @@ function AdminPage() {
                 if (review.user.login === user.login) {
                     userReviews.push(
                         <Card key={review._id} className='card'>
-                            <CardContent>
+                            <Card.Body>
                                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                     <div>
-                                        <Rating name="read-only" value={review.stars} readOnly />
+                                        {/*<Rating name="read-only" value={review.stars} readOnly />*/}
                                     </div>
                                 </div>
                                 <div>
@@ -175,10 +154,10 @@ function AdminPage() {
                                 </div>
                                 <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                                     <div style={{color: 'GrayText'}}>
-                                        {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}
+                                        {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth() + 1}.{new Date(review.date_added).getFullYear()}
                                     </div>
                                 </div>
-                            </CardContent>
+                            </Card.Body>
                         </Card>
                     );
                 }
@@ -195,51 +174,36 @@ function AdminPage() {
 
     return (
         <>
-            <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-                <div className={'container-fluid'}>
-                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                        <TableContainer>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        {columns.map((column) => (
-                                            <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
+            <div className={'container-fluid'}>
+                <Table stickyHeader aria-label="sticky table">
+                    <thead>
+                    <tr>
+                        {columns.map((column) => (
+                            <span key={column.id} align={column.align} style={{minWidth: column.minWidth}}>
                                                 {column.label}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row) => {
+                                            </span>
+                        ))}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {rows
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((row) => {
+                            return (
+                                <tr hover role="checkbox" tabIndex={-1} key={row.code}>
+                                    {columns.map((column) => {
+                                        const value = row[column.id];
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align}>
-                                                            {column.format && typeof value === 'number' ? column.format(value): value}
-                                                        </TableCell>
-                                                    );
-                                                })}
-                                            </TableRow>
+                                            <span key={column.id} align={column.align}>
+                                                            {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                        </span>
                                         );
                                     })}
-                                </TableBody>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
                             </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[10, 25, 100]}
-                            component="div"
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </Paper>
                 </div>
 
                 <h2>Přidat kopec</h2>
@@ -257,7 +221,6 @@ function AdminPage() {
                     <br/>
                     <button type="submit">Pridat kopec</button>
                 </form>
-            </ThemeProvider>
         </>
     )
 }

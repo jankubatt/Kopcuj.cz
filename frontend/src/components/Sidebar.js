@@ -1,6 +1,5 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Button, Checkbox, Rating} from "@mui/material";
 import React, {useRef} from 'react';
 import Review from "./Review";
 

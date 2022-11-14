@@ -1,6 +1,4 @@
-import {Card, CardContent, IconButton, Typography} from "@mui/material";
 import React from "react";
-import {KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material";
 
 const Reply = (props) => {
 

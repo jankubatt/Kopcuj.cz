@@ -1,5 +1,3 @@
-import {Card, CardContent, Chip, IconButton, Rating} from "@mui/material";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import React from "react";
 
 const Review = (props) => {

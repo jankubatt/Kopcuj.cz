@@ -1,5 +1,3 @@
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import {useState} from 'react';
 
 const Searchbar = (props) => {
@@ -21,7 +19,7 @@ const Searchbar = (props) => {
 
     return (
         <div className={'searchBar'}>
-                <Autocomplete
+                <input
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     value={searchTerm}
                     onChange={(event, newValue) => {
@@ -33,7 +31,7 @@ const Searchbar = (props) => {
                     }}
                     options={props.hills.map(hill => `${hill.name}-${hill.elevation}m`)}
                     sx={{width: 300, backgroundColor: "white"}}
-                    renderInput={(params) => <TextField {...params} label={'Hledat'}/>}
+                    renderInput={(params) => <input {...params} label={'Hledat'}/>}
                 />
                 <div className={'btn'} onClick={() => {
                     searchHill(searchTerm)

@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import pfp from '../img/pfp-default.png';
 import Searchbar from '../components/Searchbar';
 import Sidebar from '../components/Sidebar';
+import {Button} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -163,16 +164,14 @@ function MapPage() {
 
             <div className={'bottom'}>
                 <div className='bottomItems'>
-                    <button type="button" className="btn">Settings</button>
+                    <a><Button type="button" className="btn">Settings</Button></a>
                     <a href={'/profile'}><img alt={"profile"} className='btn-profile' src={pfp}></img></a>
-                    <a href={'/discussions'}>
-                        <button type="button" className="btn">Diskuze</button>
-                    </a>
+                    <a href={'/discussions'}><Button type="button" className="btn">Diskuze</Button></a>
                 </div>
             </div>
             
             {user.isAdmin ? <a href={'/admin'}>
-                <button type="button" className="btn btn-admin">Admin</button>
+                <Button type="button" className="btn btn-admin">Admin</Button>
             </a> : null}
 
             <div className={"clickMap"} onClick={mapClicked}>

@@ -13,6 +13,7 @@ import ChangePassword from './pages/change-password';
 import DiscussionsPage from './pages/discussions';
 import DiscussionPage from "./pages/discussion";
 import FilterPage from "./pages/filter";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     return (

@@ -1,19 +1,5 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {
-    Button,
-    FormControl,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow
-} from "@mui/material";
 
 function createData(name, rating, food, difficulty, parking, path, stroller) {
     return {name, rating, food, difficulty, parking, path, stroller};
