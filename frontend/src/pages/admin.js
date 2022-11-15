@@ -2,21 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
-import {createTheme, ThemeProvider} from '@mui/material/styles';
-import {
-    Card,
-    CardContent,
-    CssBaseline,
-    Paper,
-    Rating,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow
-} from '@mui/material/';
+import {Button, Card, Form, Table} from "react-bootstrap";
 
 //Main table columns
 const columns = [
@@ -38,13 +24,6 @@ function createData(id_user, login, name, email, desc, hills, comments, reviews,
   return { id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin };
 }
 
-//dark theme
-const darkTheme = createTheme({
-  palette: {
-    mode: 'dark',
-  },
-});
-
 axios.defaults.withCredentials = true;
 
 function AdminPage() {
@@ -52,8 +31,6 @@ function AdminPage() {
     const [hills, getHills] = useState([]);                     //All hills
     const [allReviews, getAllReviews] = useState([]);           //All reviews
     const [userHills, setUserHills] = useState([]);             //Array where hill is assigned to user
-    const [page, setPage] = React.useState(0);                  //Page of a table
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);   //Row per page of a table
     const [rows, setRows] = useState([]);                       //Rows of a table
 
     //State for storing form values
@@ -93,17 +70,6 @@ function AdminPage() {
                 console.log("Error in register user!\n" + err);
             });
     }
-
-    //Handle page change of a table
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    //Handle rows per page of a table
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
 
     //Fetch users from database
     const fetchUsers = async () => {
@@ -164,10 +130,10 @@ function AdminPage() {
                 if (review.user.login === user.login) {
                     userReviews.push(
                         <Card key={review._id} className='card'>
-                            <CardContent>
+                            <Card.Body>
                                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                     <div>
-                                        <Rating name="read-only" value={review.stars} readOnly />
+                                        {/*<Rating name="read-only" value={review.stars} readOnly />*/}
                                     </div>
                                 </div>
                                 <div>
@@ -175,10 +141,10 @@ function AdminPage() {
                                 </div>
                                 <div style={{display: 'flex', justifyContent: 'flex-end'}}>
                                     <div style={{color: 'GrayText'}}>
-                                        {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth()+1}.{new Date(review.date_added).getFullYear()}
+                                        {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth() + 1}.{new Date(review.date_added).getFullYear()}
                                     </div>
                                 </div>
-                            </CardContent>
+                            </Card.Body>
                         </Card>
                     );
                 }
@@ -195,69 +161,60 @@ function AdminPage() {
 
     return (
         <>
-            <ThemeProvider theme={darkTheme}>
-            <CssBaseline />
-                <div className={'container-fluid'}>
-                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                        <TableContainer>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        {columns.map((column) => (
-                                            <TableCell key={column.id} align={column.align} style={{ minWidth: column.minWidth }}>
-                                                {column.label}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {rows
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row) => {
-                                        return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align}>
-                                                            {column.format && typeof value === 'number' ? column.format(value): value}
-                                                        </TableCell>
-                                                    );
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[10, 25, 100]}
-                            component="div"
-                            count={rows.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        />
-                    </Paper>
-                </div>
+            <div className={'container'}>
+                <Table stickyHeader aria-label="sticky table">
+                    <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Login</td>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>Desc</td>
+                        <td>Hills</td>
+                        <td>Comments</td>
+                        <td>Reviews</td>
+                        <td>Registration</td>
+                        <td>Last Login</td>
+                        <td>Admin</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {rows.map((row) => {
+                        return (
+                            <tr>
+                                <td>{row.id_user}</td>
+                                <td>{row.login}</td>
+                                <td>{row.name}</td>
+                                <td>{row.email}</td>
+                                <td>{row.desc}</td>
+                                <td>{row.hills}</td>
+                                <td>{row.comments}</td>
+                                <td>{row.reviews}</td>
+                                <td>{row.date_registered}</td>
+                                <td>{row.date_lastLogin}</td>
+                                <td>{row.isAdmin}</td>
+                            </tr>
+                        );
+                    })}
+                    </tbody>
+                </Table>
+            </div>
 
-                <h2>Přidat kopec</h2>
-                <form onSubmit={handleSubmit}>
-                    <input onChange={handleChange} placeholder='Jméno' name='name'></input><br/>
-                    <input onChange={handleChange} placeholder='Výška' name='elevation'></input><br/>
-                    <input onChange={handleChange} placeholder='Lat' name='lat'></input><br/>
-                    <input onChange={handleChange} placeholder='Lon' name='lon'></input><br/>
-                    <input onChange={handleChange} placeholder='Prominence' name='prominence'></input><br/>
-                    <input onChange={handleChange} placeholder='Izolace' name='isolation'></input><br/>
-                    <input onChange={handleChange} placeholder='Materiál' name='material'></input><br/>
-                    <input onChange={handleChange} placeholder='Povodí' name='basin'></input><br/>
-                    <input onChange={handleChange} placeholder='Okres' name='district'></input><br/>
-                    <input onChange={handleChange} placeholder='Lokace' name='location'></input><br/>
-                    <br/>
-                    <button type="submit">Pridat kopec</button>
-                </form>
-            </ThemeProvider>
+            <h2>Přidat kopec</h2>
+            <Form onSubmit={handleSubmit}>
+                <Form.Control onChange={handleChange} placeholder='Jméno' name='name'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Výška' name='elevation'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Lat' name='lat'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Lon' name='lon'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Prominence' name='prominence'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Izolace' name='isolation'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Materiál' name='material'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Povodí' name='basin'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Okres' name='district'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Lokace' name='location'></Form.Control><br/>
+                <br/>
+                <Button type="submit">Pridat kopec</Button>
+            </Form>
         </>
     )
 }

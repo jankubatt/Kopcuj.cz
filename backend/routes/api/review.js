@@ -28,23 +28,31 @@ router.post('/addReview', (req, res) => {
         })
 
         if (req.body.difficulty !== null) {
-            Hill.updateOne({_id: req.body.hillId}, {$addToSet : { difficulty: req.body.difficulty }}).then().catch((err) => {console.log(err)})
+            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {difficulty: req.body.difficulty}}).then().catch((err) => {
+                console.log(err)
+            })
         }
 
         if (req.body.food !== null) {
-            Hill.updateOne({_id: req.body.hillId}, {$addToSet : { food: req.body.food}}).then().catch((err) => {console.log(err)})
+            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {food: req.body.food}}).then().catch((err) => {
+                console.log(err)
+            })
         }
 
         if (req.body.parking !== null) {
-            Hill.updateOne({_id: req.body.hillId}, {$addToSet : {parking: req.body.parking}}).then().catch((err) => {console.log(err)})
+            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {parking: req.body.parking}}).then().catch((err) => {
+                console.log(err)
+            })
         }
 
         if (req.body.path !== null) {
-            Hill.updateOne({_id: req.body.hillId}, {$addToSet : {path: req.body.path}}).then().catch((err) => {console.log(err)})
+            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {path: req.body.path}}).then().catch((err) => {
+                console.log(err)
+            })
         }
 
         if (req.body.stroller !== null) {
-            Hill.updateOne({_id: req.body.hillId}, {$addToSet: {stroller: req.body.stroller}}).then().catch((err) => {
+            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {stroller: req.body.stroller}}).then().catch((err) => {
                 console.log(err)
             })
         }

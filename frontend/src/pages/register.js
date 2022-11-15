@@ -3,6 +3,7 @@ import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {Button, Form} from "react-bootstrap";
 
 function RegisterPage() {
     //Ref for storing form values
@@ -57,29 +58,29 @@ function RegisterPage() {
 
     return (
         <div className={"container-fluid"}>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Uživatelské jméno</label>
-                <input ref={username}  type="text" className={"form-control"} name={"username"}
-                       placeholder={"Uživatelské jméno"} required/>
+            <Form onSubmit={handleSubmit}>
+                <Form.Label htmlFor="username">Uživatelské jméno</Form.Label>
+                <Form.Control ref={username} type="text" className={"form-control"} name={"username"}
+                              placeholder={"Uživatelské jméno"} required/>
 
-                <label htmlFor="nickname">Přezdívka</label>
-                <input ref={nickname}  type="text" className={"form-control"} name={"nickname"}
-                       placeholder={"Přezdívka"}/>
+                <Form.Label htmlFor="nickname">Přezdívka</Form.Label>
+                <Form.Control ref={nickname} type="text" className={"form-control"} name={"nickname"}
+                              placeholder={"Přezdívka"}/>
 
-                <label htmlFor="email">E-mail</label>
-                <input ref={email}  type="email" className={"form-control"} name={"email"}
-                       placeholder={"E-mail"} required/>
+                <Form.Label htmlFor="email">E-mail</Form.Label>
+                <Form.Control ref={email} type="email" className={"form-control"} name={"email"}
+                              placeholder={"E-mail"} required/>
 
-                <label htmlFor="pass">Heslo</label>
-                <input ref={pass}  type="password" className={"form-control"} name={"pass"}
-                       placeholder={"Heslo"} minLength={8} required/>
+                <Form.Label htmlFor="pass">Heslo</Form.Label>
+                <Form.Control ref={pass} type="password" className={"form-control"} name={"pass"}
+                              placeholder={"Heslo"} minLength={8} required/>
 
-                <label htmlFor="passAgain">Heslo znovu</label>
-                <input ref={passAgain}  type="password" className={"form-control"} name={"passAgain"}
-                       placeholder={"Heslo znovu"} required/>
+                <Form.Label htmlFor="passAgain">Heslo znovu</Form.Label>
+                <Form.Control ref={passAgain} type="password" className={"form-control"} name={"passAgain"}
+                              placeholder={"Heslo znovu"} required/>
 
-                <button type="submit" className="btn btn-primary">Zaregistrovat</button>
-            </form>
+                <Button type="submit" className="btn btn-primary">Zaregistrovat</Button>
+            </Form>
 
         </div>
     )

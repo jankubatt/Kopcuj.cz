@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import Cookies from 'js-cookie';
+import {Button} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -84,7 +85,7 @@ function ProfilePage() {
                 </div>
 
                 <a href="/">
-                    <button type="button" className="btn">Domov</button>
+                    <Button type="button" className="btn">Domov</Button>
                 </a>
             </div>
         </>

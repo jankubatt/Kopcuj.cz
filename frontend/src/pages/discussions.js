@@ -1,9 +1,9 @@
 import React, {useEffect, useRef, useState} from 'react';
 import '../App.css';
 import Discussion from '../components/Discussion';
-import {Button, Container, TextField} from '@mui/material';
 import axios from "axios";
 import Cookies from 'js-cookie';
+import {Button, Form} from "react-bootstrap";
 
 function DiscussionsPage() {
     const [user, setUser] = useState([]);
@@ -42,8 +42,6 @@ function DiscussionsPage() {
         fetchDiscussions().then((res) => {
             setDiscussions(res);
         })
-
-        console.log("update")
     }, [btn])
 
     const createDiscussion = async () => {
@@ -63,20 +61,17 @@ function DiscussionsPage() {
                 <div className='navbrand' style={{marginRight: "20px"}}>Diskuze</div>
             </div>
 
-            <Container maxWidth="lg">
-                <div className='formDiscussion'>
-                    <h1>Vytvořit diskuzi</h1>
+            <div className={'container'}>
+                <h1>Vytvořit diskuzi</h1>
 
-                    <TextField inputRef={subject} style={{width: "50%"}} label="Téma" variant="outlined"/><br/>
-                    <TextField inputRef={text} label="Myšlenka" multiline rows={10}
-                               style={{marginTop: "10px", width: "100%"}}/><br/>
-                    <Button variant="contained" style={{marginTop: "10px"}} onClick={createDiscussion}>Vytvořit</Button>
-                </div>
+                <Form.Control as="input" ref={subject} placeholder="Téma"/><br/>
+                <Form.Control as="textarea" ref={text} placeholder="Myšlenka" rows={5}/><br/>
+                <Button onClick={createDiscussion}>Vytvořit</Button>
 
                 <hr/>
 
-                {discussions?.map((discussion) => <Discussion data={discussion}/>)}
-            </Container>
+                {discussions?.map((discussion) => <Discussion key={discussion._id} data={discussion}/>)}
+            </div>
         </>
     )
 }

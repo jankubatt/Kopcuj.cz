@@ -1,15 +1,14 @@
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
+import {Form} from "react-bootstrap";
+import {Typeahead} from "react-bootstrap-typeahead";
 
 const Searchbar = (props) => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [inputSearchValue, setInputSearchValue] = useState('');
+    const [singleSelections, setSingleSelections] = useState([]);
 
     const searchHill = (n) => {
         let name = n.split("-")[0];
         let elevation = n.split("-")[1].replace('m', '')
-        console.log(n);
+
         props.hills.forEach((hill) => {
             console.log(hill.elevation == elevation)
             if (hill.name.includes(name) && hill.elevation == elevation) {
@@ -19,27 +18,25 @@ const Searchbar = (props) => {
         })
     }
 
+    useEffect(() => {
+        if (singleSelections[0] !== undefined)
+            searchHill(singleSelections[0])
+    }, [singleSelections])
+
     return (
+
         <div className={'searchBar'}>
-                <Autocomplete
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                    value={searchTerm}
-                    onChange={(event, newValue) => {
-                        setSearchTerm(newValue);
-                    }}
-                    inputValue={inputSearchValue}
-                    onInputChange={(event, newInputValue) => {
-                        setInputSearchValue(newInputValue);
-                    }}
+            <Form.Group>
+                <Typeahead
+                    id="basic-typeahead-single"
+                    labelKey="name"
+                    onChange={setSingleSelections}
                     options={props.hills.map(hill => `${hill.name}-${hill.elevation}m`)}
-                    sx={{width: 300, backgroundColor: "white"}}
-                    renderInput={(params) => <TextField {...params} label={'Hledat'}/>}
+                    placeholder="Vyber kopec..."
+                    selected={singleSelections}
                 />
-                <div className={'btn'} onClick={() => {
-                    searchHill(searchTerm)
-                }}>Hledat
-                </div>
-            </div>
+            </Form.Group>
+        </div>
     )
 }
 

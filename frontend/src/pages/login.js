@@ -1,7 +1,8 @@
-import React, {useState, useRef} from 'react';
+import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {Button, Form} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -33,24 +34,22 @@ function LoginPage() {
 
 
     return (
-        <div className='wrapper'>
-            <form onSubmit={handleSubmit}>
-                <div className='input'>
-                    <label htmlFor="username">Uživatelské jméno</label><br />
-                    <input ref={username} type="text" name={"username"}
-                        placeholder={"Uživatelské jméno"}/>
-                </div>
+        <div className='container'>
+            <Form onSubmit={handleSubmit}>
 
-                <div className='input'>
-                    <label htmlFor="pass">Heslo</label><br/>
-                    <input ref={password} type="password" name={"pass"}
-                        placeholder={"Heslo"}/>
-                </div>
+                <Form.Label htmlFor="username">Uživatelské jméno</Form.Label><br/>
+                <Form.Control ref={username} type="text" name={"username"}
+                              placeholder={"Uživatelské jméno"}/>
+
+
+                <Form.Label htmlFor="pass">Heslo</Form.Label><br/>
+                <Form.Control ref={password} type="password" name={"pass"}
+                              placeholder={"Heslo"}/>
 
                 <br/><a href='/forgot-password'>Zapomenuté heslo</a><br/>
 
-                <button className='btn-hoverable' type="submit">Přihlásit</button>
-            </form>
+                <Button type="submit">Přihlásit</Button>
+            </Form>
         </div>
     )
 }

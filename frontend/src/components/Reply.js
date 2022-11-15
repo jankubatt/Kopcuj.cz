@@ -1,31 +1,32 @@
-import {Card, CardContent, IconButton, Typography} from "@mui/material";
 import React from "react";
-import {KeyboardArrowDown, KeyboardArrowUp} from "@mui/icons-material";
+import {Badge, Card} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Reply = (props) => {
 
     let rating = props.reply.upVotes.length - props.reply.downVotes.length;
 
     return (
-        <Card sx={{marginTop: "10px"}}>
-            <CardContent sx={{display: "flex", justifyContent: "space-between"}}>
-                <div>
-                    <Typography variant="h5" component="div">
-                        {props.reply.user !== undefined ? props.reply.user.name : "Loading..."}
-                    </Typography>
-                    <Typography variant="body2">
-                        {props.reply.text}
-                    </Typography>
-                </div>
-                <div style={{alignSelf: "flex-end"}}>
-                    <Typography variant="body2">
-                        <IconButton onClick={props.upVote}><KeyboardArrowUp/></IconButton>
+        <Card>
+            <Card.Header>
+                <div style={{display: "flex", justifyContent: "space-between"}}>
+                    {props.reply.user !== undefined ?
+                        <b>{props.reply.user.name || props.reply.user.login} {((props.reply.user !== undefined && props.reply.user.isAdmin) ?
+                            <Badge pill bg="danger">Admin</Badge> : '')}</b> : "Loading..."}
+
+                    <div style={{alignSelf: "flex-end"}}>
+                        <FontAwesomeIcon onClick={props.upVote} icon="fa-solid fa-chevron-up"/>
                         {<span
-                            style={((rating < 0) ? {color: "red"} : (rating === 0) ? {color: "gray"} : {color: "green"})}>{rating}</span>}
-                        <IconButton onClick={props.downVote}><KeyboardArrowDown/></IconButton>
-                    </Typography>
+                            style={((rating < 0) ? {color: "red"} : (rating === 0) ? {color: "gray"} : {color: "green"})}> {rating} </span>}
+                        <FontAwesomeIcon onClick={props.downVote} icon="fa-solid fa-chevron-down"/>
+                    </div>
                 </div>
-            </CardContent>
+            </Card.Header>
+            <Card.Body>
+                <Card.Text>
+                    {props.reply.text}
+                </Card.Text>
+            </Card.Body>
         </Card>
     )
 }

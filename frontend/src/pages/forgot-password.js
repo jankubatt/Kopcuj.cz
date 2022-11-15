@@ -2,6 +2,7 @@ import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {Button, Form} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -26,15 +27,15 @@ function ForgotPassword() {
 
     return (
         <div className='wrapper'>
-            <form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit}>
                 <div className='input'>
-                    <label htmlFor="email">E-Mail</label><br />
-                    <input ref={email} type="text" name={"email"}
-                        placeholder={"E-Mail"}/>
+                    <Form.Label htmlFor="email">E-Mail</Form.Label><br/>
+                    <Form.Control ref={email} type="text" name={"email"}
+                                  placeholder={"E-Mail"}/>
                 </div>
 
-                <button className='btn-hoverable' type="submit">Odeslat</button>
-            </form>
+                <Button className='btn-hoverable' type="submit">Odeslat</Button>
+            </Form>
         </div>
     )
 }

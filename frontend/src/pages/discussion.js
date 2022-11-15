@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
-import {Button, Card, CardContent, Container, TextField, Typography} from '@mui/material'
 import Cookies from "js-cookie";
 import Reply from "../components/Reply";
+import {Badge, Button, Card, Form} from "react-bootstrap";
 
 const DiscussionPage = () => {
     const qs = require('query-string');
@@ -90,34 +90,39 @@ const DiscussionPage = () => {
             </div>
 
             {discussion !== undefined ?
-                <Container>
-                    <h1>{discussion.subject}</h1>
+                <div className={'container'}>
+
 
                     <Card>
-                        <CardContent>
-                            <Typography>
-                                {discussion.user !== undefined ? discussion.user.name : "Loading..."}
-                            </Typography>
-                            <Typography variant="body2">
+                        <Card.Header>
+                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                <b>{discussion.subject}</b>{discussion.user !== undefined ?
+                                <b>{discussion.user.name || discussion.user.login} {((discussion.user !== undefined && discussion.user.isAdmin) ?
+                                    <Badge pill bg="danger">Admin</Badge> : '')}</b> : "Loading..."}
+                            </div>
+                        </Card.Header>
+                        <Card.Body>
+                            <Card.Text>
                                 {discussion.text}
-                            </Typography>
-                        </CardContent>
+                            </Card.Text>
+                        </Card.Body>
                     </Card>
 
                     <hr/>
 
                     <div style={{marginTop: "20px"}}>
-                        {replies?.map((reply) => <Reply id={reply._id} upVote={() => {
+                        {replies?.map((reply) => <Reply key={reply._id} upVote={() => {
                             SendUpvote(reply._id)
                         }} downVote={() => {
                             SendDownvote(reply._id)
                         }} reply={reply}/>)}
                     </div>
 
-                    <TextField inputRef={reply} minRows={8} multiline
-                               style={{width: "100%", marginTop: "20px"}}></TextField><br/>
-                    <Button variant="contained" style={{marginTop: "10px"}} onClick={SendReply}>Odpovědět</Button>
-                </Container>
+                    <hr/>
+
+                    <Form.Control as="textarea" rows={5} ref={reply}></Form.Control>
+                    <Button className={"mb-5"} onClick={SendReply}>Odpovědět</Button>
+                </div>
                 : "Loading..."}
         </>
 

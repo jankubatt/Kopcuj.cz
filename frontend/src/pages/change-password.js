@@ -2,6 +2,7 @@ import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {Button, Form} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -41,21 +42,21 @@ function ChangePassword() {
 
     return (
         <div className='wrapper'>
-            <form onSubmit={handleSubmit}>
-            <div className='input'>
-                    <label htmlFor="pass">Heslo</label><br/>
-                    <input type="password" name={"pass"}
-                        placeholder={"Heslo"}/>
+            <Form onSubmit={handleSubmit}>
+                <div className='input'>
+                    <Form.Label htmlFor="pass">Heslo</Form.Label><br/>
+                    <Form.Control type="password" name={"pass"}
+                                  placeholder={"Heslo"}/>
                 </div>
 
                 <div className='input'>
-                    <label htmlFor="passAgain">Heslo znovu</label><br/>
-                    <input type="password" name={"passAgain"}
-                        placeholder={"Heslo znovu"}/>
+                    <Form.Label htmlFor="passAgain">Heslo znovu</Form.Label><br/>
+                    <Form.Control type="password" name={"passAgain"}
+                                  placeholder={"Heslo znovu"}/>
                 </div>
 
-                <button className='btn-hoverable' type="submit">Změnit</button>
-            </form>
+                <Button className='btn-hoverable' type="submit">Změnit</Button>
+            </Form>
 
         </div>
     )
