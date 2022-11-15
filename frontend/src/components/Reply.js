@@ -1,4 +1,5 @@
 import React from "react";
+import {Button, Card} from "react-bootstrap";
 
 const Reply = (props) => {
 
@@ -6,24 +7,24 @@ const Reply = (props) => {
 
     return (
         <Card sx={{marginTop: "10px"}}>
-            <CardContent sx={{display: "flex", justifyContent: "space-between"}}>
+            <Card.Body sx={{display: "flex", justifyContent: "space-between"}}>
                 <div>
-                    <Typography variant="h5" component="div">
+                    <Card.Text variant="h5" component="div">
                         {props.reply.user !== undefined ? props.reply.user.name : "Loading..."}
-                    </Typography>
-                    <Typography variant="body2">
+                    </Card.Text>
+                    <Card.Text variant="body2">
                         {props.reply.text}
-                    </Typography>
+                    </Card.Text>
                 </div>
                 <div style={{alignSelf: "flex-end"}}>
-                    <Typography variant="body2">
-                        <IconButton onClick={props.upVote}><KeyboardArrowUp/></IconButton>
+                    <span variant="body2">
+                        <Button onClick={props.upVote}>up</Button>
                         {<span
                             style={((rating < 0) ? {color: "red"} : (rating === 0) ? {color: "gray"} : {color: "green"})}>{rating}</span>}
-                        <IconButton onClick={props.downVote}><KeyboardArrowDown/></IconButton>
-                    </Typography>
+                        <Button onClick={props.downVote}>down</Button>
+                    </span>
                 </div>
-            </CardContent>
+            </Card.Body>
         </Card>
     )
 }

@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 import React, {useRef} from 'react';
-import Review from "./Review";
+import {Button, InputGroup} from "react-bootstrap";
 
 const Sidebar = (props) => {
     const chbDifficulty = useRef();
@@ -100,9 +100,9 @@ const Sidebar = (props) => {
             {props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}<br />
 
             <div style={{textAlign: 'center'}}>
-                <button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
+                <Button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
                         disabled={props.climbed}>Pokořit
-                </button>
+                </Button>
             </div>
 
             <hr/>
@@ -110,27 +110,28 @@ const Sidebar = (props) => {
             <h1>Rating</h1>
 
             <div className={'rating'}>
-                <Rating name="size-large simple-controlled" value={props.rating || 0} onChange={(event, newValue) => {
-                    props.setRating(newValue);
-                    props.setTxtArea('block')
-                }} size={'large'}
-                /><br/>
+                {/*<Rating  name="size-large simple-controlled" value={props.rating || 0} onChange={(event, newValue) => {*/}
+                {/*    props.setRating(newValue);*/}
+                {/*    props.setTxtArea('block')*/}
+                {/*}} size={'large'}*/}
+                {/*/><br/>*/}
 
                 <Button type="button" className="btn" onClick={sendRating}>Odeslat</Button><br/>
 
                 <div style={{display: props.txtArea}}>
-                    <Checkbox ref={chbDifficulty}/> Obtížné <br/>
-                    <Checkbox ref={chbPath}/> Dostupná cesta <br/>
-                    <Checkbox ref={chbStroller}/> Vhodné pro kočárky <br/>
-                    <Checkbox ref={chbParking}/> Parkoviště <br/>
-                    <Checkbox ref={chbFood}/> Občerstvení <br/>
+                    <InputGroup.Checkbox ref={chbDifficulty}/> Obtížné <br/>
+                    <InputGroup.Checkbox ref={chbPath}/> Dostupná cesta <br/>
+                    <InputGroup.Checkbox ref={chbStroller}/> Vhodné pro kočárky <br/>
+                    <InputGroup.Checkbox ref={chbParking}/> Parkoviště <br/>
+                    <InputGroup.Checkbox ref={chbFood}/> Občerstvení <br/>
                 </div>
 
                 <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: props.txtArea}}></textarea><br/>
                     
                 <div id='reviews'>
                     {props.reviews?.map((review) => ((review.text !== null) ?
-                        <Review review={review} helpfulClicked={helpfulClicked}/> : 'Loading...'))}
+                        // <Review review={review} helpfulClicked={helpfulClicked}/>
+                        "nic" : 'Loading...'))}
                     </div>
                 </div>
             </div>

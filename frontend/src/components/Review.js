@@ -1,16 +1,17 @@
 import React from "react";
+import {Button, Card} from "react-bootstrap";
 
 const Review = (props) => {
     return (
         <div key={props.review._id}>
             <Card className='card'>
-                <CardContent>
+                <Card.Body>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <div>
                             <b style={{fontSize: '1.25em'}}>{props.review.user.name || props.review.user.login}</b>&nbsp;
-                            {((props.review.user.isAdmin) ? <Chip color="error" label="Admin"/> : '')}
+                            {((props.review.user.isAdmin) ? <span color="error" label="Admin"/> : '')}
                         </div>
-                        <div><Rating name="read-only" value={props.review.stars} readOnly/></div>
+                        {/*<div><Rating name="read-only" value={props.review.stars} readOnly/></div>*/}
                     </div>
 
                     <div>
@@ -18,16 +19,16 @@ const Review = (props) => {
                     </div>
 
                     <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
-                        <IconButton style={{alignSelf: "flex-end"}} onClick={() => {
+                        <Button style={{alignSelf: "flex-end"}} onClick={() => {
                             props.helpfulClicked(props.review._id)
-                        }} aria-label="thumbs up" disabled={false}><ThumbUpIcon/>{props.review.helpful.length}
-                        </IconButton>
+                        }} aria-label="thumbs up" disabled={false}>Helpful{props.review.helpful.length}
+                        </Button>
                         <div style={{
                             color: 'GrayText',
                             alignSelf: "flex-end"
                         }}>{new Date(props.review.date_added).getDate()}.{new Date(props.review.date_added).getMonth() + 1}.{new Date(props.review.date_added).getFullYear()}</div>
                     </div>
-                </CardContent>
+                </Card.Body>
             </Card>
         </div>
     )

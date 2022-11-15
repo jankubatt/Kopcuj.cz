@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
+import {Form, Table} from "react-bootstrap";
 
 function createData(name, rating, food, difficulty, parking, path, stroller) {
     return {name, rating, food, difficulty, parking, path, stroller};
@@ -25,10 +26,12 @@ const FilterPage = () => {
 
     const handleType = (event) => {
         setType(event.target.value);
+        handleChange();
     }
 
     const handleFilter = (event) => {
         setFilter(event.target.value);
+        handleChange();
     }
 
     const sortArray = (arr, orderBy, orderType) => {
@@ -158,90 +161,83 @@ const FilterPage = () => {
     return (
         <>
             {rowData !== undefined ? <>
-                <FormControl sx={{width: "10vw"}}>
-                    <InputLabel id="filter-label">Filtr</InputLabel>
-                    <Select
-                        labelId="filter-label"
-                        id="filter"
-                        value={filter}
-                        label="Filtr"
-                        onChange={handleFilter}
-                    >
-                        <MenuItem value={'name'}>Name</MenuItem>
-                        <MenuItem value={'rating'}>Rating</MenuItem>
-                        <MenuItem value={'food'}>Food</MenuItem>
-                        <MenuItem value={'difficulty'}>Difficulty</MenuItem>
-                        <MenuItem value={'parking'}>Parking</MenuItem>
-                        <MenuItem value={'path'}>Path</MenuItem>
-                        <MenuItem value={'stroller'}>Stroller</MenuItem>
-                    </Select>
-                </FormControl>
-                <FormControl sx={{width: "10vw"}}>
-                    <InputLabel id="filter-label2">Typ</InputLabel>
-                    <Select
-                        labelId="filter-label2"
-                        id="filter2"
-                        value={type}
-                        label="Filtr"
-                        onChange={handleType}
-                    >
-                        <MenuItem value={'asc'}>Vzestupne</MenuItem>
-                        <MenuItem value={'desc'}>Zestupne</MenuItem>
-                    </Select>
-                </FormControl>
+                <Form.Select
+                    labelId="filter-label"
+                    id="filter"
+                    value={filter}
+                    label="Filtr"
+                    onChange={handleFilter}
+                >
+                    <option value={'name'}>Name</option>
+                    <option value={'rating'}>Rating</option>
+                    <option value={'food'}>Food</option>
+                    <option value={'difficulty'}>Difficulty</option>
+                    <option value={'parking'}>Parking</option>
+                    <option value={'path'}>Path</option>
+                    <option value={'stroller'}>Stroller</option>
+                </Form.Select>
+                <Form.Select
+                    labelId="filter-label2"
+                    id="filter2"
+                    value={type}
+                    label="Filtr"
+                    onChange={handleType}
+                >
+                    <option value={'asc'}>Vzestupne</option>
+                    <option value={'desc'}>Zestupne</option>
+                </Form.Select>
 
-                <Button onClick={handleChange}>Seradit</Button>
-
-                <TableContainer component={Paper}>
+                <div className={'container'}>
                     <Table aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell align="center" aria-describedby={refresh}>
-                                    <b>Jméno</b>
-                                </TableCell>
+                        <thead>
+                        <tr>
+                            <td align="center" aria-describedby={refresh}>
+                                <b>Jméno</b>
+                            </td>
 
-                                <TableCell align="center">
-                                    <b>Hodnocení</b>
-                                </TableCell>
+                            <td align="center">
+                                <b>Hodnocení</b>
+                            </td>
 
-                                <TableCell align="center">
-                                    <b>Jídlo</b>
-                                </TableCell>
+                            <td align="center">
+                                <b>Jídlo</b>
+                            </td>
 
-                                <TableCell align="center">
-                                    <b>Obtížnost</b>
-                                </TableCell>
+                            <td align="center">
+                                <b>Obtížnost</b>
+                            </td>
 
-                                <TableCell align="center">
-                                    <b>Parkování</b>
-                                </TableCell>
+                            <td align="center">
+                                <b>Parkování</b>
+                            </td>
 
-                                <TableCell align="center">
-                                    <b>Cesta</b>
-                                </TableCell>
+                            <td align="center">
+                                <b>Cesta</b>
+                            </td>
 
-                                <TableCell align="center">
-                                    <b>Kočárek</b>
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {rowData?.map((row) => (
-                                <TableRow key={row.name}>
-                                    <TableCell component="th" scope="row" align="center">
-                                        {row.name}
-                                    </TableCell>
-                                    <TableCell align="center">{row.rating}</TableCell>
-                                    <TableCell align="center">{row.food}</TableCell>
-                                    <TableCell align="center">{row.difficulty}</TableCell>
-                                    <TableCell align="center">{row.parking}</TableCell>
-                                    <TableCell align="center">{row.path}</TableCell>
-                                    <TableCell align="center">{row.stroller}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
+                            <td align="center">
+                                <b>Kočárek</b>
+                            </td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {rowData?.map((row) => (
+                            <tr key={row.name}>
+                                <td component="th" scope="row" align="center">
+                                    {row.name}
+                                </td>
+                                <td align="center">{row.rating}</td>
+                                <td align="center">{row.food}</td>
+                                <td align="center">{row.difficulty}</td>
+                                <td align="center">{row.parking}</td>
+                                <td align="center">{row.path}</td>
+                                <td align="center">{row.stroller}</td>
+                            </tr>
+                        ))}
+                        </tbody>
                     </Table>
-                </TableContainer></> : "Loading..."
+                </div>
+            </> : "Loading..."
             }
 
         </>

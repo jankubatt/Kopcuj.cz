@@ -2,6 +2,7 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import Cookies from "js-cookie";
 import Reply from "../components/Reply";
+import {Button, Card, Form} from "react-bootstrap";
 
 const DiscussionPage = () => {
     const qs = require('query-string');
@@ -89,18 +90,18 @@ const DiscussionPage = () => {
             </div>
 
             {discussion !== undefined ?
-                <Container>
+                <div className={'container'}>
                     <h1>{discussion.subject}</h1>
 
                     <Card>
-                        <CardContent>
-                            <Typography>
+                        <Card.Body>
+                            <Card.Text>
                                 {discussion.user !== undefined ? discussion.user.name : "Loading..."}
-                            </Typography>
-                            <Typography variant="body2">
+                            </Card.Text>
+                            <Card.Text variant="body2">
                                 {discussion.text}
-                            </Typography>
-                        </CardContent>
+                            </Card.Text>
+                        </Card.Body>
                     </Card>
 
                     <hr/>
@@ -113,10 +114,10 @@ const DiscussionPage = () => {
                         }} reply={reply}/>)}
                     </div>
 
-                    <TextField inputRef={reply} minRows={8} multiline
-                               style={{width: "100%", marginTop: "20px"}}></TextField><br/>
+                    <Form.Control inputRef={reply} minRows={8} multiline
+                                  style={{width: "100%", marginTop: "20px"}}></Form.Control><br/>
                     <Button variant="contained" style={{marginTop: "10px"}} onClick={SendReply}>Odpovědět</Button>
-                </Container>
+                </div>
                 : "Loading..."}
         </>
 

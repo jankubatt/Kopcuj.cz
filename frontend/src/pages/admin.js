@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
-import {Card, Table} from "react-bootstrap";
+import {Button, Card, Form, Table} from "react-bootstrap";
 
 //Main table columns
 const columns = [
@@ -31,7 +31,6 @@ function AdminPage() {
     const [hills, getHills] = useState([]);                     //All hills
     const [allReviews, getAllReviews] = useState([]);           //All reviews
     const [userHills, setUserHills] = useState([]);             //Array where hill is assigned to user
-    const [page, setPage] = React.useState(0);                  //Page of a table
     const [rowsPerPage, setRowsPerPage] = React.useState(10);   //Row per page of a table
     const [rows, setRows] = useState([]);                       //Rows of a table
 
@@ -72,17 +71,6 @@ function AdminPage() {
                 console.log("Error in register user!\n" + err);
             });
     }
-
-    //Handle page change of a table
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    //Handle rows per page of a table
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
 
     //Fetch users from database
     const fetchUsers = async () => {
@@ -174,53 +162,60 @@ function AdminPage() {
 
     return (
         <>
-            <div className={'container-fluid'}>
+            <div className={'container'}>
                 <Table stickyHeader aria-label="sticky table">
                     <thead>
                     <tr>
-                        {columns.map((column) => (
-                            <span key={column.id} align={column.align} style={{minWidth: column.minWidth}}>
-                                                {column.label}
-                                            </span>
-                        ))}
+                        <td>ID</td>
+                        <td>Login</td>
+                        <td>Name</td>
+                        <td>Email</td>
+                        <td>Desc</td>
+                        <td>Hills</td>
+                        <td>Comments</td>
+                        <td>Reviews</td>
+                        <td>Registration</td>
+                        <td>Last Login</td>
+                        <td>Admin</td>
                     </tr>
                     </thead>
                     <tbody>
-                    {rows
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((row) => {
-                            return (
-                                <tr hover role="checkbox" tabIndex={-1} key={row.code}>
-                                    {columns.map((column) => {
-                                        const value = row[column.id];
-                                        return (
-                                            <span key={column.id} align={column.align}>
-                                                            {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                        </span>
-                                        );
-                                    })}
-                                </tr>
-                            );
-                        })}
+                    {rows.map((row) => {
+                        return (
+                            <tr>
+                                <td>{row.id_user}</td>
+                                <td>{row.login}</td>
+                                <td>{row.name}</td>
+                                <td>{row.email}</td>
+                                <td>{row.desc}</td>
+                                <td>{row.hills}</td>
+                                <td>{row.comments}</td>
+                                <td>{row.reviews}</td>
+                                <td>{row.date_registered}</td>
+                                <td>{row.date_lastLogin}</td>
+                                <td>{row.isAdmin}</td>
+                            </tr>
+                        );
+                    })}
                     </tbody>
-                            </Table>
-                </div>
+                </Table>
+            </div>
 
-                <h2>Přidat kopec</h2>
-                <form onSubmit={handleSubmit}>
-                    <input onChange={handleChange} placeholder='Jméno' name='name'></input><br/>
-                    <input onChange={handleChange} placeholder='Výška' name='elevation'></input><br/>
-                    <input onChange={handleChange} placeholder='Lat' name='lat'></input><br/>
-                    <input onChange={handleChange} placeholder='Lon' name='lon'></input><br/>
-                    <input onChange={handleChange} placeholder='Prominence' name='prominence'></input><br/>
-                    <input onChange={handleChange} placeholder='Izolace' name='isolation'></input><br/>
-                    <input onChange={handleChange} placeholder='Materiál' name='material'></input><br/>
-                    <input onChange={handleChange} placeholder='Povodí' name='basin'></input><br/>
-                    <input onChange={handleChange} placeholder='Okres' name='district'></input><br/>
-                    <input onChange={handleChange} placeholder='Lokace' name='location'></input><br/>
-                    <br/>
-                    <button type="submit">Pridat kopec</button>
-                </form>
+            <h2>Přidat kopec</h2>
+            <Form onSubmit={handleSubmit}>
+                <Form.Control onChange={handleChange} placeholder='Jméno' name='name'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Výška' name='elevation'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Lat' name='lat'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Lon' name='lon'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Prominence' name='prominence'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Izolace' name='isolation'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Materiál' name='material'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Povodí' name='basin'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Okres' name='district'></Form.Control><br/>
+                <Form.Control onChange={handleChange} placeholder='Lokace' name='location'></Form.Control><br/>
+                <br/>
+                <Button type="submit">Pridat kopec</Button>
+            </Form>
         </>
     )
 }
