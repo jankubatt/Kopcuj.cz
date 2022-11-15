@@ -73,7 +73,6 @@ function MapPage() {
             if (currentHill !== undefined) {
                 let currentReviews = []
                 res.forEach((review) => {
-                    console.log(review.hill._id)
                     if (review.hill._id === currentHill._id) {
                         currentReviews.push(review);
                     }

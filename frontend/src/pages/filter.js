@@ -162,7 +162,6 @@ const FilterPage = () => {
         <>
             {rowData !== undefined ? <>
                 <Form.Select
-                    labelId="filter-label"
                     id="filter"
                     value={filter}
                     label="Filtr"
@@ -177,7 +176,6 @@ const FilterPage = () => {
                     <option value={'stroller'}>Stroller</option>
                 </Form.Select>
                 <Form.Select
-                    labelId="filter-label2"
                     id="filter2"
                     value={type}
                     label="Filtr"

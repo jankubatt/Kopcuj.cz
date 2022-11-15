@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import Cookies from "js-cookie";
 import Reply from "../components/Reply";
-import {Button, Card, Form} from "react-bootstrap";
+import {Badge, Button, Card, Form} from "react-bootstrap";
 
 const DiscussionPage = () => {
     const qs = require('query-string');
@@ -91,14 +91,18 @@ const DiscussionPage = () => {
 
             {discussion !== undefined ?
                 <div className={'container'}>
-                    <h1>{discussion.subject}</h1>
+
 
                     <Card>
+                        <Card.Header>
+                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                                <b>{discussion.subject}</b>{discussion.user !== undefined ?
+                                <b>{discussion.user.name || discussion.user.login} {((discussion.user !== undefined && discussion.user.isAdmin) ?
+                                    <Badge pill bg="danger">Admin</Badge> : '')}</b> : "Loading..."}
+                            </div>
+                        </Card.Header>
                         <Card.Body>
                             <Card.Text>
-                                {discussion.user !== undefined ? discussion.user.name : "Loading..."}
-                            </Card.Text>
-                            <Card.Text variant="body2">
                                 {discussion.text}
                             </Card.Text>
                         </Card.Body>

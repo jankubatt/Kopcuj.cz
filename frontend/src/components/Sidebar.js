@@ -31,16 +31,17 @@ const Sidebar = (props) => {
     }
 
     const sendRating = async () => {
+        console.log(chbDifficulty.current.value.includes("on") ? props.user._id : null)
         await axios.post(`http://localhost:8082/api/review/addReview`, {
             stars: props.rating,
             hill: props.currentHill,
             user: props.user,
             text: reviewText.current.value,
-            difficulty: chbDifficulty.current.className.includes("Mui-checked") ? props.user._id : null,
-            path: chbPath.current.className.includes("Mui-checked") ? props.user._id : null,
-            stroller: chbStroller.current.className.includes("Mui-checked") ? props.user._id : null,
-            parking: chbParking.current.className.includes("Mui-checked") ? props.user._id : null,
-            food: chbFood.current.className.includes("Mui-checked") ? props.user._id : null
+            difficulty: chbDifficulty.current.value.includes("on") ? props.user._id : null,
+            path: chbPath.current.value.includes("on") ? props.user._id : null,
+            stroller: chbStroller.current.value.includes("on") ? props.user._id : null,
+            parking: chbParking.current.value.includes("on") ? props.user._id : null,
+            food: chbFood.current.value.includes("on") ? props.user._id : null
         }).then(() => {
             props.setTxtArea('none')
             props.setBtnReview(!props.btnReview);
@@ -112,48 +113,44 @@ const Sidebar = (props) => {
             <h1>Rating</h1>
 
             <div className={'rating'}>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
-                    props.setRating(newValue);
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
+                    props.setRating(1);
                     props.setTxtArea('block')
                 }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
-                    props.setRating(newValue);
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
+                    props.setRating(2);
                     props.setTxtArea('block')
                 }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
-                    props.setRating(newValue);
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
+                    props.setRating(3);
                     props.setTxtArea('block')
                 }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
-                    props.setRating(newValue);
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
+                    props.setRating(4);
                     props.setTxtArea('block')
                 }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
-                    props.setRating(newValue);
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
+                    props.setRating(5);
                     props.setTxtArea('block')
                 }}/>
-
-
-                <br/>
-
-                <Button type="button" className="btn" onClick={sendRating}>Odeslat</Button><br/>
 
                 <div style={{display: props.txtArea}}>
-                    <Form.Check ref={chbDifficulty} label={"Obtížné"}/> <br/>
-                    <Form.Check ref={chbPath}/> Dostupná cesta <br/>
-                    <Form.Check ref={chbStroller}/> Vhodné pro kočárky <br/>
-                    <Form.Check ref={chbParking}/> Parkoviště <br/>
-                    <Form.Check ref={chbFood}/> Občerstvení <br/>
+                    <Form.Check ref={chbDifficulty} label={"Obtížné"}/>
+                    <Form.Check ref={chbPath} label={"Dostupná cesta"}/>
+                    <Form.Check ref={chbStroller} label={"Vhodné pro kočárky"}/>
+                    <Form.Check ref={chbParking} label={"Parkoviště"}/>
+                    <Form.Check ref={chbFood} label={"Občerstvení"}/>
                 </div>
 
-                <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: props.txtArea}}></textarea><br/>
-                    
+                <Form.Control as="textarea" rows={3} ref={reviewText} style={{display: props.txtArea}}></Form.Control>
+                <Button type="button" className="btn" onClick={sendRating}>Odeslat</Button>
+                <hr/>
                 <div id='reviews'>
                     {props.reviews?.map((review) => ((review.text !== null) ?
                         <Review review={review} helpfulClicked={helpfulClicked}/>
                         : 'Loading...'))}
-                    </div>
                 </div>
+            </div>
             </div>
     )
 }
