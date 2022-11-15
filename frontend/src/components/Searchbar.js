@@ -1,14 +1,14 @@
-import {useRef} from 'react';
+import {useEffect, useState} from 'react';
 import {Form} from "react-bootstrap";
+import {Typeahead} from "react-bootstrap-typeahead";
 
 const Searchbar = (props) => {
-    const searchTerm = useRef();
-
+    const [singleSelections, setSingleSelections] = useState([]);
 
     const searchHill = (n) => {
         let name = n.split("-")[0];
         let elevation = n.split("-")[1].replace('m', '')
-        console.log(n);
+
         props.hills.forEach((hill) => {
             console.log(hill.elevation == elevation)
             if (hill.name.includes(name) && hill.elevation == elevation) {
@@ -18,14 +18,25 @@ const Searchbar = (props) => {
         })
     }
 
+    useEffect(() => {
+        if (singleSelections[0] !== undefined)
+            searchHill(singleSelections[0])
+    }, [singleSelections])
+
     return (
+
         <div className={'searchBar'}>
-            <Form.Control ref={searchTerm}/>
-            <div className={'btn'} onClick={() => {
-                searchHill(searchTerm.current.value)
-            }}>Hledat
-            </div>
-            </div>
+            <Form.Group>
+                <Typeahead
+                    id="basic-typeahead-single"
+                    labelKey="name"
+                    onChange={setSingleSelections}
+                    options={props.hills.map(hill => `${hill.name}-${hill.elevation}m`)}
+                    placeholder="Vyber kopec..."
+                    selected={singleSelections}
+                />
+            </Form.Group>
+        </div>
     )
 }
 

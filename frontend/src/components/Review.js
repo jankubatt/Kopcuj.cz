@@ -1,5 +1,5 @@
 import React from "react";
-import {Button, Card} from "react-bootstrap";
+import {Badge, Button, Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Review = (props) => {
@@ -9,8 +9,8 @@ const Review = (props) => {
                 <Card.Body>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <div>
-                            <b style={{fontSize: '1.25em'}}>{props.review.user.name || props.review.user.login}</b>&nbsp;
-                            {((props.review.user.isAdmin) ? <span color="error" label="Admin"/> : '')}
+                            <b>{props.review.user.name || props.review.user.login}</b>&nbsp;
+                            {((props.review.user.isAdmin) ? <Badge pill bg="danger">Admin</Badge> : '')}
                         </div>
                         <div>
                             {[...Array(props.review.stars)].map((x, i) =>

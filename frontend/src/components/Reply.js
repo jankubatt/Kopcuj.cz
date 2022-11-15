@@ -1,5 +1,6 @@
 import React from "react";
-import {Button, Card} from "react-bootstrap";
+import {Badge, Card} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Reply = (props) => {
 
@@ -8,21 +9,20 @@ const Reply = (props) => {
     return (
         <Card sx={{marginTop: "10px"}}>
             <Card.Body sx={{display: "flex", justifyContent: "space-between"}}>
-                <div>
-                    <Card.Text variant="h5" component="div">
-                        {props.reply.user !== undefined ? props.reply.user.name : "Loading..."}
-                    </Card.Text>
-                    <Card.Text variant="body2">
-                        {props.reply.text}
-                    </Card.Text>
-                </div>
+                <Card.Text>
+                    {props.reply.user !== undefined ?
+                        <b>{props.reply.user.name || props.review.user.login}&nbsp;</b> : "Loading..."}
+                    {((props.reply.user.isAdmin) ? <Badge pill bg="danger">Admin</Badge> : '')}
+                </Card.Text>
+                <Card.Text>
+                    {props.reply.text}
+                </Card.Text>
+
                 <div style={{alignSelf: "flex-end"}}>
-                    <span variant="body2">
-                        <Button onClick={props.upVote}>up</Button>
-                        {<span
-                            style={((rating < 0) ? {color: "red"} : (rating === 0) ? {color: "gray"} : {color: "green"})}>{rating}</span>}
-                        <Button onClick={props.downVote}>down</Button>
-                    </span>
+                    <FontAwesomeIcon onClick={props.upVote} icon="fa-solid fa-chevron-up"/>
+                    {<span
+                        style={((rating < 0) ? {color: "red"} : (rating === 0) ? {color: "gray"} : {color: "green"})}> {rating} </span>}
+                    <FontAwesomeIcon onClick={props.downVote} icon="fa-solid fa-chevron-down"/>
                 </div>
             </Card.Body>
         </Card>

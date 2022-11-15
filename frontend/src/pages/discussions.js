@@ -42,8 +42,6 @@ function DiscussionsPage() {
         fetchDiscussions().then((res) => {
             setDiscussions(res);
         })
-
-        console.log("update")
     }, [btn])
 
     const createDiscussion = async () => {
@@ -63,19 +61,16 @@ function DiscussionsPage() {
                 <div className='navbrand' style={{marginRight: "20px"}}>Diskuze</div>
             </div>
 
-            <div className={'container'} maxWidth="lg">
-                <div className='formDiscussion'>
-                    <h1>Vytvořit diskuzi</h1>
+            <div className={'container'}>
+                <h1>Vytvořit diskuzi</h1>
 
-                    <Form.Control inputRef={subject} placeholder="Téma"/><br/>
-                    <Form.Control as="textarea" inputRef={text} placeholder="Myšlenka"
-                                  style={{marginTop: "10px"}}/><br/>
-                    <Button style={{marginTop: "10px"}} onClick={createDiscussion}>Vytvořit</Button>
-                </div>
+                <Form.Control as="input" ref={subject} placeholder="Téma"/><br/>
+                <Form.Control as="textarea" ref={text} placeholder="Myšlenka" rows={5}/><br/>
+                <Button onClick={createDiscussion}>Vytvořit</Button>
 
                 <hr/>
 
-                {discussions?.map((discussion) => <Discussion data={discussion}/>)}
+                {discussions?.map((discussion) => <Discussion key={discussion._id} data={discussion}/>)}
             </div>
         </>
     )

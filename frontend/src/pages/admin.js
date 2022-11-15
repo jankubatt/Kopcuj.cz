@@ -31,7 +31,6 @@ function AdminPage() {
     const [hills, getHills] = useState([]);                     //All hills
     const [allReviews, getAllReviews] = useState([]);           //All reviews
     const [userHills, setUserHills] = useState([]);             //Array where hill is assigned to user
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);   //Row per page of a table
     const [rows, setRows] = useState([]);                       //Rows of a table
 
     //State for storing form values

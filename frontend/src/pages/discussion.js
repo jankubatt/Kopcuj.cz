@@ -107,16 +107,17 @@ const DiscussionPage = () => {
                     <hr/>
 
                     <div style={{marginTop: "20px"}}>
-                        {replies?.map((reply) => <Reply id={reply._id} upVote={() => {
+                        {replies?.map((reply) => <Reply key={reply._id} upVote={() => {
                             SendUpvote(reply._id)
                         }} downVote={() => {
                             SendDownvote(reply._id)
                         }} reply={reply}/>)}
                     </div>
 
-                    <Form.Control inputRef={reply} minRows={8} multiline
-                                  style={{width: "100%", marginTop: "20px"}}></Form.Control><br/>
-                    <Button variant="contained" style={{marginTop: "10px"}} onClick={SendReply}>Odpovědět</Button>
+                    <hr/>
+
+                    <Form.Control as="textarea" rows={5} ref={reply}></Form.Control>
+                    <Button className={"mb-5"} onClick={SendReply}>Odpovědět</Button>
                 </div>
                 : "Loading..."}
         </>
