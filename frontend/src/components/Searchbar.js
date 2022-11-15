@@ -1,8 +1,9 @@
-import {useState} from 'react';
+import {useRef} from 'react';
+import {Form} from "react-bootstrap";
 
 const Searchbar = (props) => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [inputSearchValue, setInputSearchValue] = useState('');
+    const searchTerm = useRef();
+
 
     const searchHill = (n) => {
         let name = n.split("-")[0];
@@ -19,24 +20,11 @@ const Searchbar = (props) => {
 
     return (
         <div className={'searchBar'}>
-                <input
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
-                    value={searchTerm}
-                    onChange={(event, newValue) => {
-                        setSearchTerm(newValue);
-                    }}
-                    inputValue={inputSearchValue}
-                    onInputChange={(event, newInputValue) => {
-                        setInputSearchValue(newInputValue);
-                    }}
-                    options={props.hills.map(hill => `${hill.name}-${hill.elevation}m`)}
-                    sx={{width: 300, backgroundColor: "white"}}
-                    renderInput={(params) => <input {...params} label={'Hledat'}/>}
-                />
-                <div className={'btn'} onClick={() => {
-                    searchHill(searchTerm)
-                }}>Hledat
-                </div>
+            <Form.Control ref={searchTerm}/>
+            <div className={'btn'} onClick={() => {
+                searchHill(searchTerm.current.value)
+            }}>Hledat
+            </div>
             </div>
     )
 }

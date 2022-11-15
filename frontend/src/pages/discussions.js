@@ -3,7 +3,7 @@ import '../App.css';
 import Discussion from '../components/Discussion';
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Button} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
 
 function DiscussionsPage() {
     const [user, setUser] = useState([]);
@@ -67,10 +67,10 @@ function DiscussionsPage() {
                 <div className='formDiscussion'>
                     <h1>Vytvořit diskuzi</h1>
 
-                    <input inputRef={subject} style={{width: "50%"}} label="Téma" variant="outlined"/><br/>
-                    <input inputRef={text} label="Myšlenka" multiline rows={10}
-                           style={{marginTop: "10px", width: "100%"}}/><br/>
-                    <Button variant="contained" style={{marginTop: "10px"}} onClick={createDiscussion}>Vytvořit</Button>
+                    <Form.Control inputRef={subject} placeholder="Téma"/><br/>
+                    <Form.Control as="textarea" inputRef={text} placeholder="Myšlenka"
+                                  style={{marginTop: "10px"}}/><br/>
+                    <Button style={{marginTop: "10px"}} onClick={createDiscussion}>Vytvořit</Button>
                 </div>
 
                 <hr/>

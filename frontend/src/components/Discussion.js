@@ -4,7 +4,7 @@ import {Button, Card} from "react-bootstrap";
 const Discussion = (props) => {
     return (
         <>
-            <Card key={props.data._id} sx={{marginTop: "10px"}}>
+            <Card key={props.data._id} style={{marginTop: "10px"}}>
                 <Card.Body>
                     <Card.Title>
                         {props.data.subject}
@@ -13,7 +13,7 @@ const Discussion = (props) => {
                         {props.data.text}
                     </Card.Text>
 
-                    <Button sx={{marginTop: "5px"}} variant="contained"><a
+                    <Button style={{marginTop: "5px"}}><a
                         href={`http://localhost:3000/discussion?id=${props.data._id}`}>K diskuzi</a></Button>
                 </Card.Body>
             </Card>

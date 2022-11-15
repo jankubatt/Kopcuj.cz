@@ -1,5 +1,6 @@
 import React from "react";
 import {Button, Card} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const Review = (props) => {
     return (
@@ -11,7 +12,11 @@ const Review = (props) => {
                             <b style={{fontSize: '1.25em'}}>{props.review.user.name || props.review.user.login}</b>&nbsp;
                             {((props.review.user.isAdmin) ? <span color="error" label="Admin"/> : '')}
                         </div>
-                        {/*<div><Rating name="read-only" value={props.review.stars} readOnly/></div>*/}
+                        <div>
+                            {[...Array(props.review.stars)].map((x, i) =>
+                                <FontAwesomeIcon icon="fa-solid fa-star" key={i}/>
+                            )}
+                        </div>
                     </div>
 
                     <div>

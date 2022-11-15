@@ -1,7 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 import React, {useRef} from 'react';
-import {Button, InputGroup} from "react-bootstrap";
+import {Button, Form} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Review from "./Review";
 
 const Sidebar = (props) => {
     const chbDifficulty = useRef();
@@ -110,28 +112,46 @@ const Sidebar = (props) => {
             <h1>Rating</h1>
 
             <div className={'rating'}>
-                {/*<Rating  name="size-large simple-controlled" value={props.rating || 0} onChange={(event, newValue) => {*/}
-                {/*    props.setRating(newValue);*/}
-                {/*    props.setTxtArea('block')*/}
-                {/*}} size={'large'}*/}
-                {/*/><br/>*/}
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
+                    props.setRating(newValue);
+                    props.setTxtArea('block')
+                }}/>
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
+                    props.setRating(newValue);
+                    props.setTxtArea('block')
+                }}/>
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
+                    props.setRating(newValue);
+                    props.setTxtArea('block')
+                }}/>
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
+                    props.setRating(newValue);
+                    props.setTxtArea('block')
+                }}/>
+                <FontAwesomeIcon icon="fa-regular fa-star" onClick={(event, newValue) => {
+                    props.setRating(newValue);
+                    props.setTxtArea('block')
+                }}/>
+
+
+                <br/>
 
                 <Button type="button" className="btn" onClick={sendRating}>Odeslat</Button><br/>
 
                 <div style={{display: props.txtArea}}>
-                    <InputGroup.Checkbox ref={chbDifficulty}/> Obtížné <br/>
-                    <InputGroup.Checkbox ref={chbPath}/> Dostupná cesta <br/>
-                    <InputGroup.Checkbox ref={chbStroller}/> Vhodné pro kočárky <br/>
-                    <InputGroup.Checkbox ref={chbParking}/> Parkoviště <br/>
-                    <InputGroup.Checkbox ref={chbFood}/> Občerstvení <br/>
+                    <Form.Check ref={chbDifficulty} label={"Obtížné"}/> <br/>
+                    <Form.Check ref={chbPath}/> Dostupná cesta <br/>
+                    <Form.Check ref={chbStroller}/> Vhodné pro kočárky <br/>
+                    <Form.Check ref={chbParking}/> Parkoviště <br/>
+                    <Form.Check ref={chbFood}/> Občerstvení <br/>
                 </div>
 
                 <textarea ref={reviewText} style={{'width': '20vw', height: '20vh', display: props.txtArea}}></textarea><br/>
                     
                 <div id='reviews'>
                     {props.reviews?.map((review) => ((review.text !== null) ?
-                        // <Review review={review} helpfulClicked={helpfulClicked}/>
-                        "nic" : 'Loading...'))}
+                        <Review review={review} helpfulClicked={helpfulClicked}/>
+                        : 'Loading...'))}
                     </div>
                 </div>
             </div>
