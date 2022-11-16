@@ -185,6 +185,7 @@ a, a:hover {
 
 .bottom {
     bottom: 0;
+    right: 0;
     z-index: 999;
     position: fixed;
 }

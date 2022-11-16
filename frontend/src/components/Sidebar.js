@@ -1,9 +1,9 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 import React, {useRef} from 'react';
-import {Button, Form} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import Review from "./Review";
+import {Button, Nav, Row, Tab} from "react-bootstrap";
+import Rating from "./Rating";
+import Faults from "./Faults";
 
 const Sidebar = (props) => {
     const chbDifficulty = useRef();
@@ -31,7 +31,6 @@ const Sidebar = (props) => {
     }
 
     const sendRating = async () => {
-        console.log(chbDifficulty.current.value.includes("on") ? props.user._id : null)
         await axios.post(`http://localhost:8082/api/review/addReview`, {
             stars: props.rating,
             hill: props.currentHill,
@@ -100,7 +99,7 @@ const Sidebar = (props) => {
             {props.currentHill.path.length > 0 ? "Dostupná cesta " : ""}
             {props.currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}
             {props.currentHill.parking.length > 0 ? "Parkoviště " : ""}
-            {props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}<br />
+            {props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}<br/>
 
             <div style={{textAlign: 'center'}}>
                 <Button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
@@ -110,48 +109,43 @@ const Sidebar = (props) => {
 
             <hr/>
 
-            <h1>Rating</h1>
-
-            <div className={'rating'}>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                    props.setRating(1);
-                    props.setTxtArea('block')
-                }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                    props.setRating(2);
-                    props.setTxtArea('block')
-                }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                    props.setRating(3);
-                    props.setTxtArea('block')
-                }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                    props.setRating(4);
-                    props.setTxtArea('block')
-                }}/>
-                <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                    props.setRating(5);
-                    props.setTxtArea('block')
-                }}/>
-
-                <div style={{display: props.txtArea}}>
-                    <Form.Check ref={chbDifficulty} label={"Obtížné"}/>
-                    <Form.Check ref={chbPath} label={"Dostupná cesta"}/>
-                    <Form.Check ref={chbStroller} label={"Vhodné pro kočárky"}/>
-                    <Form.Check ref={chbParking} label={"Parkoviště"}/>
-                    <Form.Check ref={chbFood} label={"Občerstvení"}/>
-                </div>
-
-                <Form.Control as="textarea" rows={3} ref={reviewText} style={{display: props.txtArea}}></Form.Control>
-                <Button type="button" className="btn" onClick={sendRating}>Odeslat</Button>
-                <hr/>
-                <div id='reviews'>
-                    {props.reviews?.map((review) => ((review.text !== null) ?
-                        <Review review={review} helpfulClicked={helpfulClicked}/>
-                        : 'Loading...'))}
-                </div>
-            </div>
-            </div>
+            <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                <Row>
+                    <Row>
+                        <Nav variant="pills" className="flex-row">
+                            <Nav.Item>
+                                <Nav.Link eventKey="first">Hodnocení</Nav.Link>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Nav.Link eventKey="second">Závady</Nav.Link>
+                            </Nav.Item>
+                        </Nav>
+                    </Row>
+                    <Row>
+                        <Tab.Content>
+                            <Tab.Pane eventKey="first">
+                                <Rating setRating={props.setRating}
+                                        setTxtArea={props.setTxtArea}
+                                        chbDifficulty={chbDifficulty}
+                                        chbPath={chbPath}
+                                        chbStroller={chbStroller}
+                                        chbParking={chbParking}
+                                        chbFood={chbFood}
+                                        reviewText={reviewText}
+                                        sendRating={sendRating}
+                                        reviews={props.reviews}
+                                        helpfulClicked={helpfulClicked}>
+                                </Rating>
+                            </Tab.Pane>
+                            <Tab.Pane eventKey="second">
+                                <Faults setTxtArea={props.setTxtArea} currentHill={props.currentHill}
+                                        user={props.user}></Faults>
+                            </Tab.Pane>
+                        </Tab.Content>
+                    </Row>
+                </Row>
+            </Tab.Container>
+        </div>
     )
 }
 
