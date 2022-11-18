@@ -1,12 +1,10 @@
 :root {
-    --c1: #114b5f;
-    --c2: #028090;
-    --c3: #ebebeb;
+    --c1: #CEB992;
+    --c2: #73937E;
 }
 
 body {
-    background-color: var(--c3);
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    background-color: var(--c2) !important;
     margin: auto;
     overflow-x: hidden !important;
 }
@@ -17,6 +15,33 @@ button {
 
 a, a:hover {
     text-decoration: none !important;
+}
+
+.register {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+.register .card {
+    background-color: var(--c1);
+    color: var(--c2);
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
+
+.register .btn {
+    background-color: var(--c2);
+    color: var(--c1);
+    border: none;
+}
+
+.register .btn:hover {
+    background-color: var(--c1);
+    color: var(--c2);
+    border: 1px solid var(--c2);
 }
 
 .searchBar {
@@ -54,11 +79,11 @@ a, a:hover {
 
 .navbar-item {
     display: inline;
-    margin: 0px 15px 0px 5px;
+    margin: 0 15px 0 5px;
 }
 
 .header {
-    background-image: url('./img/header.jpg');
+    background-image: url('./img/background.webp');
     background-repeat: no-repeat;
     background-size: cover;
     height: 60vh;
@@ -76,24 +101,6 @@ a, a:hover {
 .header-content-heading {
     font-weight: bold;
     font-size: xx-large;
-}
-
-.register-form {
-    width: 30vw;
-}
-
-.register-form > form {
-    border: none;
-    border-radius: 0px;
-}
-
-.register-form input {
-    width: 25vw;
-    font-size: 1.2em;
-    padding: 5px;
-    margin-bottom: 5px;
-    border-radius: 0px;
-    border: none;
 }
 
 .info {
@@ -195,7 +202,7 @@ a, a:hover {
     justify-content: space-evenly;
     width: 27em;
     padding: 10px;
-    background-color: var(--c3);
+    background-color: var(--c2);
 }
 
 .sidebar {
@@ -203,7 +210,7 @@ a, a:hover {
     height: 100vh;
     z-index: 999;
     position: absolute;
-    background: var(--c3);
+    background: var(--c2);
     left: 0;
     padding: 10px;
     overflow: auto;

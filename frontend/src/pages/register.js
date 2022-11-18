@@ -1,9 +1,9 @@
 //IMPORTS
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Button, Form} from "react-bootstrap";
+import {Alert, Button, Card, Col, Form, Row} from "react-bootstrap";
 
 function RegisterPage() {
     //Ref for storing form values
@@ -13,76 +13,116 @@ function RegisterPage() {
     const pass = useRef();
     const passAgain = useRef();
 
+    const [error, setError] = useState(null)
+
     const navigate = useNavigate();
 
     //handles submit button
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault(); //prevent reload of page
+        let checkEmail;
+        let checkUser;
 
         //get request to check, if email isn't already used
-        axios.get("http://localhost:8082/api/users/checkEmail/" + email.current.value).then(res => {
-            if (res.data != null) {
-                alert("Tento email je již použit");
-            } else {
-                //get request to check if login isn't already used
-                axios.get("http://localhost:8082/api/users/checkName/" + username.current.value).then(res => {
-                    if (res.data != null) {
-                        alert("Toto uživatelské jméno je již použito");
-                    } else {
-                        //checks if password is written ok
-                        if (pass.current.value !== passAgain.current.value) {
-                            alert("Hesla se neshoduji");
-                        } else {
-                            //form data
-                            const data = {
-                                login: username.current.value,
-                                name: nickname.current.value,
-                                email: email.current.value,
-                                pass: pass.current.value
-                            };
-
-                            //post data to database
-                            axios.post("http://localhost:8082/api/users/register", data)
-                                .then(() => {
-                                    return navigate("/login")
-                                })
-                                .catch(err => {
-                                    console.log("Error in register user!\n" + err);
-                                });
-                        }
-                    }
-                })
-            }
+        await axios.get("http://localhost:8082/api/users/checkEmail/" + email.current.value).then(res => {
+            checkEmail = res.data;
         });
+
+        //get request to check if login isn't already used
+        await axios.get("http://localhost:8082/api/users/checkName/" + username.current.value).then(res => {
+            checkUser = res.data;
+        });
+
+        if (checkEmail != null) {
+            setError("Tento email byl již použit");
+            return;
+        }
+
+        if (checkUser != null) {
+            setError("Toto uživatelské jméno je již použito");
+            return;
+        }
+
+        //checks if password is written ok
+        if (pass.current.value !== passAgain.current.value) {
+            setError("Hesla se neshoduji");
+            return;
+        }
+
+        //form data
+        const data = {
+            login: username.current.value,
+            name: nickname.current.value,
+            email: email.current.value,
+            pass: pass.current.value
+        };
+
+        //post data to database
+        axios.post("http://localhost:8082/api/users/register", data).then(() => {
+            return navigate("/login")
+        })
     }
 
     return (
-        <div className={"container-fluid"}>
-            <Form onSubmit={handleSubmit}>
-                <Form.Label htmlFor="username">Uživatelské jméno</Form.Label>
-                <Form.Control ref={username} type="text" className={"form-control"} name={"username"}
-                              placeholder={"Uživatelské jméno"} required/>
+        <>
+            <div className={"register"}>
+                <Col>
+                    <Card>
+                        <Card.Body>
+                            <Card.Title>
+                                <h1>Registrace</h1>
+                            </Card.Title>
+                            <Form onSubmit={handleSubmit}>
+                                <Row className={"mb-3"}>
+                                    <Col>
+                                        <Form.Label className={"mb-0"} htmlFor="username">Uživatelské jméno</Form.Label>
+                                        <Form.Control ref={username} type="text" className={"form-control"}
+                                                      name={"username"}
+                                                      placeholder={"Uživatelské jméno"} required/>
+                                    </Col>
+                                    <Col>
+                                        <Form.Label className={"mb-0"} htmlFor="nickname">Přezdívka</Form.Label>
+                                        <Form.Control ref={nickname} type="text" className={"form-control"}
+                                                      name={"nickname"}
+                                                      placeholder={"Přezdívka"}/>
+                                    </Col>
+                                </Row>
 
-                <Form.Label htmlFor="nickname">Přezdívka</Form.Label>
-                <Form.Control ref={nickname} type="text" className={"form-control"} name={"nickname"}
-                              placeholder={"Přezdívka"}/>
+                                <Form.Group className={"mb-3"}>
+                                    <Form.Label className={"mb-0"} htmlFor="email">E-mail</Form.Label>
+                                    <Form.Control ref={email} type="email" className={"form-control"} name={"email"}
+                                                  placeholder={"E-mail"} required/>
+                                </Form.Group>
 
-                <Form.Label htmlFor="email">E-mail</Form.Label>
-                <Form.Control ref={email} type="email" className={"form-control"} name={"email"}
-                              placeholder={"E-mail"} required/>
+                                <Form.Group className={"mb-3"}>
+                                    <Form.Label className={"mb-0"} htmlFor="pass">Heslo</Form.Label>
+                                    <Form.Control ref={pass} type="password" className={"form-control"} name={"pass"}
+                                                  placeholder={"Heslo"} minLength={8} required/>
+                                </Form.Group>
 
-                <Form.Label htmlFor="pass">Heslo</Form.Label>
-                <Form.Control ref={pass} type="password" className={"form-control"} name={"pass"}
-                              placeholder={"Heslo"} minLength={8} required/>
+                                <Form.Group className={"mb-3"}>
+                                    <Form.Label className={"mb-0"} htmlFor="passAgain">Heslo znovu</Form.Label>
+                                    <Form.Control ref={passAgain} type="password" className={"form-control"}
+                                                  name={"passAgain"} placeholder={"Heslo znovu"} required/>
+                                </Form.Group>
 
-                <Form.Label htmlFor="passAgain">Heslo znovu</Form.Label>
-                <Form.Control ref={passAgain} type="password" className={"form-control"} name={"passAgain"}
-                              placeholder={"Heslo znovu"} required/>
+                                <span className={"d-flex justify-content-end"}>
+                                        <Button type="submit" className="btn mt-3">Zaregistrovat</Button>
+                                    </span>
+                            </Form>
 
-                <Button type="submit" className="btn btn-primary">Zaregistrovat</Button>
-            </Form>
+                            {error !== null ? <Alert variant='danger'>{error}</Alert> : ""}
+                        </Card.Body>
+                    </Card>
+                </Col>
 
-        </div>
+                <Col style={{textAlign: "center", color: "var(--c1)"}}>
+                    <h1>Zaregistruj se</h1>
+                    <h2>Užívej kopce</h2>
+                    <h3>Komunikuj</h3>
+                </Col>
+            </div>
+        </>
     )
 }
 
