@@ -4,6 +4,7 @@
 }
 
 body {
+    color: var(--c1) !important;
     background-color: var(--c2) !important;
     margin: auto;
     overflow-x: hidden !important;
@@ -15,6 +16,28 @@ button {
 
 a, a:hover {
     text-decoration: none !important;
+}
+
+.card {
+    background-color: var(--c1) !important;
+    color: var(--c2) !important;
+}
+
+.profile .hills {
+    overflow-y: scroll;
+    max-height: 25vh;
+}
+
+.profile .btn {
+    background-color: var(--c1);
+    color: var(--c2);
+    border: none;
+}
+
+.profile .btn:hover {
+    background-color: var(--c2);
+    color: var(--c1);
+    border: 1px solid var(--c1);
 }
 
 .register {

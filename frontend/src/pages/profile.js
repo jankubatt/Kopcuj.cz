@@ -2,15 +2,15 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Button} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
 function ProfilePage() {
     const [user, getUser] = useState([]);
     const [hills, getHills] = useState([]);
-    let climbedHills = [];
-    let notClimbedHills = [];
+    const [climbedHills, setClimbedHills] = useState([]);
+    const [notClimbedHills, setNotClimbedHills] = useState([]);
 
     const fetchUser = async () => {
         const response = await axios.get('http://localhost:8082/api/users/token/' + Cookies.get('authToken'));
@@ -23,73 +23,85 @@ function ProfilePage() {
     }
 
     useEffect(() => {
-        fetchUser()
-            .then((res) => {
-                getUser(res)
-            })
-            .catch((e) => {
-                console.log(e.message)
-            })
+        fetchUser().then((res) => {
+            getUser(res)
+        })
 
-        fetchHills()
-            .then((res) => {
-                getHills(res)
-            })
-            .catch((e) => {
-                console.log(e.message)
-            })
-    }, [])
+        fetchHills().then((res) => {
+            getHills(res)
+        })
 
-   
-        hills?.map((hill) => {
+        let cHills = [];
+        hills?.forEach((hill) => {
             if (user.hills.includes(hill._id)) {
-                climbedHills.push(hill);
+                cHills.push(hill);
             }
         })
+        setClimbedHills(cHills);
 
-    let a;
-    hills.map((hill) => {
-        a = true;
-        climbedHills.map((cHill) => {
-            if (hill._id === cHill._id)
-                a = false;
+        let ncHills = hills;
+        climbedHills.forEach((hill) => {
+            ncHills.remove(hill);
         })
 
-        if (a)
-            notClimbedHills.push(hill);
-    });
+        console.log(ncHills)
+        setNotClimbedHills(ncHills);
+    }, [])
 
-    let uniqueNotClimbedHills;
-    uniqueNotClimbedHills = [...new Set(notClimbedHills)];
 
     return (
         <>
-            <div className={'container'}>
-                <div className={'border border-dark rounded userInfo'}>
-                    <h1>{user.name}</h1>
-                    <p>
-                        <b>login: </b> {user.login} <br/>
-                        <b>email: </b> {user.email} <br/>
-                        <b>description: </b> {user.description}
-                    </p>
-                </div>
+            {notClimbedHills ? <div className={'container profile'}>
 
-                <div className={'border border-dark rounded climbed'}>
-                    <b>Pokorene kopce: </b><br/>
-                    {climbedHills.map(hill => <li key={hill._id}>{hill.name}</li>)}
-                </div>
+                <h1 className={"d-inline-block"}>{user.login}</h1>&nbsp;<small
+                className={"d-inline-block"}>({user.name})</small>
 
-                <div className={'border border-dark rounded notClimbed'}>
-                    <b>Zbyvajici kopce: </b><br/>
-                    {uniqueNotClimbedHills.map(hill => <li key={hill._id}>{hill.name}</li>)}
-                </div>
+                <Card className={"mb-3"}>
+                    <Card.Body>
+                        <Card.Text>
+                            {user.description}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
 
-                <a href="/">
-                    <Button type="button" className="btn">Domov</Button>
-                </a>
-            </div>
+                <Card className={"mb-3"}>
+                    <Card.Header>
+                        <h2>Pokořené kopce</h2>
+                    </Card.Header>
+                    <Card.Body>
+                        <Card.Text className={"hills"}>
+                            {climbedHills?.map(hill => <li key={hill._id}>{hill.name}</li>)}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+
+                <Card className={"mb-3"}>
+                    <Card.Header>
+                        <h2>Zbývající kopce</h2>
+                    </Card.Header>
+                    <Card.Body>
+                        <Card.Text className={"hills"}>
+                            {notClimbedHills?.map(hill => <li key={hill._id}>{hill.name}</li>)}
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+
+                <a href="/"><Button type="button" className="btn">Domov</Button></a>
+            </div> : "Loading..."}
+
         </>
     )
 }
 
 export default ProfilePage;
+
+Array.prototype.remove = function () {
+    let what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};

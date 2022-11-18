@@ -133,7 +133,7 @@ router.post("/login", (req, res) => {
 });
 
 router.post('/addHill', (req, res) => {
-    User.updateOne({authToken: req.body.authToken}, {$push: {hills: req.body.hillId}}).then(() => {
+    User.updateOne({authToken: req.body.authToken}, {$push: {hills: req.body.hill}}).then(() => {
         res.sendStatus(200);
     });
 });

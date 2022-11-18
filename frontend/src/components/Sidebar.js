@@ -24,7 +24,7 @@ const Sidebar = (props) => {
     const addHill = async () => {
         await axios.post('http://localhost:8082/api/users/addHill', {
             authToken: Cookies.get('authToken'),
-            hillId: props.currentHill._id
+            hill: props.currentHill
         });
 
         props.setBtnClimb(!props.btnClimb)

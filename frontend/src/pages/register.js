@@ -13,13 +13,13 @@ function RegisterPage() {
     const pass = useRef();
     const passAgain = useRef();
 
+    //Register errors
     const [error, setError] = useState(null)
 
     const navigate = useNavigate();
 
-    //handles submit button
     const handleSubmit = async (event) => {
-        event.preventDefault(); //prevent reload of page
+        event.preventDefault();
         let checkEmail;
         let checkUser;
 
@@ -49,7 +49,6 @@ function RegisterPage() {
             return;
         }
 
-        //form data
         const data = {
             login: username.current.value,
             name: nickname.current.value,
