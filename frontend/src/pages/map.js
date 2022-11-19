@@ -174,7 +174,8 @@ function MapPage() {
             </a> : null}
 
             <div className={"clickMap"} onClick={mapClicked}>
-                {user.hills ? <Map center={center} centerValue={centerValue} user={user} hills={hills} /> : "Loading map..."}
+                {user.hills !== undefined ?
+                    <Map center={center} centerValue={centerValue} user={user} hills={hills}/> : "Loading map..."}
             </div>
         </>
     )

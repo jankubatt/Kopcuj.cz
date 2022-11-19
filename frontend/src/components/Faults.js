@@ -17,7 +17,6 @@ const Faults = (props) => {
     useEffect(() => {
         fetchFaults().then((res) => {
             setFaults(res);
-            console.log(faults)
         })
     }, [btnFault])
 

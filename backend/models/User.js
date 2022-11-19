@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
         default: null
     },
     hills: {
-        type: Object,
+        type: Array,
         required: false,
         default: null
     },
