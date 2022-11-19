@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 import React, {useRef} from 'react';
-import {Button, Nav, Row, Tab} from "react-bootstrap";
+import {Button, Nav, Tab} from "react-bootstrap";
 import Rating from "./Rating";
 import Faults from "./Faults";
 
@@ -70,59 +70,70 @@ const Sidebar = (props) => {
         <div className={'sidebar'}>
             <div className={'hill'}>
                 <h1>{props.currentHill.name}<small style={{fontSize: 'medium'}}>({props.currentHill.elevation}m)</small></h1>
-                
+
                 <hr/>
-                
+
                 <div style={{
                     width: "100%",
                     height: "200px",
                     backgroundImage: `url(${tryHillImage()})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center"
-                    }}></div>
-                    
-                <h2>Informace</h2>
-                    
-                <div>
-                    {props.currentHill.lat}<br/>
-                    {props.currentHill.lon}<br/>
-                    {props.currentHill.prominence}<br/>
-                    {props.currentHill.isolation}<br/>
-                    {props.currentHill.material}<br/>
-                    {props.currentHill.basin}<br/>
-                    {props.currentHill.district}<br/>
-                    {props.currentHill.location}<br/>
+                }}></div>
+
+                <hr/>
+
+                <div className={"border-line"}>
+                    <h2>Informace</h2>
+
+                    <div>
+                        <b>Lat: </b>{props.currentHill.lat}<br/>
+                        <b>Lng: </b>{props.currentHill.lon}<br/>
+                        <b>Prominence: </b>{props.currentHill.prominence}<br/>
+                        <b>Izolace: </b> {props.currentHill.isolation}<br/>
+                        <b>Materiál: </b> {props.currentHill.material}<br/>
+                        <b>Povodí: </b> {props.currentHill.basin}<br/>
+                        <b>Okres: </b> {props.currentHill.district}<br/>
+                        <b>Umístění: </b> {props.currentHill.location}<br/>
+                    </div>
+
+                    <hr/>
+
+                    {props.currentHill.difficulty.length > 0 ? "Obtížné " : ""}
+                    {props.currentHill.path.length > 0 ? "Dostupná cesta " : ""}
+                    {props.currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}
+                    {props.currentHill.parking.length > 0 ? "Parkoviště " : ""}
+                    {props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}
+
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
+                        <Button id={'btnClaimHill'} type="button" className="btn1" onClick={addHill}
+                                disabled={props.climbed}>Pokořit
+                        </Button>
+                    </div>
                 </div>
+
+
             </div>
 
-            {props.currentHill.difficulty.length > 0 ? "Obtížné " : ""}
-            {props.currentHill.path.length > 0 ? "Dostupná cesta " : ""}
-            {props.currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}
-            {props.currentHill.parking.length > 0 ? "Parkoviště " : ""}
-            {props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}<br/>
-
-            <div style={{textAlign: 'center'}}>
-                <Button id={'btnClaimHill'} type="button" className="btn" onClick={addHill}
-                        disabled={props.climbed}>Pokořit
-                </Button>
-            </div>
 
             <hr/>
 
             <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-                <Row>
-                    <Row>
-                        <Nav variant="pills" className="flex-row">
+                <div className={"align-items-center"}>
+                    <div>
+                        <Nav variant="pills" className="flex-row justify-content-around">
                             <Nav.Item>
-                                <Nav.Link eventKey="first">Hodnocení</Nav.Link>
+                                <Nav.Link eventKey="first" className={"btn1 mr-5"}>Hodnocení</Nav.Link>
                             </Nav.Item>
                             <Nav.Item>
-                                <Nav.Link eventKey="second">Závady</Nav.Link>
+                                <Nav.Link eventKey="second" className={"btn1"}>Závady</Nav.Link>
                             </Nav.Item>
                         </Nav>
-                    </Row>
-                    <Row>
-                        <Tab.Content>
+                    </div>
+
+                    <div>
+                        <Tab.Content className={""}>
+                            <hr/>
                             <Tab.Pane eventKey="first">
                                 <Rating setRating={props.setRating}
                                         setTxtArea={props.setTxtArea}
@@ -142,8 +153,8 @@ const Sidebar = (props) => {
                                         user={props.user}></Faults>
                             </Tab.Pane>
                         </Tab.Content>
-                    </Row>
-                </Row>
+                    </div>
+                </div>
             </Tab.Container>
         </div>
     )

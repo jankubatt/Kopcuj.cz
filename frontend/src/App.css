@@ -67,6 +67,11 @@ a, a:hover {
     border: 1px solid var(--c2);
 }
 
+.textarea {
+    background-color: var(--c1) !important;
+    color: var(--c2) !important;
+}
+
 .searchBar {
     display: flex;
     right: 100px;
@@ -149,14 +154,6 @@ a, a:hover {
     cursor: pointer;
 }
 
-.btn-admin {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin: 10px;
-    z-index: 999;
-}
-
 .btn-profile {
     width: 3em;
     background-color: white;
@@ -190,14 +187,6 @@ a, a:hover {
     padding: 5px;
 }
 
-#btnClaimHill {
-    background-color: var(--c2);
-}
-
-#btnClaimHill:disabled {
-    display: none;
-}
-
 #map {
     z-index: -999;
     overflow: hidden;
@@ -213,19 +202,41 @@ a, a:hover {
     margin-bottom: 5em;
 }
 
-.bottom {
+.bottomItems {
     bottom: 0;
     right: 0;
     z-index: 999;
     position: fixed;
-}
-
-.bottomItems {
     display: flex;
     justify-content: space-evenly;
-    width: 27em;
+    align-items: center;
+    width: 20vw;
     padding: 10px;
+    margin-right: 5vw;
     background-color: var(--c2);
+    border-radius: 10px 10px 0 0;
+}
+
+.border-line {
+    border: 1px solid var(--c1);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.btn1 {
+    background-color: var(--c1) !important;
+    color: var(--c2) !important;
+    border: none !important;
+}
+
+.btn1:hover {
+    background-color: var(--c2) !important;
+    color: var(--c1) !important;
+    border: 1px solid var(--c1) !important;
+}
+
+.btn1:disabled {
+    display: none !important;
 }
 
 .sidebar {

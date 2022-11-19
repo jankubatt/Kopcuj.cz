@@ -120,7 +120,7 @@ function MapPage() {
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
-            if (user.hills.includes(clickedHill._id)) setClimbed(true);
+            if (user.hills.filter(uHill => uHill._id === clickedHill._id)[0] !== undefined) setClimbed(true);
 
             setCurrentHill(clickedHill);
 
@@ -161,17 +161,17 @@ function MapPage() {
                                         reviews={reviews} />
             }
 
-            <div className={'bottom'}>
-                <div className='bottomItems'>
-                    <a><Button type="button" className="btn">Settings</Button></a>
-                    <a href={'/profile'}><img alt={"profile"} className='btn-profile' src={pfp}></img></a>
-                    <a href={'/discussions'}><Button type="button" className="btn">Diskuze</Button></a>
-                </div>
+
+            <div className='bottomItems'>
+                <a href={'/profile'}><img alt={"profile"} className='btn-profile' src={pfp}></img></a>
+                <a><Button type="button" className="btn1">Settings</Button></a>
+                <a href={'/discussions'}><Button type="button" className="btn1">Diskuze</Button></a>
+
+                {user.isAdmin ? <a href={'/admin'}>
+                    <Button type="button" className="btn1">Admin</Button>
+                </a> : null}
             </div>
-            
-            {user.isAdmin ? <a href={'/admin'}>
-                <Button type="button" className="btn btn-admin">Admin</Button>
-            </a> : null}
+
 
             <div className={"clickMap"} onClick={mapClicked}>
                 {user.hills !== undefined ?
