@@ -30,28 +30,33 @@ function ProfilePage() {
         fetchHills().then((res) => {
             getHills(res)
         })
+    }, [])
 
+    useEffect(() => {
         let cHills = [];
         hills?.forEach((hill) => {
-            if (user.hills.includes(hill._id)) {
+            if (user.hills.filter(uHill => uHill._id === hill._id)[0] !== undefined) {
                 cHills.push(hill);
             }
         })
         setClimbedHills(cHills);
 
+
+    }, [hills])
+
+    useEffect(() => {
         let ncHills = hills;
+
         climbedHills.forEach((hill) => {
-            ncHills.remove(hill);
+            ncHills.splice(ncHills.indexOf(hill), 1)
         })
 
-        console.log(ncHills)
         setNotClimbedHills(ncHills);
-    }, [])
-
+    }, [climbedHills])
 
     return (
         <>
-            {notClimbedHills ? <div className={'container profile'}>
+            {notClimbedHills !== undefined ? <div className={'container profile'}>
 
                 <h1 className={"d-inline-block"}>{user.login}</h1>&nbsp;<small
                 className={"d-inline-block"}>({user.name})</small>
@@ -94,14 +99,3 @@ function ProfilePage() {
 }
 
 export default ProfilePage;
-
-Array.prototype.remove = function () {
-    let what, a = arguments, L = a.length, ax;
-    while (L && this.length) {
-        what = a[--L];
-        while ((ax = this.indexOf(what)) !== -1) {
-            this.splice(ax, 1);
-        }
-    }
-    return this;
-};
