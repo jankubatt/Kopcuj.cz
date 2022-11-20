@@ -10,7 +10,6 @@ const Searchbar = (props) => {
         let elevation = n.split("-")[1].replace('m', '')
 
         props.hills.forEach((hill) => {
-            console.log(hill.elevation == elevation)
             if (hill.name.includes(name) && hill.elevation == elevation) {
                 props.setCenterValue({lat: hill.lat, lng: hill.lon})
                 props.setCenter(false);

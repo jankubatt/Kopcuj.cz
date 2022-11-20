@@ -24,7 +24,7 @@ const Review = (props) => {
                     </div>
 
                     <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
-                        <Button style={{alignSelf: "flex-end"}} onClick={() => {
+                        <Button className={"btn2"} style={{alignSelf: "flex-end"}} onClick={() => {
                             props.helpfulClicked(props.review._id)
                         }} aria-label="thumbs up" disabled={false}><FontAwesomeIcon
                             icon="fa-solid fa-thumbs-up"/>{props.review.helpful.length}

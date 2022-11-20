@@ -60,8 +60,8 @@ const Faults = (props) => {
 
             <h1>Závady</h1>
 
-            <Form.Control as="textarea" rows={3} ref={faultText}></Form.Control>
-            <Button onClick={sendFault}>Odeslat</Button>
+            <Form.Control as="textarea" className={"textarea"} rows={3} ref={faultText}></Form.Control>
+            <Button onClick={sendFault} className={"btn1 mt-2"}>Odeslat</Button>
             <hr/>
             <div id='faults'>
                 {faults?.map((fault) => ((fault.text !== null && new Date().getDate() < new Date(fault.date_added).getDate() + 7) ?
