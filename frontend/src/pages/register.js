@@ -74,14 +74,15 @@ function RegisterPage() {
                             <Form onSubmit={handleSubmit}>
                                 <Row className={"mb-3"}>
                                     <Col>
-                                        <Form.Label className={"mb-0"} htmlFor="username">Uživatelské jméno</Form.Label>
-                                        <Form.Control ref={username} type="text" className={"form-control"}
-                                                      name={"username"}
+                                        <Form.Label className={"mb-0"} htmlFor="usernameReg">Uživatelské
+                                            jméno</Form.Label>
+                                        <Form.Control ref={username} type="text" className={"form-control textarea"}
+                                                      name={"usernameReg"}
                                                       placeholder={"Uživatelské jméno"} required/>
                                     </Col>
                                     <Col>
                                         <Form.Label className={"mb-0"} htmlFor="nickname">Přezdívka</Form.Label>
-                                        <Form.Control ref={nickname} type="text" className={"form-control"}
+                                        <Form.Control ref={nickname} type="text" className={"form-control textarea"}
                                                       name={"nickname"}
                                                       placeholder={"Přezdívka"}/>
                                     </Col>
@@ -89,19 +90,21 @@ function RegisterPage() {
 
                                 <Form.Group className={"mb-3"}>
                                     <Form.Label className={"mb-0"} htmlFor="email">E-mail</Form.Label>
-                                    <Form.Control ref={email} type="email" className={"form-control"} name={"email"}
+                                    <Form.Control ref={email} type="email" className={"form-control textarea"}
+                                                  name={"email"}
                                                   placeholder={"E-mail"} required/>
                                 </Form.Group>
 
                                 <Form.Group className={"mb-3"}>
-                                    <Form.Label className={"mb-0"} htmlFor="pass">Heslo</Form.Label>
-                                    <Form.Control ref={pass} type="password" className={"form-control"} name={"pass"}
+                                    <Form.Label className={"mb-0"} htmlFor="passReg">Heslo</Form.Label>
+                                    <Form.Control ref={pass} type="password" className={"form-control textarea"}
+                                                  name={"passReg"}
                                                   placeholder={"Heslo"} minLength={8} required/>
                                 </Form.Group>
 
                                 <Form.Group className={"mb-3"}>
                                     <Form.Label className={"mb-0"} htmlFor="passAgain">Heslo znovu</Form.Label>
-                                    <Form.Control ref={passAgain} type="password" className={"form-control"}
+                                    <Form.Control ref={passAgain} type="password" className={"form-control textarea"}
                                                   name={"passAgain"} placeholder={"Heslo znovu"} required/>
                                 </Form.Group>
 

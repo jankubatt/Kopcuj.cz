@@ -40,6 +40,14 @@ a, a:hover {
     border: 1px solid var(--c1);
 }
 
+.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    width: 100vw;
+}
+
 .register {
     display: flex;
     align-items: center;

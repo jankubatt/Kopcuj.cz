@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Button, Form} from "react-bootstrap";
+import {Button, Card, Form} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -34,22 +34,31 @@ function LoginPage() {
 
 
     return (
-        <div className='container'>
-            <Form onSubmit={handleSubmit}>
+        <div className='container login'>
+            <Card style={{width: "40vw"}}>
+                <Card.Body>
+                    <Card.Title><h1>Přihlášení</h1></Card.Title>
 
-                <Form.Label htmlFor="username">Uživatelské jméno</Form.Label><br/>
-                <Form.Control ref={username} type="text" name={"username"}
-                              placeholder={"Uživatelské jméno"}/>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className={"mb-3"}>
+                            <Form.Label className={"mb-0"} htmlFor="username">Uživatelské jméno</Form.Label><br/>
+                            <Form.Control className={"textarea"} ref={username} type="text" name={"username"}
+                                          placeholder={"Uživatelské jméno"}/>
+                        </Form.Group>
 
+                        <Form.Group className={"mb-3"}>
+                            <Form.Label className={"mb-0"} htmlFor="pass">Heslo</Form.Label><br/>
+                            <Form.Control className={"textarea"} ref={password} type="password" name={"pass"}
+                                          placeholder={"Heslo"}/>
+                            <Form.Text><a href='/forgot-password'>Zapomenuté heslo</a></Form.Text>
+                        </Form.Group>
 
-                <Form.Label htmlFor="pass">Heslo</Form.Label><br/>
-                <Form.Control ref={password} type="password" name={"pass"}
-                              placeholder={"Heslo"}/>
-
-                <br/><a href='/forgot-password'>Zapomenuté heslo</a><br/>
-
-                <Button type="submit">Přihlásit</Button>
-            </Form>
+                        <div className={"d-flex justify-content-end"}>
+                            <Button className={"btn2"} type="submit">Přihlásit</Button>
+                        </div>
+                    </Form>
+                </Card.Body>
+            </Card>
         </div>
     )
 }
