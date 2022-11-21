@@ -1,125 +1,183 @@
-import React, {useEffect, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import Cookies from 'js-cookie';
+import {Alert, Button, Card, Col, Form, Row} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 
 function HomePage() {
-    //State for storing form values
-    const [state, setState] = useState({username: null, nickname: null, email: null, pass: null, passAgain: null});
+    const username = useRef();
+    const nickname = useRef();
+    const email = useRef();
+    const pass = useRef();
+    const passAgain = useRef();
 
-    //function that handles changes in input boxes, when input changes, it gets written into state variable
-    const handleChange = (event) => {
-        const name = event.target.name;
-        const value = event.target.value;
-        setState({...state, [name]: value});
-    };
+    const navigate = useNavigate();
+
+    //State for storing form values
+    const [error, setError] = useState(null)
 
     //handles submit button
-    const handleSubmit = (event) => {
-        event.preventDefault(); //prevent reload of page
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        let checkEmail;
+        let checkUser;
 
         //get request to check, if email isn't already used
-        axios.get("http://localhost:8082/api/users/checkEmail/" + state.email).then(res => {
-            if (res.data != null) {
-                alert("Tento email je již použit");
-            } else {
-                //get request to check if login isn't already used
-                axios.get("http://localhost:8082/api/users/checkName/" + state.username).then(res => {
-                    if (res.data != null) {
-                        alert("Toto uživatelské jméno je již použito");
-                    } else {
-                        //checks if password is written ok
-                        if (state.pass !== state.passAgain) {
-                            alert("Hesla se neshoduji");
-                        } else {
-                            //form data
-                            const data = {
-                                login: state.username,
-                                name: state.nickname,
-                                email: state.email,
-                                pass: state.pass
-                            };
-
-                            //post data to database
-                            axios.post("http://localhost:8082/api/users/register", data)
-                                .then(() => {
-                                    //redirect
-                                })
-                                .catch(err => {
-                                    console.log("Error in register user!\n" + err);
-                                });
-                        }
-                    }
-                })
-            }
+        await axios.get("http://localhost:8082/api/users/checkEmail/" + email.current.value).then(res => {
+            checkEmail = res.data;
         });
+
+        //get request to check if login isn't already used
+        await axios.get("http://localhost:8082/api/users/checkName/" + username.current.value).then(res => {
+            checkUser = res.data;
+        });
+
+        if (checkEmail != null) {
+            setError("Tento email byl již použit");
+            return;
+        }
+
+        if (checkUser != null) {
+            setError("Toto uživatelské jméno je již použito");
+            return;
+        }
+
+        //checks if password is written ok
+        if (pass.current.value !== passAgain.current.value) {
+            setError("Hesla se neshoduji");
+            return;
+        }
+
+        const data = {
+            login: username.current.value,
+            name: nickname.current.value,
+            email: email.current.value,
+            pass: pass.current.value
+        };
+
+        //post data to database
+        axios.post("http://localhost:8082/api/users/register", data).then(() => {
+            return navigate("/login")
+        })
     }
 
     return (
         <>
-           <div className='container'>
-                <div className='navbar'>
-                    <div className='navbrand'>Kopcuj.cz</div>
-                    <div>
+            <div className='navbar'>
+                <div className='navbrand'>Kopcuj.cz</div>
+                <div>
                     {
-                        ((Cookies.get('authToken')) ? <a href='/'><div className='navbar-item btn'>Mapa</div></a> : 
-                        <>
-                            <a href='/login'><div className='navbar-item btn'>Přihlásit</div></a>
-                            <a href='/register'><div className='navbar-item btn'>Zaregistrovat</div></a>
-                        </>)
+                        ((Cookies.get('authToken')) ?
+                            <a href="/"><Button type="button" className="navbar-item btn1">Mapa</Button></a> :
+                            <>
+                                <a href='/login'>
+                                    <div className='navbar-item btn'>Přihlásit</div>
+                                </a>
+                                <a href='/register'>
+                                    <div className='navbar-item btn'>Zaregistrovat</div>
+                                </a>
+                            </>)
                     }
-                    </div>
                 </div>
+            </div>
 
+            <main>
                 <div className='header'>
                     <div className='header-content'>
                         <div className='header-content-heading'>Poznávej kopce českého středohoří!</div>
-                        <div className='header-content-text'>S naší aplikací to jde snadno a rychle. Stačí se zaregistrovat.</div>
+                        <div className='header-content-text'>S naší aplikací to jde snadno a rychle. Stačí se
+                            zaregistrovat.
+                        </div>
                     </div>
                     <div className='register-form'>
-                        <form onSubmit={handleSubmit}>
-                            <input onChange={handleChange} type="text" className={"form-control"} name={"username"}
-                                placeholder={"Uživatelské jméno"} required/>
+                        <Card>
+                            <Card.Body>
+                                <Card.Title>
+                                    <h1>Registrace</h1>
+                                </Card.Title>
+                                <Form onSubmit={handleSubmit}>
+                                    <Row className={"mb-3"}>
+                                        <Col>
+                                            <Form.Label className={"mb-0"} htmlFor="usernameReg">Uživatelské
+                                                jméno</Form.Label>
+                                            <Form.Control ref={username} type="text" className={"form-control textarea"}
+                                                          name={"usernameReg"}
+                                                          placeholder={"Uživatelské jméno"} required/>
+                                        </Col>
+                                        <Col>
+                                            <Form.Label className={"mb-0"} htmlFor="nickname">Přezdívka</Form.Label>
+                                            <Form.Control ref={nickname} type="text" className={"form-control textarea"}
+                                                          name={"nickname"}
+                                                          placeholder={"Přezdívka"}/>
+                                        </Col>
+                                    </Row>
 
-                            <input onChange={handleChange} type="text" className={"form-control"} name={"nickname"}
-                                placeholder={"Přezdívka"}/>
+                                    <Form.Group className={"mb-3"}>
+                                        <Form.Label className={"mb-0"} htmlFor="email">E-mail</Form.Label>
+                                        <Form.Control ref={email} type="email" className={"form-control textarea"}
+                                                      name={"email"}
+                                                      placeholder={"E-mail"} required/>
+                                    </Form.Group>
 
-                            <input onChange={handleChange} type="email" className={"form-control"} name={"email"}
-                                placeholder={"E-mail"} required/>
+                                    <Form.Group className={"mb-3"}>
+                                        <Form.Label className={"mb-0"} htmlFor="passReg">Heslo</Form.Label>
+                                        <Form.Control ref={pass} type="password" className={"form-control textarea"}
+                                                      name={"passReg"}
+                                                      placeholder={"Heslo"} minLength={8} required/>
+                                    </Form.Group>
 
-                            <input onChange={handleChange} type="password" className={"form-control"} name={"pass"}
-                                placeholder={"Heslo"} minLength={8} required/>
+                                    <Form.Group className={"mb-3"}>
+                                        <Form.Label className={"mb-0"} htmlFor="passAgain">Heslo znovu</Form.Label>
+                                        <Form.Control ref={passAgain} type="password"
+                                                      className={"form-control textarea"}
+                                                      name={"passAgain"} placeholder={"Heslo znovu"} required/>
+                                    </Form.Group>
 
-                            <input onChange={handleChange} type="password" className={"form-control"} name={"passAgain"}
-                                placeholder={"Heslo znovu"} required/>
+                                    <span className={"d-flex justify-content-end"}>
+                                        <Button type="submit" className="btn2 mt-3">Zaregistrovat</Button>
+                                    </span>
+                                </Form>
 
-                            <br />
-                            <button type="submit" className="btn btn-primary">Zaregistrovat</button>
-                        </form>
+                                {error !== null ? <Alert variant='danger'>{error}</Alert> : ""}
+                            </Card.Body>
+                        </Card>
                     </div>
                 </div>
+            </main>
 
-                <div className='info'>
-                    <div className='card'>
-                        <div className='card-header'>Header</div>
-                        <div className='card-text'>Loremp Ipsum</div>
-                    </div>
-                    
-                    <div className='card'>
-                        <div className='card-header'>Header</div>
-                        <div className='card-text'>Loremp Ipsum</div>
-                    </div>
+            <section className='info'>
+                <Card>
+                    <Card.Header><Card.Title>Lorem Ipsum</Card.Title></Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                            lorem
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
 
-                    <div className='card'>
-                        <div className='card-header'>Header</div>
-                        <div className='card-text'>Loremp Ipsum</div>
-                    </div>
-                </div>
+                <Card>
+                    <Card.Header><Card.Title>Lorem Ipsum</Card.Title></Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                            lorem
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
 
-                <div className='footer'>
-                    
-                </div>
-           </div>
+                <Card>
+                    <Card.Header><Card.Title>Lorem Ipsum</Card.Title></Card.Header>
+                    <Card.Body>
+                        <Card.Text>
+                            lorem
+                        </Card.Text>
+                    </Card.Body>
+                </Card>
+            </section>
+
+            <section className='footer'>
+
+            </section>
         </>
     )
 }

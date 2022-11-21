@@ -125,8 +125,9 @@ a, a:hover {
 }
 
 .navbrand {
-    color: white !important;
+    color: var(--c1) !important;
     text-decoration: none !important;
+    font-weight: bolder;
 }
 
 .navbar-item {
