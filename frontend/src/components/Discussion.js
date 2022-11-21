@@ -13,7 +13,8 @@ const Discussion = (props) => {
                         {props.data.text}
                     </Card.Text>
 
-                    <Button href={`http://localhost:3000/discussion?id=${props.data._id}`}>K diskuzi</Button>
+                    <Button href={`http://localhost:3000/discussion?id=${props.data._id}`} className={"btn2"}>K
+                        diskuzi</Button>
                 </Card.Body>
             </Card>
         </>

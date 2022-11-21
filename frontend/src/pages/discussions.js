@@ -64,9 +64,19 @@ function DiscussionsPage() {
             <div className={'container'}>
                 <h1>Vytvořit diskuzi</h1>
 
-                <Form.Control as="input" ref={subject} placeholder="Téma"/><br/>
-                <Form.Control as="textarea" ref={text} placeholder="Myšlenka" rows={5}/><br/>
-                <Button onClick={createDiscussion}>Vytvořit</Button>
+                <Form.Group>
+                    <Form.Label className={"m-0"}>Téma</Form.Label>
+                    <Form.Control as="input" ref={subject} placeholder="Téma" className={"textarea"}/>
+                </Form.Group>
+
+                <Form.Group>
+                    <Form.Label className={"m-0"}>Myšlenka</Form.Label>
+                    <Form.Control as="textarea" ref={text} placeholder="Myšlenka" rows={5} className={"textarea"}/><br/>
+                </Form.Group>
+
+                <div className={"d-flex justify-content-end"}>
+                    <Button onClick={createDiscussion} className={"btn1"}>Vytvořit</Button>
+                </div>
 
                 <hr/>
 
