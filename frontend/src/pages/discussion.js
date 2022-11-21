@@ -91,13 +91,11 @@ const DiscussionPage = () => {
 
             {discussion !== undefined ?
                 <div className={'container'}>
-
-
                     <Card>
                         <Card.Header>
-                            <div style={{display: "flex", justifyContent: "space-between"}}>
+                            <div className={"d-flex justify-content-between"}>
                                 <b>{discussion.subject}</b>{discussion.user !== undefined ?
-                                <b>{discussion.user.name || discussion.user.login} {((discussion.user !== undefined && discussion.user.isAdmin) ?
+                                <b>{discussion.user.name || discussion.user.login} {((discussion.user.isAdmin) ?
                                     <Badge pill bg="danger">Admin</Badge> : '')}</b> : "Loading..."}
                             </div>
                         </Card.Header>
@@ -110,7 +108,7 @@ const DiscussionPage = () => {
 
                     <hr/>
 
-                    <div style={{marginTop: "20px"}}>
+                    <div>
                         {replies?.map((reply) => <Reply key={reply._id} upVote={() => {
                             SendUpvote(reply._id)
                         }} downVote={() => {
@@ -120,13 +118,14 @@ const DiscussionPage = () => {
 
                     <hr/>
 
-                    <Form.Control as="textarea" rows={5} ref={reply}></Form.Control>
-                    <Button className={"mb-5"} onClick={SendReply}>Odpovědět</Button>
+                    <Form.Control placeholder={"Odpověď"} className={"textarea"} as="textarea" rows={5}
+                                  ref={reply}></Form.Control>
+                    <div className={"d-flex justify-content-end"}>
+                        <Button className={"mt-3 btn1"} onClick={SendReply}>Odpovědět</Button>
+                    </div>
                 </div>
                 : "Loading..."}
         </>
-
-
     )
 }
 
