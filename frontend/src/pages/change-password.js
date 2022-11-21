@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Button, Form} from "react-bootstrap";
+import {Button, Card, Form} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -41,23 +41,31 @@ function ChangePassword() {
     }
 
     return (
-        <div className='wrapper'>
-            <Form onSubmit={handleSubmit}>
-                <div className='input'>
-                    <Form.Label htmlFor="pass">Heslo</Form.Label><br/>
-                    <Form.Control type="password" name={"pass"}
-                                  placeholder={"Heslo"}/>
-                </div>
+        <div className='container w-50'>
+            <Card>
+                <Card.Body>
+                    <Card.Title>
+                        <h1>Změna hesla</h1>
+                    </Card.Title>
 
-                <div className='input'>
-                    <Form.Label htmlFor="passAgain">Heslo znovu</Form.Label><br/>
-                    <Form.Control type="password" name={"passAgain"}
-                                  placeholder={"Heslo znovu"}/>
-                </div>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className='mb-2'>
+                            <Form.Label htmlFor="pass">Heslo</Form.Label>
+                            <Form.Control className={"textarea"} type="password" name={"pass"} placeholder={"Heslo"}/>
+                        </Form.Group>
 
-                <Button className='btn-hoverable' type="submit">Změnit</Button>
-            </Form>
+                        <Form.Group>
+                            <Form.Label htmlFor="passAgain">Heslo znovu</Form.Label>
+                            <Form.Control className={"textarea"} type="password" name={"passAgain"}
+                                          placeholder={"Heslo znovu"}/>
+                        </Form.Group>
 
+                        <div className={"d-flex justify-content-end"}>
+                            <Button className='btn2 mt-2' type="submit">Změnit</Button>
+                        </div>
+                    </Form>
+                </Card.Body>
+            </Card>
         </div>
     )
 }
