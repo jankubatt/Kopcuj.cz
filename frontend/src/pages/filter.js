@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Form, Table} from "react-bootstrap";
+import {Card, Form, Table} from "react-bootstrap";
 
 function createData(name, rating, food, difficulty, parking, path, stroller) {
     return {name, rating, food, difficulty, parking, path, stroller};
@@ -40,7 +40,7 @@ const FilterPage = () => {
             default:
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        processHillName(a.name) > processHillName(b.name) ? 1 : processHillName(b.name) > processHillName(a.name) ? -1 : 0
+                        processHillName(a.name) < processHillName(b.name) ? 1 : processHillName(b.name) < processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -76,7 +76,7 @@ const FilterPage = () => {
             case "desc":
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        processHillName(a.name) < processHillName(b.name) ? 1 : processHillName(b.name) < processHillName(a.name) ? -1 : 0
+                        processHillName(a.name) > processHillName(b.name) ? 1 : processHillName(b.name) > processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -161,79 +161,84 @@ const FilterPage = () => {
     return (
         <>
             {rowData !== undefined ? <>
-                <Form.Select
-                    id="filter"
-                    value={filter}
-                    label="Filtr"
-                    onChange={handleFilter}
-                >
-                    <option value={'name'}>Name</option>
-                    <option value={'rating'}>Rating</option>
-                    <option value={'food'}>Food</option>
-                    <option value={'difficulty'}>Difficulty</option>
-                    <option value={'parking'}>Parking</option>
-                    <option value={'path'}>Path</option>
-                    <option value={'stroller'}>Stroller</option>
-                </Form.Select>
-                <Form.Select
-                    id="filter2"
-                    value={type}
-                    label="Filtr"
-                    onChange={handleType}
-                >
-                    <option value={'asc'}>Vzestupne</option>
-                    <option value={'desc'}>Zestupne</option>
-                </Form.Select>
+                <div className={"d-flex flex-row"}>
+                    <div className={"d-flex flex-column m-5 w-25 p-5"}>
+                        <Card>
+                            <Card.Body>
+                                <Form.Select id="filter" value={filter} label="Filtr" onChange={handleFilter}
+                                             className={"textarea mb-5"}>
+                                    <option value={'name'}>Jméno</option>
+                                    <option value={'rating'}>Hodnocení</option>
+                                    <option value={'food'}>Jídlo</option>
+                                    <option value={'difficulty'}>Obtížnost</option>
+                                    <option value={'parking'}>Parkování</option>
+                                    <option value={'path'}>Cesta</option>
+                                    <option value={'stroller'}>Dostupnost s kočárky</option>
+                                </Form.Select>
+                                <Form.Select
+                                    id="filter2"
+                                    value={type}
+                                    label="Filtr"
+                                    onChange={handleType}
+                                    className={"textarea"}
+                                >
+                                    <option value={'asc'}>Vzestupně</option>
+                                    <option value={'desc'}>Sestupně</option>
+                                </Form.Select>
+                            </Card.Body>
+                        </Card>
+                    </div>
 
-                <div className={'container'}>
-                    <Table aria-label="simple table">
-                        <thead>
-                        <tr>
-                            <td align="center" aria-describedby={refresh}>
-                                <b>Jméno</b>
-                            </td>
-
-                            <td align="center">
-                                <b>Hodnocení</b>
-                            </td>
-
-                            <td align="center">
-                                <b>Jídlo</b>
-                            </td>
-
-                            <td align="center">
-                                <b>Obtížnost</b>
-                            </td>
-
-                            <td align="center">
-                                <b>Parkování</b>
-                            </td>
-
-                            <td align="center">
-                                <b>Cesta</b>
-                            </td>
-
-                            <td align="center">
-                                <b>Kočárek</b>
-                            </td>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {rowData?.map((row) => (
-                            <tr key={row.name}>
-                                <td component="th" scope="row" align="center">
-                                    {row.name}
+                    <div className={'container'}>
+                        <Table aria-label="simple table" className={"mt-4"}>
+                            <thead>
+                            <tr>
+                                <td align="center" aria-describedby={refresh}>
+                                    <b>Jméno</b>
                                 </td>
-                                <td align="center">{row.rating}</td>
-                                <td align="center">{row.food}</td>
-                                <td align="center">{row.difficulty}</td>
-                                <td align="center">{row.parking}</td>
-                                <td align="center">{row.path}</td>
-                                <td align="center">{row.stroller}</td>
+
+                                <td align="center">
+                                    <b>Hodnocení</b>
+                                </td>
+
+                                <td align="center">
+                                    <b>Jídlo</b>
+                                </td>
+
+                                <td align="center">
+                                    <b>Obtížnost</b>
+                                </td>
+
+                                <td align="center">
+                                    <b>Parkování</b>
+                                </td>
+
+                                <td align="center">
+                                    <b>Cesta</b>
+                                </td>
+
+                                <td align="center">
+                                    <b>Kočárek</b>
+                                </td>
                             </tr>
-                        ))}
-                        </tbody>
-                    </Table>
+                            </thead>
+                            <tbody>
+                            {rowData?.map((row) => (
+                                <tr key={row.name}>
+                                    <td component="th" scope="row" align="center">
+                                        {row.name}
+                                    </td>
+                                    <td align="center">{row.rating}</td>
+                                    <td align="center">{row.food}</td>
+                                    <td align="center">{row.difficulty}</td>
+                                    <td align="center">{row.parking}</td>
+                                    <td align="center">{row.path}</td>
+                                    <td align="center">{row.stroller}</td>
+                                </tr>
+                            ))}
+                            </tbody>
+                        </Table>
+                    </div>
                 </div>
             </> : "Loading..."
             }

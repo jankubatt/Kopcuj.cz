@@ -18,6 +18,13 @@ a, a:hover {
     text-decoration: none !important;
 }
 
+table, tr, td {
+    color: var(--c2) !important;
+    background-color: var(--c1) !important;
+    font-size: large;
+    border-bottom: 2px solid var(--c2) !important;
+}
+
 .card {
     background-color: var(--c1) !important;
     color: var(--c2) !important;
