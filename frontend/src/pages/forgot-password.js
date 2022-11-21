@@ -2,7 +2,7 @@ import React, {useRef} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Button, Form} from "react-bootstrap";
+import {Button, Card, Form} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -26,16 +26,26 @@ function ForgotPassword() {
     }
 
     return (
-        <div className='wrapper'>
-            <Form onSubmit={handleSubmit}>
-                <div className='input'>
-                    <Form.Label htmlFor="email">E-Mail</Form.Label><br/>
-                    <Form.Control ref={email} type="text" name={"email"}
-                                  placeholder={"E-Mail"}/>
-                </div>
+        <div className='container w-50'>
+            <Card>
+                <Card.Body>
+                    <Card.Title>
+                        <h1>Zapomenuté heslo</h1>
+                    </Card.Title>
 
-                <Button className='btn-hoverable' type="submit">Odeslat</Button>
-            </Form>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group>
+                            <Form.Label className={"mb-0"} htmlFor="email">E-Mail</Form.Label><br/>
+                            <Form.Control className={"textarea"} ref={email} type="text" name={"email"}
+                                          placeholder={"E-Mail"}/>
+                        </Form.Group>
+
+                        <div className={"d-flex justify-content-end"}>
+                            <Button className='btn2 mt-2' type="submit">Odeslat</Button>
+                        </div>
+                    </Form>
+                </Card.Body>
+            </Card>
         </div>
     )
 }
