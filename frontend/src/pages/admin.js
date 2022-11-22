@@ -2,26 +2,24 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
-import {Button, Card, Form, Table} from "react-bootstrap";
-
-//Main table columns
-const columns = [
-    {id: 'id_user', label: 'ID', minWidth: 170},
-    {id: 'login', label: 'Login', minWidth: 100},
-    {id: 'name', label: 'Nickname', minWidth: 100},
-    {id: 'email', label: 'E-Mail', minWidth: 100},
-    {id: 'desc', label: 'Desc', minWidth: 100},
-    {id: 'hills', label: 'Hills', minWidth: 200},
-    {id: 'comments', label: 'Comments', minWidth: 100},
-    {id: 'reviews', label: 'Reviews', minWidth: 100},
-    {id: 'date_registered', label: 'Registered', minWidth: 100},
-    {id: 'date_lastLogin', label: 'LL', minWidth: 100},
-    {id: 'isAdmin', label: 'Admin', minWidth: 100},
-];
+import {Button, Card, Collapse, Form, Nav, Tab, Table} from "react-bootstrap";
 
 //formats pushable row into table
-function createData(id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin) {
-  return { id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin };
+function createData(id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
+    return {
+        id_user,
+        login,
+        name,
+        email,
+        desc,
+        hills,
+        comments,
+        reviews,
+        date_registered,
+        date_lastLogin,
+        isAdmin,
+        isVerified
+    };
 }
 
 axios.defaults.withCredentials = true;
@@ -35,6 +33,7 @@ function AdminPage() {
 
     //State for storing form values
     const [state, setState] = useState({});
+    const [collapse, setCollapse] = useState({});
     let navigate = useNavigate();
 
     //function that handles changes in input boxes, when input changes, it gets written into state variable
@@ -43,6 +42,11 @@ function AdminPage() {
         const value = event.target.value;
         setState({...state, [name]: value});
     };
+
+    const handleCollapse = (event) => {
+        console.log(collapse)
+        setCollapse({...collapse, [event.target.value]: !collapse.event.target.value})
+    }
 
     //handles submit button
     const handleSubmit = (event) => {
@@ -91,10 +95,25 @@ function AdminPage() {
 
     //Fetching data
     useEffect(() => {
-        fetchUsers().then((res) => {getUsers(res)})
-        fetchHills().then((res) => {getHills(res)})
-        fetchReviews().then((res) => {getAllReviews(res)})
+        fetchUsers().then((res) => {
+            getUsers(res)
+        })
+        fetchHills().then((res) => {
+            getHills(res)
+        })
+        fetchReviews().then((res) => {
+            getAllReviews(res)
+        })
     }, [])
+
+    useEffect(() => {
+        let temp = [];
+        users?.forEach((user) => {
+            temp.push({[user._id]: false})
+        })
+
+        setCollapse(temp)
+    }, [users])
 
     //Assign hills to each user
     useEffect(() => {
@@ -150,7 +169,7 @@ function AdminPage() {
                 }
             })
 
-            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, "In Progress", userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), ((user.isAdmin) ? 'true' : 'false')))
+            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, "In Progress", userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
             
             userClimbed = [];
             userReviews = [];
@@ -161,60 +180,123 @@ function AdminPage() {
 
     return (
         <>
-            <div className={'container'}>
-                <Table stickyHeader aria-label="sticky table">
-                    <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Login</td>
-                        <td>Name</td>
-                        <td>Email</td>
-                        <td>Desc</td>
-                        <td>Hills</td>
-                        <td>Comments</td>
-                        <td>Reviews</td>
-                        <td>Registration</td>
-                        <td>Last Login</td>
-                        <td>Admin</td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {rows.map((row) => {
-                        return (
-                            <tr>
-                                <td>{row.id_user}</td>
-                                <td>{row.login}</td>
-                                <td>{row.name}</td>
-                                <td>{row.email}</td>
-                                <td>{row.desc}</td>
-                                <td>{row.hills}</td>
-                                <td>{row.comments}</td>
-                                <td>{row.reviews}</td>
-                                <td>{row.date_registered}</td>
-                                <td>{row.date_lastLogin}</td>
-                                <td>{row.isAdmin}</td>
-                            </tr>
-                        );
-                    })}
-                    </tbody>
-                </Table>
+            <div style={{overflowX: "scroll !important"}}>
+                <Tab.Container id="left-tabs-example" defaultActiveKey="first">
+                    <div className={"d-flex flex-row"}>
+                        <div style={{borderRight: "1px solid var(--c2)"}}>
+                            <Nav variant="pills" className="flex-column">
+                                <Nav.Item>
+                                    <Nav.Link eventKey="first" className={"btn1"}
+                                              style={{borderRadius: "0"}}>Hodnocení</Nav.Link>
+                                </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link eventKey="second" className={"btn1"}
+                                              style={{borderRadius: "0"}}>Závady</Nav.Link>
+                                </Nav.Item>
+                            </Nav>
+                        </div>
+
+                        <div className={"w-100"}>
+                            <Tab.Content>
+                                <Tab.Pane eventKey="first">
+                                    <Table stickyHeader aria-label="sticky table">
+                                        <thead>
+                                        <tr>
+                                            <td>ID</td>
+                                            <td>Login</td>
+                                            <td>Name</td>
+                                            <td>Email</td>
+                                            <td>Desc</td>
+                                            <td>Hills</td>
+                                            <td>Comments</td>
+                                            <td>Reviews</td>
+                                            <td>Registration</td>
+                                            <td>Last Login</td>
+                                            <td>Admin</td>
+                                            <td>Verified</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {rows?.map((row) => {
+                                            return (
+                                                <tr>
+                                                    <td>{row.id_user}</td>
+                                                    <td>{row.login}</td>
+                                                    <td>{row.name}</td>
+                                                    <td>{row.email}</td>
+                                                    <td>
+                                                        <Button
+                                                            onClick={handleCollapse}
+                                                            aria-controls="example-collapse-text"
+                                                            aria-expanded={false}
+                                                            value={row.id_user}
+                                                        >
+                                                            Desc
+                                                        </Button>
+                                                        <Collapse in={false}>
+                                                            <div id="example-collapse-text">
+                                                                {row.desc}
+                                                            </div>
+                                                        </Collapse>
+                                                    </td>
+                                                    <td>{row.hills}</td>
+                                                    <td>{row.comments}</td>
+                                                    <td>{row.reviews}</td>
+                                                    <td>{row.date_registered}</td>
+                                                    <td>{row.date_lastLogin}</td>
+                                                    <td>{row.isAdmin}</td>
+                                                    <td>{row.isVerified}</td>
+                                                </tr>
+                                            );
+                                        })}
+                                        </tbody>
+                                    </Table>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="second">
+                                    <Card className={"mx-5"}>
+                                        <Card.Body>
+                                            <Card.Title><h2>Přidat kopec</h2></Card.Title>
+
+                                            <Form onSubmit={handleSubmit}>
+                                                <Form.Control onChange={handleChange} placeholder='Jméno' name='name'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Výška'
+                                                              name='elevation'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Lat' name='lat'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Lon' name='lon'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Prominence'
+                                                              name='prominence'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Izolace'
+                                                              name='isolation'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Materiál'
+                                                              name='material'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Povodí' name='basin'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Okres'
+                                                              name='district'
+                                                              className={"textarea"}></Form.Control><br/>
+                                                <Form.Control onChange={handleChange} placeholder='Lokace'
+                                                              name='location'
+                                                              className={"textarea"}></Form.Control><br/>
+
+                                                <Button className={"btn2"} type="submit">Pridat kopec</Button>
+                                            </Form>
+                                        </Card.Body>
+                                    </Card>
+                                </Tab.Pane>
+                            </Tab.Content>
+                        </div>
+                    </div>
+                </Tab.Container>
             </div>
 
-            <h2>Přidat kopec</h2>
-            <Form onSubmit={handleSubmit}>
-                <Form.Control onChange={handleChange} placeholder='Jméno' name='name'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Výška' name='elevation'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Lat' name='lat'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Lon' name='lon'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Prominence' name='prominence'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Izolace' name='isolation'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Materiál' name='material'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Povodí' name='basin'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Okres' name='district'></Form.Control><br/>
-                <Form.Control onChange={handleChange} placeholder='Lokace' name='location'></Form.Control><br/>
-                <br/>
-                <Button type="submit">Pridat kopec</Button>
-            </Form>
+
         </>
     )
 }
