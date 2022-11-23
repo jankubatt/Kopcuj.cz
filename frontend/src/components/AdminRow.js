@@ -8,7 +8,7 @@ const AdminRow = (props) => {
 
 
     return (
-        <tr>
+        <tr key={props.row.id_user}>
             <td>{props.row.id_user}</td>
             <td>{props.row.login}</td>
             <td>{props.row.name}</td>
@@ -44,6 +44,7 @@ const AdminRow = (props) => {
                 </Collapse>
             </td>
             <td>{props.row.discussions}</td>
+            <td>{props.row.replies}</td>
             <td>
                 <Button
                     onClick={() => setReviews(!reviews)}

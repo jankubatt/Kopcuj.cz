@@ -5,9 +5,11 @@ import axios from "axios";
 import {Button, Card, Form, Nav, Tab, Table} from "react-bootstrap";
 import AdminRow from "../components/AdminRow";
 import AdminReview from "../components/AdminReview";
+import AdminDiscussion from "../components/AdminDiscussion";
+import AdminReply from "../components/AdminReply";
 
 //formats pushable row into table
-function createData(id_user, login, name, email, desc, hills, discussions, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
+function createData(id_user, login, name, email, desc, hills, discussions, replies, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
     return {
         id_user,
         login,
@@ -16,22 +18,23 @@ function createData(id_user, login, name, email, desc, hills, discussions, revie
         desc,
         hills,
         discussions,
+        replies,
         reviews,
         date_registered,
         date_lastLogin,
         isAdmin,
-        isVerified
+        isVerified,
     };
 }
 
 axios.defaults.withCredentials = true;
 
 function AdminPage() {
-    const [users, getUsers] = useState([]);                     //All users
-    const [hills, getHills] = useState([]);                     //All hills
-    const [allReviews, getAllReviews] = useState([]);           //All reviews
-    const [userHills, setUserHills] = useState([]);             //Array where hill is assigned to user
+    const [users, setUsers] = useState([]);                     //All users
+    const [hills, setHills] = useState([]);                     //All hills
+    const [allReviews, setAllReviews] = useState([]);           //All reviews
     const [rows, setRows] = useState([]);                       //Rows of a table
+    const [discussions, setDiscussions] = useState([]);
 
     //State for storing form values
     const [state, setState] = useState({});
@@ -42,7 +45,7 @@ function AdminPage() {
         const name = event.target.name;
         const value = event.target.value;
         setState({...state, [name]: value});
-    };
+    }
 
     //handles submit button
     const handleSubmit = (event) => {
@@ -89,34 +92,26 @@ function AdminPage() {
         return response.data;
     }
 
+    const fetchDiscussions = async () => {
+        const response = await axios.get(`http://localhost:8082/api/discussions`);
+        return response.data;
+    }
+
     //Fetching data
     useEffect(() => {
         fetchUsers().then((res) => {
-            getUsers(res)
+            setUsers(res)
         })
         fetchHills().then((res) => {
-            getHills(res)
+            setHills(res)
         })
         fetchReviews().then((res) => {
-            getAllReviews(res)
+            setAllReviews(res)
+        })
+        fetchDiscussions().then((res) => {
+            setDiscussions(res)
         })
     }, [])
-
-    //Assign hills to each user
-    useEffect(() => {
-        let temp = [];
-        users.forEach((user) => {
-            user.hills.forEach((userHills) => {
-                hills.forEach((aHill) => {
-                    if (userHills === aHill._id) {
-                        temp.push({user: user.login, hill: aHill})
-                    }
-                })
-            })
-        })
-
-        setUserHills(temp);
-    }, [hills, users])
 
     //Fill table with data
     useEffect(() => {
@@ -125,6 +120,8 @@ function AdminPage() {
         users.map((user) => {
             let userClimbed = [];
             let userReviews = [];
+            let userDiscussions = [];
+            let userReplies = [];
 
             user.hills.map((hill) => {
                 userClimbed.push(<li>{hill.name}</li>);
@@ -138,14 +135,28 @@ function AdminPage() {
                 }
             })
 
-            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, "In Progress", userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
-            
+            discussions.map((discussion) => {
+                if (user._id === discussion.user._id) {
+                    userDiscussions.push(<AdminDiscussion key={discussion._id}
+                                                          discussion={discussion}></AdminDiscussion>)
+                }
+
+                discussion.replies.map((reply) => {
+                    if (user._id === reply.user._id) {
+                        userReplies.push(<AdminReply key={reply._id} reply={reply}
+                                                     discussion={discussion}></AdminReply>)
+                    }
+                })
+            })
+
+            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, userDiscussions, userReplies, userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
+
             userClimbed = [];
             userReviews = [];
         })
-        
+
         setRows(tempRows);
-    }, [users, userHills])
+    }, [users])
 
     return (
         <>
@@ -178,6 +189,7 @@ function AdminPage() {
                                             <td>Desc</td>
                                             <td>Hills</td>
                                             <td>Discussions</td>
+                                            <td>Replies</td>
                                             <td>Reviews</td>
                                             <td>Registration</td>
                                             <td>Last Login</td>
