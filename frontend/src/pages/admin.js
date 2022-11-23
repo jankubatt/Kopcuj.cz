@@ -7,7 +7,7 @@ import AdminRow from "../components/AdminRow";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 //formats pushable row into table
-function createData(id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
+function createData(id_user, login, name, email, desc, hills, discussions, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
     return {
         id_user,
         login,
@@ -15,7 +15,7 @@ function createData(id_user, login, name, email, desc, hills, comments, reviews,
         email,
         desc,
         hills,
-        comments,
+        discussions,
         reviews,
         date_registered,
         date_lastLogin,
@@ -201,7 +201,7 @@ function AdminPage() {
                                             <td>Email</td>
                                             <td>Desc</td>
                                             <td>Hills</td>
-                                            <td>Comments</td>
+                                            <td>Discussions</td>
                                             <td>Reviews</td>
                                             <td>Registration</td>
                                             <td>Last Login</td>

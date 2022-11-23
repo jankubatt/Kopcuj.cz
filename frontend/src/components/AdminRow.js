@@ -4,6 +4,7 @@ import React, {useState} from "react";
 const AdminRow = (props) => {
     const [desc, setDesc] = useState(false);
     const [reviews, setReviews] = useState(false);
+    const [hills, setHills] = useState(false);
 
 
     return (
@@ -27,8 +28,22 @@ const AdminRow = (props) => {
                     </div>
                 </Collapse>
             </td>
-            <td>{props.row.hills}</td>
-            <td>{props.row.comments}</td>
+            <td>
+                <Button
+                    onClick={() => setHills(!hills)}
+                    aria-controls="example-collapse-text"
+                    aria-expanded={hills}
+                    className={"btn2"}
+                >
+                    Hills
+                </Button>
+                <Collapse in={hills}>
+                    <div id="example-collapse-text">
+                        {props.row.hills}
+                    </div>
+                </Collapse>
+            </td>
+            <td>{props.row.discussions}</td>
             <td>
                 <Button
                     onClick={() => setReviews(!reviews)}
