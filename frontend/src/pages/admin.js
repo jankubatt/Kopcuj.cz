@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
-import {Button, Card, Collapse, Form, Nav, Tab, Table} from "react-bootstrap";
+import {Button, Card, Form, Nav, Tab, Table} from "react-bootstrap";
+import AdminRow from "../components/AdminRow";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 //formats pushable row into table
 function createData(id_user, login, name, email, desc, hills, comments, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
@@ -33,7 +35,6 @@ function AdminPage() {
 
     //State for storing form values
     const [state, setState] = useState({});
-    const [collapse, setCollapse] = useState({});
     let navigate = useNavigate();
 
     //function that handles changes in input boxes, when input changes, it gets written into state variable
@@ -42,11 +43,6 @@ function AdminPage() {
         const value = event.target.value;
         setState({...state, [name]: value});
     };
-
-    const handleCollapse = (event) => {
-        console.log(collapse)
-        setCollapse({...collapse, [event.target.value]: !collapse.event.target.value})
-    }
 
     //handles submit button
     const handleSubmit = (event) => {
@@ -106,15 +102,6 @@ function AdminPage() {
         })
     }, [])
 
-    useEffect(() => {
-        let temp = [];
-        users?.forEach((user) => {
-            temp.push({[user._id]: false})
-        })
-
-        setCollapse(temp)
-    }, [users])
-
     //Assign hills to each user
     useEffect(() => {
         let temp = [];
@@ -139,10 +126,8 @@ function AdminPage() {
             let userClimbed = [];
             let userReviews = [];
 
-            userHills.map((hill) => {
-                if (hill.user === user.login) {
-                    userClimbed.push(<li>{hill.hill.name}</li>);
-                }
+            user.hills.map((hill) => {
+                userClimbed.push(<li>{hill.name}</li>);
             })
 
             allReviews.map((review) => {
@@ -152,13 +137,21 @@ function AdminPage() {
                             <Card.Body>
                                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                                     <div>
-                                        {/*<Rating name="read-only" value={review.stars} readOnly />*/}
+                                        {[...Array(review.stars)].map((x, i) =>
+                                            <FontAwesomeIcon icon="fa-solid fa-star" key={i}/>
+                                        )}
                                     </div>
                                 </div>
                                 <div>
                                     {ellipsify(review.text)}
                                 </div>
-                                <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                    <div style={{color: 'GrayText'}}>
+                                        {review.user.login}
+                                    </div>
+                                    <div style={{color: 'GrayText'}}>
+                                        {review.hill.name}
+                                    </div>
                                     <div style={{color: 'GrayText'}}>
                                         {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth() + 1}.{new Date(review.date_added).getFullYear()}
                                     </div>
@@ -191,7 +184,7 @@ function AdminPage() {
                                 </Nav.Item>
                                 <Nav.Item>
                                     <Nav.Link eventKey="second" className={"btn1"}
-                                              style={{borderRadius: "0"}}>Závady</Nav.Link>
+                                              style={{borderRadius: "0"}}>CRUD Kopec</Nav.Link>
                                 </Nav.Item>
                             </Nav>
                         </div>
@@ -199,7 +192,7 @@ function AdminPage() {
                         <div className={"w-100"}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                    <Table stickyHeader aria-label="sticky table">
+                                    <Table aria-label="sticky table">
                                         <thead>
                                         <tr>
                                             <td>ID</td>
@@ -219,34 +212,7 @@ function AdminPage() {
                                         <tbody>
                                         {rows?.map((row) => {
                                             return (
-                                                <tr>
-                                                    <td>{row.id_user}</td>
-                                                    <td>{row.login}</td>
-                                                    <td>{row.name}</td>
-                                                    <td>{row.email}</td>
-                                                    <td>
-                                                        <Button
-                                                            onClick={handleCollapse}
-                                                            aria-controls="example-collapse-text"
-                                                            aria-expanded={false}
-                                                            value={row.id_user}
-                                                        >
-                                                            Desc
-                                                        </Button>
-                                                        <Collapse in={false}>
-                                                            <div id="example-collapse-text">
-                                                                {row.desc}
-                                                            </div>
-                                                        </Collapse>
-                                                    </td>
-                                                    <td>{row.hills}</td>
-                                                    <td>{row.comments}</td>
-                                                    <td>{row.reviews}</td>
-                                                    <td>{row.date_registered}</td>
-                                                    <td>{row.date_lastLogin}</td>
-                                                    <td>{row.isAdmin}</td>
-                                                    <td>{row.isVerified}</td>
-                                                </tr>
+                                                <AdminRow key={row.id_user} row={row}></AdminRow>
                                             );
                                         })}
                                         </tbody>
