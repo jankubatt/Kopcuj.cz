@@ -4,7 +4,7 @@ import '../App.css';
 import axios from "axios";
 import {Button, Card, Form, Nav, Tab, Table} from "react-bootstrap";
 import AdminRow from "../components/AdminRow";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import AdminReview from "../components/AdminReview";
 
 //formats pushable row into table
 function createData(id_user, login, name, email, desc, hills, discussions, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
@@ -133,31 +133,7 @@ function AdminPage() {
             allReviews.map((review) => {
                 if (review.user.login === user.login) {
                     userReviews.push(
-                        <Card key={review._id} className='card'>
-                            <Card.Body>
-                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <div>
-                                        {[...Array(review.stars)].map((x, i) =>
-                                            <FontAwesomeIcon icon="fa-solid fa-star" key={i}/>
-                                        )}
-                                    </div>
-                                </div>
-                                <div>
-                                    {ellipsify(review.text)}
-                                </div>
-                                <div style={{display: 'flex', justifyContent: 'space-between'}}>
-                                    <div style={{color: 'GrayText'}}>
-                                        {review.user.login}
-                                    </div>
-                                    <div style={{color: 'GrayText'}}>
-                                        {review.hill.name}
-                                    </div>
-                                    <div style={{color: 'GrayText'}}>
-                                        {new Date(review.date_added).getDate()}.{new Date(review.date_added).getMonth() + 1}.{new Date(review.date_added).getFullYear()}
-                                    </div>
-                                </div>
-                            </Card.Body>
-                        </Card>
+                        <AdminReview review={review}></AdminReview>
                     );
                 }
             })
@@ -272,15 +248,6 @@ function DateTime(dateTime) {
     return (
         `${(dt.getDate() < 10) ? '0' + dt.getDate() : dt.getDate()}.${(dt.getMonth()+1 < 10 ? '0' + (dt.getMonth()+1) : dt.getMonth()+1)}.${dt.getFullYear()} 
         [${(dt.getHours()) < 10 ? '0' + dt.getHours() : dt.getHours()}:${(dt.getMinutes() < 10) ? '0' + dt.getMinutes() : dt.getMinutes()}:${(dt.getSeconds() < 10) ? '0' + dt.getSeconds() : dt.getSeconds()}]`)
-}
-
-function ellipsify(str) {
-    if (str.length > 10) {
-        return (str.substring(0, 10) + "...");
-    }
-    else {
-        return str;
-    }
 }
 
 export default AdminPage;
