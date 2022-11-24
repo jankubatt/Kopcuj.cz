@@ -2,7 +2,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import React, {useRef} from 'react';
 import {Button, Nav, Tab} from "react-bootstrap";
-import Rating from "./Rating";
+import Reviews from "./Reviews";
 import Faults from "./Faults";
 
 const Sidebar = (props) => {
@@ -135,18 +135,18 @@ const Sidebar = (props) => {
                         <Tab.Content className={""}>
                             <hr/>
                             <Tab.Pane eventKey="first">
-                                <Rating setRating={props.setRating}
-                                        setTxtArea={props.setTxtArea}
-                                        chbDifficulty={chbDifficulty}
-                                        chbPath={chbPath}
-                                        chbStroller={chbStroller}
-                                        chbParking={chbParking}
-                                        chbFood={chbFood}
-                                        reviewText={reviewText}
-                                        sendRating={sendRating}
-                                        reviews={props.reviews}
-                                        helpfulClicked={helpfulClicked}>
-                                </Rating>
+                                <Reviews setRating={props.setRating}
+                                         setTxtArea={props.setTxtArea}
+                                         chbDifficulty={chbDifficulty}
+                                         chbPath={chbPath}
+                                         chbStroller={chbStroller}
+                                         chbParking={chbParking}
+                                         chbFood={chbFood}
+                                         reviewText={reviewText}
+                                         sendRating={sendRating}
+                                         reviews={props.reviews}
+                                         helpfulClicked={helpfulClicked}>
+                                </Reviews>
                             </Tab.Pane>
                             <Tab.Pane eventKey="second">
                                 <Faults setTxtArea={props.setTxtArea} currentHill={props.currentHill}

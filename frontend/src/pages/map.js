@@ -22,7 +22,7 @@ function MapPage() {
     const [centerValue, setCenterValue] = useState(null)
     const [user, setUser] = useState([]);
 
-    //Rating variables
+    //Reviews variables
     const [rating, setRating] = useState(0);
     const [txtArea, setTxtArea] = useState('none');
     const [allReviews, setAllReviews] = useState([])

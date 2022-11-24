@@ -242,7 +242,7 @@ table, tr, td {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    width: 20vw;
+    width: fit-content;
     padding: 10px;
     margin-right: 5vw;
     background-color: var(--c2);

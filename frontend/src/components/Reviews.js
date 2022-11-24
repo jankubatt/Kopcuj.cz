@@ -1,35 +1,23 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Button, Form} from "react-bootstrap";
 import Review from "./Review";
 import React from "react";
+import Rating from '@mui/material/Rating';
 
-const Rating = (props) => {
+const Reviews = (props) => {
     return (
         <>
             <div className={"border-line"}>
                 <h1>Rating</h1>
 
                 <div className={'rating'}>
-                    <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                        props.setRating(1);
-                        props.setTxtArea('block')
-                    }}/>
-                    <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                        props.setRating(2);
-                        props.setTxtArea('block')
-                    }}/>
-                    <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                        props.setRating(3);
-                        props.setTxtArea('block')
-                    }}/>
-                    <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                        props.setRating(4);
-                        props.setTxtArea('block')
-                    }}/>
-                    <FontAwesomeIcon icon="fa-regular fa-star" onClick={() => {
-                        props.setRating(5);
-                        props.setTxtArea('block')
-                    }}/>
+                    <Rating
+                        name="simple-controlled"
+                        value={props.rating}
+                        onChange={(event, newValue) => {
+                            props.setRating(newValue);
+                            props.setTxtArea('block');
+                        }}
+                    />
 
                     <div style={{display: props.txtArea}}>
                         <Form.Check ref={props.chbDifficulty} label={"Obtížné"}/>
@@ -59,4 +47,4 @@ const Rating = (props) => {
     )
 }
 
-export default Rating
+export default Reviews
