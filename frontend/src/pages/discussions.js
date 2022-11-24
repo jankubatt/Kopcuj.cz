@@ -9,6 +9,7 @@ function DiscussionsPage() {
     const [user, setUser] = useState([]);
     const [discussions, setDiscussions] = useState([]);
     const [btn, setBtn] = useState(false);
+    const [loading, setLoading] = useState(false);
     const subject = useRef();
     const text = useRef();
 
@@ -41,6 +42,7 @@ function DiscussionsPage() {
     useEffect(() => {
         fetchDiscussions().then((res) => {
             setDiscussions(res);
+            setLoading(false)
         })
     }, [btn])
 
@@ -52,6 +54,7 @@ function DiscussionsPage() {
         });
 
         setBtn(!btn);
+        setLoading(true)
     }
 
     return (
@@ -79,6 +82,8 @@ function DiscussionsPage() {
                 </div>
 
                 <hr/>
+
+                {loading && <h2>Loading...</h2>}
 
                 {discussions?.map((discussion) => <Discussion key={discussion._id} data={discussion}/>)}
             </div>

@@ -12,6 +12,7 @@ const DiscussionPage = () => {
     const [user, setUser] = useState([]);
     const [replies, setReplies] = useState([]);
     const [btn, setBtn] = useState(false);
+    const [loading, setLoading] = useState(false);
     const reply = useRef();
 
     //Check if user is logged in. If not, redirect user to login page
@@ -44,6 +45,7 @@ const DiscussionPage = () => {
     useEffect(() => {
         fetchDiscussion().then((res) => {
             setReplies(res.replies);
+            setLoading(false);
         })
     }, [btn])
 
@@ -57,6 +59,7 @@ const DiscussionPage = () => {
             }
         }).then(() => {
             setBtn(!btn)
+            setLoading(true);
         })
     }
 
@@ -117,6 +120,8 @@ const DiscussionPage = () => {
                     </div>
 
                     <hr/>
+
+                    {loading && <h2>Loading...</h2>}
 
                     <Form.Control placeholder={"Odpověď"} className={"textarea"} as="textarea" rows={5}
                                   ref={reply}></Form.Control>
