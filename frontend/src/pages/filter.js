@@ -113,7 +113,7 @@ const FilterPage = () => {
     };
 
     const fetchReviews = async () => {
-        const response = await axios.get('http://localhost:8082/api/review/');
+        const response = await axios.get('http://localhost:8082/api/reviews/');
         return response.data;
     }
 

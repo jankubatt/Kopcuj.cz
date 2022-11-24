@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 // routes
 const hills = require('./routes/api/hills');
 const users = require('./routes/api/users');
-const review = require('./routes/api/review');
+const review = require('./routes/api/reviews');
 const discussion = require('./routes/api/discussions');
 const fault = require('./routes/api/fault')
 
@@ -28,7 +28,7 @@ app.get('/', (req, res) => res.send('Hello world!'));
 // use Routes
 app.use('/api/users', users);
 app.use('/api/hills', hills);
-app.use('/api/review', review);
+app.use('/api/reviews', review);
 app.use('/api/discussions', discussion)
 app.use('/api/fault', fault)
 

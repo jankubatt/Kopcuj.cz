@@ -48,13 +48,13 @@ const Sidebar = (props) => {
     }
 
     const helpfulClicked = async (review) => {
-        await axios.post(`http://localhost:8082/api/review/addHelpful`, {
+        await axios.post(`http://localhost:8082/api/reviews/addHelpful`, {
             hillId: props.currentHill._id,
             userId: props.user._id,
             reviewId: review
         }).then(async (res) => {
             if (res.data === 'remove') {
-                await axios.post(`http://localhost:8082/api/review/removeHelpful`, {
+                await axios.post(`http://localhost:8082/api/reviews/removeHelpful`, {
                     hillId: props.currentHill._id,
                     userId: props.user._id,
                     reviewId: review

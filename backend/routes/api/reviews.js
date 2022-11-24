@@ -1,29 +1,38 @@
 const express = require('express');
 const router = express.Router();
-const Review = require('../../models/Review');
+const Reviews = require('../../models/Review');
 const User = require('../../models/User');
 const Hill = require('../../models/Hill');
 
+let mysql = require('mysql');
+let config = require('../../config/db.js');
+let db = mysql.createConnection(config);
+
+
 router.get('/', (req, res) => {
-    Review.find()
-        .then(reviews => res.json(reviews))
-        .catch(err => res.status(404).json(err));
+    let sql = `SELECT * FROM reviews`;
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 })
 
 router.get('/:hillId', (req, res) => {
-    Review.find({id_hill: req.params.hillId}).then(reviews => res.json(reviews));
+    let sql = `SELECT * FROM reviews WHERE hill='${req.params.hillId}'`;
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 })
 
 router.post('/addReview', (req, res) => {
-        Review.updateOne({"hill._id": req.body.hill._id, "user._id": req.body.user._id}, {
-            $set: {
-                user: req.body.user,
-                hill: req.body.hill,
-                stars: req.body.stars,
-                text: req.body.text,
-                date_added: new Date()
-            }
-        }, {upsert: true}).then(res.sendStatus(200)).catch((err) => {
+    Reviews.updateOne({"hill._id": req.body.hill._id, "user._id": req.body.user._id}, {
+        $set: {
+            user: req.body.user,
+            hill: req.body.hill,
+            stars: req.body.stars,
+            text: req.body.text,
+            date_added: new Date()
+        }
+    }, {upsert: true}).then(res.sendStatus(200)).catch((err) => {
             console.log(err)
         })
 
@@ -59,7 +68,7 @@ router.post('/addReview', (req, res) => {
 });
 
 router.post('/addHelpful', (req, res) => {
-    Review.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
+    Reviews.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
         $addToSet: {
             helpful: req.body.userId
         }
@@ -75,9 +84,9 @@ router.post('/addHelpful', (req, res) => {
 });
 
 router.post('/removeHelpful', (req, res) => {
-    Review.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
+    Reviews.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
         $pull: {
-            helpful: { $in: [req.body.userId] }
+            helpful: {$in: [req.body.userId]}
         }
     }).then(() => {res.sendStatus(200)}).catch((err) => {
         console.log(err);
