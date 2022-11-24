@@ -32,8 +32,8 @@ axios.defaults.withCredentials = true;
 function AdminPage() {
     const [users, setUsers] = useState([]);                     //All users
     const [hills, setHills] = useState([]);                     //All hills
-    const [allReviews, setAllReviews] = useState([]);           //All reviews
-    const [rows, setRows] = useState([]);                       //Rows of a table
+    const [reviews, setReviews] = useState([]);           //All reviews
+    const [rows, setRows] = useState();                       //Rows of a table
     const [discussions, setDiscussions] = useState([]);
 
     //State for storing form values
@@ -106,7 +106,7 @@ function AdminPage() {
             setHills(res)
         })
         fetchReviews().then((res) => {
-            setAllReviews(res)
+            setReviews(res)
         })
         fetchDiscussions().then((res) => {
             setDiscussions(res)
@@ -127,7 +127,7 @@ function AdminPage() {
                 userClimbed.push(<li>{hill.name}</li>);
             })
 
-            allReviews.map((review) => {
+            reviews.map((review) => {
                 if (review.user.login === user.login) {
                     userReviews.push(
                         <AdminReview review={review}></AdminReview>
@@ -156,7 +156,7 @@ function AdminPage() {
         })
 
         setRows(tempRows);
-    }, [users])
+    }, [users, discussions, reviews])
 
     return (
         <>
@@ -249,8 +249,6 @@ function AdminPage() {
                     </div>
                 </Tab.Container>
             </div>
-
-
         </>
     )
 }

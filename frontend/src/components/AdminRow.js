@@ -5,7 +5,8 @@ const AdminRow = (props) => {
     const [desc, setDesc] = useState(false);
     const [reviews, setReviews] = useState(false);
     const [hills, setHills] = useState(false);
-
+    const [replies, setReplies] = useState(false);
+    const [discussions, setDiscussions] = useState(false);
 
     return (
         <tr key={props.row.id_user}>
@@ -43,8 +44,36 @@ const AdminRow = (props) => {
                     </div>
                 </Collapse>
             </td>
-            <td>{props.row.discussions}</td>
-            <td>{props.row.replies}</td>
+            <td>
+                <Button
+                    onClick={() => setDiscussions(!discussions)}
+                    aria-controls="example-collapse-text"
+                    aria-expanded={discussions}
+                    className={"btn2"}
+                >
+                    Discussions
+                </Button>
+                <Collapse in={discussions}>
+                    <div id="example-collapse-text">
+                        {props.row.discussions}
+                    </div>
+                </Collapse>
+            </td>
+            <td>
+                <Button
+                    onClick={() => setReplies(!replies)}
+                    aria-controls="example-collapse-text"
+                    aria-expanded={replies}
+                    className={"btn2"}
+                >
+                    Replies
+                </Button>
+                <Collapse in={replies}>
+                    <div id="example-collapse-text">
+                        {props.row.replies}
+                    </div>
+                </Collapse>
+            </td>
             <td>
                 <Button
                     onClick={() => setReviews(!reviews)}
