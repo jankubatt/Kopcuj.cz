@@ -8,7 +8,6 @@ const Reviews = (props) => {
         <>
             <div className={"border-line"}>
                 <h1>Rating</h1>
-
                 <div className={'rating'}>
                     <Rating
                         name="simple-controlled"

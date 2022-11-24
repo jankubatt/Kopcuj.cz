@@ -4,6 +4,7 @@ import Discussion from '../components/Discussion';
 import axios from "axios";
 import Cookies from 'js-cookie';
 import {Button, Form} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 
 function DiscussionsPage() {
     const [user, setUser] = useState([]);
@@ -12,6 +13,7 @@ function DiscussionsPage() {
     const [loading, setLoading] = useState(false);
     const subject = useRef();
     const text = useRef();
+    const navigate = useNavigate();
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -60,7 +62,7 @@ function DiscussionsPage() {
     return (
         <>
             <div className='navbar'>
-                <div className='navbrand'>Kopcuj.cz</div>
+                <div className='navbrand' onClick={() => navigate("/")}>Kopcuj.cz</div>
                 <div className='navbrand' style={{marginRight: "20px"}}>Diskuze</div>
             </div>
 

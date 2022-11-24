@@ -106,7 +106,7 @@ table, tr, td {
 .searchBar {
     display: flex;
     right: 100px;
-    z-index: 999;
+    z-index: 900;
     position: absolute;
     padding: 10px;
 }
@@ -129,12 +129,13 @@ table, tr, td {
 .navbrand {
     font-size: xx-large;
     margin-left: 20px;
-}
-
-.navbrand {
     color: var(--c1) !important;
     text-decoration: none !important;
     font-weight: bolder;
+}
+
+.navbrand:hover {
+    cursor: pointer;
 }
 
 .navbar-item {
@@ -290,7 +291,7 @@ table, tr, td {
 .sidebar {
     width: 25em;
     height: 100vh;
-    z-index: 999;
+    z-index: 900;
     position: absolute;
     background: var(--c2);
     left: 0;

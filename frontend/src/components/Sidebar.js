@@ -145,7 +145,8 @@ const Sidebar = (props) => {
                                          reviewText={reviewText}
                                          sendRating={sendRating}
                                          reviews={props.reviews}
-                                         helpfulClicked={helpfulClicked}>
+                                         helpfulClicked={helpfulClicked}
+                                         rating={props.rating}>
                                 </Reviews>
                             </Tab.Pane>
                             <Tab.Pane eventKey="second">

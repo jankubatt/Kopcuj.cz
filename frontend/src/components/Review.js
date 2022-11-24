@@ -1,6 +1,7 @@
 import React from "react";
-import {Badge, Button, Card} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Username from "./Username";
 
 const Review = (props) => {
     return (
@@ -9,8 +10,7 @@ const Review = (props) => {
                 <Card.Body>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <div>
-                            <b>{props.review.user.name || props.review.user.login}</b>&nbsp;
-                            {((props.review.user.isAdmin) ? <Badge pill bg="danger">Admin</Badge> : '')}
+                            <Username user={props.review.user}></Username>
                         </div>
                         <div>
                             {[...Array(props.review.stars)].map((x, i) =>

@@ -1,6 +1,7 @@
 import React from "react";
-import {Badge, Button, Card} from "react-bootstrap";
+import {Button, Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Username from "./Username";
 
 const Fault = (props) => {
     return (
@@ -9,11 +10,9 @@ const Fault = (props) => {
                 <Card.Body>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
                         <div>
-                            <b>{props.fault.user.name || props.fault.user.login}</b>&nbsp;
-                            {((props.fault.user.isAdmin) ? <Badge pill bg="danger">Admin</Badge> : '')}
+                            <Username user={props.fault.user}></Username>
                         </div>
                     </div>
-                    {console.log(new Date(props.fault.date_added).getDate() - new Date(props.fault.date_added).getDate() + 7)}
                     <div>
                         {props.fault.text}
                     </div>

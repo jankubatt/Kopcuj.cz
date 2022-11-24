@@ -1,5 +1,6 @@
 import React from 'react';
 import {Button, Card} from "react-bootstrap";
+import Username from "./Username";
 
 const Discussion = (props) => {
     return (
@@ -7,7 +8,14 @@ const Discussion = (props) => {
             <Card>
                 <Card.Body>
                     <Card.Title>
-                        {props.data.subject}
+                        <div className={"d-flex justify-content-between"}>
+                            <div>
+                                {props.data.subject}
+                            </div>
+                            <div>
+                                <Username user={props.data.user}/>
+                            </div>
+                        </div>
                     </Card.Title>
                     <Card.Text>
                         {props.data.text}

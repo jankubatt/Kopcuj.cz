@@ -1,6 +1,7 @@
 import React from "react";
-import {Badge, Card} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import Username from "./Username";
 
 const Reply = (props) => {
 
@@ -10,9 +11,10 @@ const Reply = (props) => {
         <Card>
             <Card.Header>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
-                    {props.reply.user !== undefined ?
-                        <b>{props.reply.user.name || props.reply.user.login} {((props.reply.user !== undefined && props.reply.user.isAdmin) ?
-                            <Badge pill bg="danger">Admin</Badge> : '')}</b> : "Loading..."}
+                    <div>
+                        {props.reply.user !== undefined ?
+                            <Username user={props.reply.user}/> : "Loading..."}
+                    </div>
 
                     <div style={{alignSelf: "flex-end"}}>
                         <FontAwesomeIcon onClick={props.upVote} icon="fa-solid fa-chevron-up"/>

@@ -6,7 +6,8 @@ import Cookies from 'js-cookie';
 import pfp from '../img/pfp-default.png';
 import Searchbar from '../components/Searchbar';
 import Sidebar from '../components/Sidebar';
-import {Button} from "react-bootstrap";
+import {Button, Dropdown, DropdownButton} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
@@ -29,7 +30,8 @@ function MapPage() {
     const [reviews, setReviews] = useState([])
     const [btnReview, setBtnReview] = useState(false);
     const [btnHelpful, setBtnHelpful] = useState(false);
-    
+
+    const navigate = useNavigate();
 
     //Check if user is logged in. If not, redirect user to login page
     let authToken = Cookies.get('authToken');
@@ -77,6 +79,7 @@ function MapPage() {
                         currentReviews.push(review);
                     }
                 })
+                currentReviews.sort((a, b) => a.helpful.length < b.helpful.length ? 1 : b.helpful.length < a.helpful.length ? -1 : 0);
                 setReviews(currentReviews);
             }
         })
@@ -125,15 +128,20 @@ function MapPage() {
             setCurrentHill(clickedHill);
 
             let currentHillReviews = [];
-            
+
             allReviews?.forEach((review) => {
                 if (clickedHill._id === review.hill._id) {
                     currentHillReviews.push(review);
                 }
             })
-            
+
             setReviews(currentHillReviews);
         }
+    }
+
+    const logout = () => {
+        Cookies.remove("authToken");
+        navigate("/login");
     }
 
     return (
@@ -143,7 +151,7 @@ function MapPage() {
                     document.location.replace(document.location + 'login') : null
             }
 
-            <Searchbar hills={hills} setCenter={setCenter} setCenterValue={setCenterValue} />
+            <Searchbar hills={hills} setCenter={setCenter} setCenterValue={setCenterValue}/>
 
             {currentHill && <Sidebar    currentHill={currentHill}
                                         setBtnClimb={setBtnClimb}
@@ -163,7 +171,17 @@ function MapPage() {
 
 
             <div className='bottomItems'>
-                <a href={'/profile'}><img alt={"profile"} className='btn-profile' src={pfp}></img></a>
+
+
+                <DropdownButton
+                    drop={"up"}
+                    title={<img alt={"profile"} className='btn-profile' src={pfp}></img>}
+                    variant={""}
+                >
+                    <Dropdown.Item eventKey="1" onClick={() => navigate("/profile")}>Profil</Dropdown.Item>
+                    <Dropdown.Item eventKey="2" onClick={logout}>Odhlásit se</Dropdown.Item>
+                </DropdownButton>
+
                 <a><Button type="button" className="btn1">Settings</Button></a>
                 <a href={'/discussions'}><Button type="button" className="btn1">Diskuze</Button></a>
 

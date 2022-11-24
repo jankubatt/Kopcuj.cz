@@ -37,7 +37,6 @@ const Faults = (props) => {
     }
 
     const helpfulClicked = async (fault) => {
-        console.log(fault)
         await axios.post(`http://localhost:8082/api/fault/addHelpful`, {
             hillId: props.currentHill._id,
             userId: props.user._id,

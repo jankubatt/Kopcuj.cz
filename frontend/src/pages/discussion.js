@@ -2,7 +2,8 @@ import axios from "axios";
 import React, {useEffect, useRef, useState} from "react";
 import Cookies from "js-cookie";
 import Reply from "../components/Reply";
-import {Badge, Button, Card, Form} from "react-bootstrap";
+import {Button, Card, Form} from "react-bootstrap";
+import Username from "../components/Username";
 
 const DiscussionPage = () => {
     const qs = require('query-string');
@@ -97,9 +98,9 @@ const DiscussionPage = () => {
                     <Card>
                         <Card.Header>
                             <div className={"d-flex justify-content-between"}>
-                                <b>{discussion.subject}</b>{discussion.user !== undefined ?
-                                <b>{discussion.user.name || discussion.user.login} {((discussion.user.isAdmin) ?
-                                    <Badge pill bg="danger">Admin</Badge> : '')}</b> : "Loading..."}
+                                <b>{discussion.subject}</b>
+                                <div>{discussion.user !== undefined ?
+                                    <Username user={discussion.user}></Username> : "Loading..."}</div>
                             </div>
                         </Card.Header>
                         <Card.Body>

@@ -50,7 +50,8 @@ function LoginPage() {
                             <Form.Label className={"mb-0"} htmlFor="pass">Heslo</Form.Label><br/>
                             <Form.Control className={"textarea"} ref={password} type="password" name={"pass"}
                                           placeholder={"Heslo"}/>
-                            <Form.Text><a href='/forgot-password'>Zapomenuté heslo</a></Form.Text>
+                            <Form.Text><a href='/forgot-password'>Zapomenuté heslo</a></Form.Text><br/>
+                            <Form.Text><a href='/register'>Registrovat se</a></Form.Text>
                         </Form.Group>
 
                         <div className={"d-flex justify-content-end"}>

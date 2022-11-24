@@ -19,6 +19,7 @@ function ForgotPassword() {
         //post data to database
         axios.post("http://localhost:8082/api/users/forgot-password", {email: email.current.value})
             .then(() => {
+                navigate("/login")
             })
             .catch(err => {
                 console.log("Error in register user!\n" + err);

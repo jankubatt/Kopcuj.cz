@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Button, Card} from "react-bootstrap";
+import {Alert, Button, Card} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -64,7 +64,7 @@ function ProfilePage() {
                 <Card className={"mb-3"}>
                     <Card.Body>
                         <Card.Text>
-                            {user.description}
+                            {user.description === null ? "Nic" : user.description}
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -91,7 +91,10 @@ function ProfilePage() {
                     </Card.Body>
                 </Card>
 
-                <a href="/"><Button type="button" className="btn">Domov</Button></a>
+                <a href="/"><Button type="button" className="btn1">Domov</Button></a>
+
+                {user.isVerified === false ?
+                    <Alert className={"mt-3"} variant='info'>Email s ověřením účtu byl odeslán na email!</Alert> : ""}
             </div> : "Loading..."}
 
         </>
