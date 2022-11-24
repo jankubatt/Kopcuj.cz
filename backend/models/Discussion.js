@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const DiscussionSchema = new mongoose.Schema({
-    user: {
-        type: Object,
+    id_user: {
+        type: String,
         required: true,
-        default: {}
+        default: null
     },
     date_added: {
         type: Date,

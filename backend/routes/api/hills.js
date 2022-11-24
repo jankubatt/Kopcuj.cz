@@ -1,23 +1,55 @@
 const express = require('express');
 const router = express.Router();
 
-// Load hill model
-const Hill = require('../../models/Hill');
+let mysql = require('mysql');
+let config = require('../../config/db.js');
+let db = mysql.createConnection(config);
 
 router.get('/', (req, res) => {
-    Hill.find()
-        .then(hills => res.json(hills))
-        .catch(err => res.status(404).json(err));
+    let sql = `SELECT * FROM hills`
+    db.query(sql, (err, result) => {
+        res.send(result)
+    })
 });
 
 router.get('/name/:name', (req, res) => {
-    Hill.find({name: req.params.name.split("-")[0], elevation: req.params.name.split("-")[1].replace('m', '')})
-        .then(hills => res.json(hills))
-        .catch(err => res.status(404).json(err));
+    let name = req.params.name.split("-")[0];
+    let elevation = req.params.name.split("-")[1].replace('m', '')
+
+    let sql = `SELECT * FROM hills WHERE name='${name}' AND elevation='${elevation}'`;
+    db.query(sql, (err, result) => {
+        res.send(result)
+    })
 })
 
 router.post('/create', (req, res) => {
-    Hill.create({...req.body}).then(res.sendStatus(200));
+    let sql = `INSERT INTO hills (
+                                    name, 
+                                    elevation, 
+                                    lat,
+                                    lng, 
+                                    prominence, 
+                                    isolation, 
+                                    material, 
+                                    basin, 
+                                    district, 
+                                    location
+                                  ) VALUES (
+                                  '${req.body.name}',
+                                  ${req.body.elevation},
+                                  '${req.body.lat}', 
+                                  '${req.body.lng}', 
+                                  '${req.body.prominence}', 
+                                  '${req.body.isolation}', 
+                                  '${req.body.material}', 
+                                  '${req.body.basin}',
+                                  '${req.body.district}',
+                                  '${req.body.location}'
+                                  )`;
+    db.query(sql, (err, result) => {
+        console.log(err)
+        res.send(result)
+    })
 })
 
 module.exports = router;

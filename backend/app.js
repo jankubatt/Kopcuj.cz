@@ -1,7 +1,5 @@
 // app.js
-
 const express = require('express');
-const connectDB = require('./config/db');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
@@ -15,7 +13,7 @@ const fault = require('./routes/api/fault')
 const app = express();
 
 // Connect Database
-connectDB();
+//connectDB();
 
 // cors
 app.use(cors({origin: true, credentials: true}));
@@ -28,8 +26,8 @@ app.use(cookieParser());
 app.get('/', (req, res) => res.send('Hello world!'));
 
 // use Routes
-app.use('/api/hills', hills);
 app.use('/api/users', users);
+app.use('/api/hills', hills);
 app.use('/api/review', review);
 app.use('/api/discussions', discussion)
 app.use('/api/fault', fault)

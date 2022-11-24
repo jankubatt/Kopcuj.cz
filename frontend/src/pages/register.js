@@ -29,16 +29,18 @@ function RegisterPage() {
         });
 
         //get request to check if login isn't already used
-        await axios.get("http://localhost:8082/api/users/checkName/" + username.current.value).then(res => {
+        await axios.get("http://localhost:8082/api/users/checkLogin/" + username.current.value).then(res => {
             checkUser = res.data;
         });
 
-        if (checkEmail != null) {
+        console.log(checkEmail)
+
+        if (checkEmail != "") {
             setError("Tento email byl již použit");
             return;
         }
 
-        if (checkUser != null) {
+        if (checkUser != "") {
             setError("Toto uživatelské jméno je již použito");
             return;
         }

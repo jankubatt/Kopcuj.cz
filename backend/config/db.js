@@ -1,21 +1,10 @@
-const mongoose = require('mongoose');
-const config = require('config');
-const db = config.get('mongoURI');
+require('dotenv').config()
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(
-            db,
-            {
-                useNewUrlParser: true
-            }
-        );
-
-        console.log('MongoDB is Connected...');
-    } catch (err) {
-        console.error(err.message);
-        process.exit(1);
-    }
+let config = {
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB
 };
 
-module.exports = connectDB;
+module.exports = config;

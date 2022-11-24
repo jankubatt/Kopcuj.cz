@@ -1,5 +1,4 @@
 import axios from "axios";
-import Cookies from 'js-cookie';
 import React, {useRef} from 'react';
 import {Button, Nav, Tab} from "react-bootstrap";
 import Reviews from "./Reviews";
@@ -23,8 +22,8 @@ const Sidebar = (props) => {
 
     const addHill = async () => {
         await axios.post('http://localhost:8082/api/users/addHill', {
-            authToken: Cookies.get('authToken'),
-            hill: props.currentHill
+            id_user: props.user.id,
+            id_hill: props.currentHill.id
         });
 
         props.setBtnClimb(!props.btnClimb)
