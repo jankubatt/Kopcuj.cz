@@ -49,8 +49,19 @@ router.get("/checkEmail/:email", (req, res) => {
 });
 
 //gets user by authToken
-router.get("/token/:auth", (req, res) => {
+router.get("/:auth", (req, res) => {
     let sql = `SELECT * FROM users WHERE authToken='${req.params.auth}'`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
+});
+
+//gets user climbed hills by authToken
+router.get("/:auth/climbedHills", (req, res) => {
+    let sql = `SELECT hills.*
+                FROM (users LEFT JOIN hills_climbed ON hills_climbed.user = users.id)
+                LEFT JOIN hills ON hills.id = hills_climbed.hill
+                WHERE users.authToken = '${req.params.auth}'`
     db.query(sql, (err, result) => {
         res.send(result);
     })

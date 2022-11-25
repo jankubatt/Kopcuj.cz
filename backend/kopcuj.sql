@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2022 at 08:44 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Nov 25, 2022 at 01:06 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -79,7 +79,7 @@ CREATE TABLE `hills` (
   `basin` varchar(255) NOT NULL,
   `district` varchar(255) NOT NULL,
   `location` varchar(255) NOT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `hills`
@@ -175,11 +175,11 @@ INSERT INTO `hills` (`id`, `name`, `elevation`, `lat`, `lng`, `prominence`, `iso
 (87, 'Popovičský vrch', 530, 50.7939, 14.2844, 101, '3km → Dobrná', 'pyroklastika, olivinický nefelinit', 'Labe', 'Děčín', 'Ludvíkovice, Huntířov'),
 (88, 'Oltařík', 566, 50.4901, 13.9233, 74, '0,7 km → Solanská hora', 'tefrit', '', 'Litoměřice', 'Děkovka'),
 (89, 'Ovčín', 431, 50.505, 14.0048, 0, '', 'čedič', 'Labe', 'Litoměřice', 'Vchynice'),
-(91, 'Košťál', 481, 50.4902, 13.9847, 64, '1 km → Jezerka', 'trachybazalt, bazanit', '', 'Litoměřice', 'Třebenice'),
-(92, 'Radobýl', 399, 50.5304, 14.0933, 85, '3,3 km → Plešivec', 'čedič', 'Labe', 'Litoměřice', 'Litoměřice'),
-(93, 'Plešivec', 477, 50.4912, 13.9388, 0, '', '', '', 'Litoměřice', 'Děkovka'),
-(94, 'Kalich', 535, 50.605, 14.2067, 99, '1,6 km → Panna', 'trachyt', 'Labe', 'Litoměřice', 'Třebušín'),
-(95, 'Děčínský Sněžník', 723, 50.7916, 14.1039, 151, '12,0 km → Jelení vrch', 'pískovec', 'Labe', 'Děčín', 'Děčín');
+(90, 'Košťál', 481, 50.4902, 13.9847, 64, '1 km → Jezerka', 'trachybazalt, bazanit', '', 'Litoměřice', 'Třebenice'),
+(91, 'Radobýl', 399, 50.5304, 14.0933, 85, '3,3 km → Plešivec', 'čedič', 'Labe', 'Litoměřice', 'Litoměřice'),
+(92, 'Plešivec', 477, 50.4912, 13.9388, 0, '', '', '', 'Litoměřice', 'Děkovka'),
+(93, 'Kalich', 535, 50.605, 14.2067, 99, '1,6 km → Panna', 'trachyt', 'Labe', 'Litoměřice', 'Třebušín'),
+(94, 'Děčínský Sněžník', 723, 50.7916, 14.1039, 151, '12,0 km → Jelení vrch', 'pískovec', 'Labe', 'Děčín', 'Děčín');
 
 -- --------------------------------------------------------
 
@@ -192,6 +192,13 @@ CREATE TABLE `hills_climbed` (
   `hill` int(11) NOT NULL,
   `user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `hills_climbed`
+--
+
+INSERT INTO `hills_climbed` (`id`, `hill`, `user`) VALUES
+(1, 1, 3);
 
 -- --------------------------------------------------------
 
@@ -223,6 +230,13 @@ CREATE TABLE `reviews` (
   `stars` int(11) NOT NULL,
   `text` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `reviews`
+--
+
+INSERT INTO `reviews` (`id`, `hill`, `user`, `added`, `stars`, `text`) VALUES
+(1, 1, 3, '2022-11-25 07:18:24', 3, 'Test');
 
 -- --------------------------------------------------------
 
@@ -261,6 +275,13 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `login`, `name`, `pass`, `email`, `description`, `authToken`, `pfp`, `theme`, `registered`, `lastLogin`, `forgotPassToken`, `verifyToken`, `isVerified`, `isAdmin`) VALUES
+(3, 'admin', 'aaa', '$2b$10$sABad3z7gaU6CXaE6KuRruQO5431RMDvFPyoGXFuu8Vgjq251XlLq', 'jankubat77@gmail.com', NULL, '847566e5-7610-44a0-bcc6-a36d2a8df59a', NULL, NULL, '2022-11-25 07:01:02', '0000-00-00 00:00:00', NULL, '3d5a4e22-6380-402e-ad39-810a75e1b770', 0, 0);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -276,7 +297,8 @@ ALTER TABLE `discussions`
 --
 ALTER TABLE `faults`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `faults_user_fk` (`user`);
+  ADD KEY `faults_user_fk` (`user`),
+  ADD KEY `faults_hill_fk` (`hill`);
 
 --
 -- Indexes for table `faults_likes`
@@ -297,7 +319,8 @@ ALTER TABLE `hills`
 --
 ALTER TABLE `hills_climbed`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `hills_climbed_user_fk` (`user`);
+  ADD KEY `hills_climbed_user_fk` (`user`),
+  ADD KEY `hills_climbed_hill_fk` (`hill`);
 
 --
 -- Indexes for table `replies`
@@ -312,7 +335,8 @@ ALTER TABLE `replies`
 --
 ALTER TABLE `reviews`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `reviews_user_fk` (`user`);
+  ADD KEY `reviews_user_fk` (`user`),
+  ADD KEY `reviews_hill_fk` (`hill`);
 
 --
 -- Indexes for table `reviews_likes`
@@ -354,13 +378,13 @@ ALTER TABLE `faults_likes`
 -- AUTO_INCREMENT for table `hills`
 --
 ALTER TABLE `hills`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT for table `hills_climbed`
 --
 ALTER TABLE `hills_climbed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `replies`
@@ -372,7 +396,7 @@ ALTER TABLE `replies`
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `reviews_likes`
@@ -384,7 +408,7 @@ ALTER TABLE `reviews_likes`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -400,6 +424,7 @@ ALTER TABLE `discussions`
 -- Constraints for table `faults`
 --
 ALTER TABLE `faults`
+  ADD CONSTRAINT `faults_hill_fk` FOREIGN KEY (`hill`) REFERENCES `hills` (`id`),
   ADD CONSTRAINT `faults_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
 
 --
@@ -413,6 +438,7 @@ ALTER TABLE `faults_likes`
 -- Constraints for table `hills_climbed`
 --
 ALTER TABLE `hills_climbed`
+  ADD CONSTRAINT `hills_climbed_hill_fk` FOREIGN KEY (`hill`) REFERENCES `hills` (`id`),
   ADD CONSTRAINT `hills_climbed_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
 
 --
@@ -426,6 +452,7 @@ ALTER TABLE `replies`
 -- Constraints for table `reviews`
 --
 ALTER TABLE `reviews`
+  ADD CONSTRAINT `reviews_hill_fk` FOREIGN KEY (`hill`) REFERENCES `hills` (`id`),
   ADD CONSTRAINT `reviews_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
 
 --

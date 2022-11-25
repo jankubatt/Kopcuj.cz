@@ -12,6 +12,8 @@ import {useNavigate} from "react-router-dom";
 axios.defaults.withCredentials = true;
 
 function MapPage() {
+    //USER
+    const [userClimbedHills, setUserClimbedHills] = useState([]);
     //Hill variables
     const [hills, getHills] = useState([]);
     const [currentHill, setCurrentHill] = useState();
@@ -39,68 +41,14 @@ function MapPage() {
         document.location.replace(document.location + 'login');
     }
 
-    useEffect(() => {
-        setCenter(true)
-
-        fetchHills().then((res) => {
-            getHills(res)
-            setCurrentHill(hills[0]);
-        })
-
-        fetchUser().then((res) => {
-            setUser(res)
-        })
-
-        fetchReviews().then((res) => {
-            setAllReviews(res);
-        })
-
-        console.log(hills, user, allReviews)
-    }, [])
-
-    useEffect(() => {
-        if (currentHill !== undefined) {
-            let starValue = 0;
-            allReviews?.forEach((review) => {
-                if (currentHill._id === review.hill._id) {
-                    starValue += review.stars;
-                }
-            })
-            setRating(Math.floor(starValue / reviews.length));
-        }
-    }, [reviews])
-
-    useEffect(() => {
-        fetchReviews().then((res) => {
-            setAllReviews(res);
-
-            if (currentHill !== undefined) {
-                let currentReviews = []
-                res.forEach((review) => {
-                    if (review.hill._id === currentHill._id) {
-                        currentReviews.push(review);
-                    }
-                })
-                currentReviews.sort((a, b) => a.helpful.length < b.helpful.length ? 1 : b.helpful.length < a.helpful.length ? -1 : 0);
-                setReviews(currentReviews);
-            }
-        })
-    }, [btnReview, currentHill, btnHelpful]);
-
-    useEffect(() => {
-        fetchHills().then((res) => {
-            getHills(res);
-            setClimbed(true);
-        })
-
-        fetchUser().then((res) => {
-            setUser(res)
-        })
-    }, [btnClimb])
-
     //Functions
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
+        return response.data;
+    }
+
+    const fetchUserClimbedHills = async () => {
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}/climbedHills`);
         return response.data;
     }
 
@@ -140,6 +88,16 @@ function MapPage() {
             setReviews(currentHillReviews);
         }
     }
+
+    useEffect(() => {
+        fetchUser().then((res) => {
+            setUser(res);
+        })
+
+        fetchUserClimbedHills().then((res) => {
+            setUserClimbedHills(res);
+        })
+    })
 
     const logout = () => {
         Cookies.remove("authToken");
