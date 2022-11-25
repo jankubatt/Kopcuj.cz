@@ -54,6 +54,8 @@ function MapPage() {
         fetchReviews().then((res) => {
             setAllReviews(res);
         })
+
+        console.log(hills, user, allReviews)
     }, [])
 
     useEffect(() => {

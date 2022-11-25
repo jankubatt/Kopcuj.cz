@@ -39,7 +39,7 @@ router.get("/checkLogin/:login", (req, res) => {
 
 //gets user by email
 router.get("/checkEmail/:email", (req, res) => {
-    let sql = `SELECT email FROM users WHERE login='${req.params.email}'`;
+    let sql = `SELECT email FROM users WHERE email='${req.params.email}'`;
     db.query(sql, (err, result) => {
         if (result.length < 1)
             res.send("");

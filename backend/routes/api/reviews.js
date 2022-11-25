@@ -24,46 +24,24 @@ router.get('/:hillId', (req, res) => {
 })
 
 router.post('/addReview', (req, res) => {
-    Reviews.updateOne({"hill._id": req.body.hill._id, "user._id": req.body.user._id}, {
-        $set: {
-            user: req.body.user,
-            hill: req.body.hill,
-            stars: req.body.stars,
-            text: req.body.text,
-            date_added: new Date()
-        }
-    }, {upsert: true}).then(res.sendStatus(200)).catch((err) => {
-            console.log(err)
-        })
+    let sql = `INSERT INTO reviews (hill, user, stars, text) VALUES ('${req.body.id_hill}', '${req.body.id_user}', '${req.body.stars}', '${req.body.text}')`;
+    db.query(sql, (err, result) => {
 
-        if (req.body.difficulty !== null) {
-            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {difficulty: req.body.difficulty}}).then().catch((err) => {
-                console.log(err)
-            })
-        }
+    });
 
-        if (req.body.food !== null) {
-            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {food: req.body.food}}).then().catch((err) => {
-                console.log(err)
-            })
-        }
+    if (req.body.difficulty !== null) {
+    }
 
-        if (req.body.parking !== null) {
-            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {parking: req.body.parking}}).then().catch((err) => {
-                console.log(err)
-            })
-        }
+    if (req.body.food !== null) {
+    }
+
+    if (req.body.parking !== null) {
+    }
 
         if (req.body.path !== null) {
-            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {path: req.body.path}}).then().catch((err) => {
-                console.log(err)
-            })
         }
 
         if (req.body.stroller !== null) {
-            Hill.updateOne({_id: req.body.hill._id}, {$addToSet: {stroller: req.body.stroller}}).then().catch((err) => {
-                console.log(err)
-            })
         }
 });
 
