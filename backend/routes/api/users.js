@@ -68,8 +68,8 @@ router.get("/:auth/climbedHills", (req, res) => {
 });
 
 //gets user by id
-router.get("/:id", (req, res) => {
-    let sql = `SELECT * FROM users WHERE authToken='${req.params.id}'`
+router.get("/id/:id", (req, res) => {
+    let sql = `SELECT * FROM users WHERE id='${req.params.id}'`
     db.query(sql, (err, result) => {
         res.send(result);
     })
@@ -147,14 +147,12 @@ router.post("/change-password", (req, res) => {
 
 router.post("/login", (req, res) => {
     let sql = `SELECT id, pass FROM users WHERE login='${req.body.login}'`;
-
     db.query(sql, (err, user) => {
         bcrypt.compare(req.body.pass, user[0].pass).then(function (result) {
             if (result) {
                 const token = crypto.randomUUID();
-                let sql = `UPDATE users SET authToken='${token}', lastLogin='${new Date().toUTCString()}' WHERE id=${user[0].id}`;
+                let sql = `UPDATE users SET authToken='${token}', lastLogin='${new Date().toISOString().slice(0, 19).replace('T', ' ')}' WHERE id=${user[0].id}`;
                 db.query(sql, (err) => {
-                    console.log(err);
                 })
 
                 res.cookie("authToken", token, {maxAge: 1000 * 3600 * 24, sameSite: false});

@@ -51,12 +51,13 @@ function ChangePassword() {
                     <Form onSubmit={handleSubmit}>
                         <Form.Group className='mb-2'>
                             <Form.Label htmlFor="pass">Heslo</Form.Label>
-                            <Form.Control className={"textarea"} type="password" name={"pass"} placeholder={"Heslo"}/>
+                            <Form.Control ref={pass} className={"textarea"} type="password" name={"pass"}
+                                          placeholder={"Heslo"}/>
                         </Form.Group>
 
                         <Form.Group>
                             <Form.Label htmlFor="passAgain">Heslo znovu</Form.Label>
-                            <Form.Control className={"textarea"} type="password" name={"passAgain"}
+                            <Form.Control ref={passAgain} className={"textarea"} type="password" name={"passAgain"}
                                           placeholder={"Heslo znovu"}/>
                         </Form.Group>
 

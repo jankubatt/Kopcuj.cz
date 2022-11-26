@@ -1,15 +1,31 @@
 import {Badge} from "react-bootstrap";
-import React from "react";
+import React, {useEffect, useState} from "react";
+import axios from "axios";
 
 const Username = (props) => {
+    const [user, setUser] = useState();
+    const [loading, setLoading] = useState(true);
+
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/${props.user}`)
+        const response = await axios.get(`http://localhost:8082/api/users/id/${props.user}`)
+        return response.data[0];
     }
+
+    useEffect(() => {
+        fetchUser().then((res) => {
+            setUser(res)
+            console.log(res.name)
+            setLoading(false)
+        })
+    }, [])
+
+    if (loading) return <p>...</p>
+
     return (
         <>
-            <b>{props.user.name || props.user.login}</b>&nbsp;
-            {((props.user.isAdmin) ? <Badge pill bg="danger">Admin</Badge> : '')}&nbsp;
-            {((props.user.isVerified) ? <Badge pill bg="info">Ověřen</Badge> : '')}
+            <b>{user.name || user.login}</b>&nbsp;
+            {((user.isAdmin) ? <Badge pill bg="danger">Admin</Badge> : '')}&nbsp;
+            {((user.isVerified) ? <Badge pill bg="info">Ověřen</Badge> : '')}
         </>
     )
 }

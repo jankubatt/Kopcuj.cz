@@ -4,7 +4,6 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Username from "./Username";
 
 const Review = (props) => {
-    console.log(props.review.name)
     return (
         <div key={props.review.id}>
             <Card className='card'>

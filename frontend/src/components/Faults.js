@@ -56,7 +56,6 @@ const Faults = (props) => {
 
     return (
         <>
-
             <h1>Závady</h1>
 
             <Form.Control as="textarea" className={"textarea"} rows={3} ref={faultText}></Form.Control>

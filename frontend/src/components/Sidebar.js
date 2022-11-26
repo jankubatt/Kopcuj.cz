@@ -1,17 +1,10 @@
 import axios from "axios";
-import React, {useRef} from 'react';
+import React from 'react';
 import {Button, Nav, Tab} from "react-bootstrap";
 import Reviews from "./Reviews";
 import Faults from "./Faults";
 
 const Sidebar = (props) => {
-    const chbDifficulty = useRef();
-    const chbPath = useRef();
-    const chbStroller = useRef();
-    const chbParking = useRef();
-    const chbFood = useRef();
-    const reviewText = useRef();
-
     const tryHillImage = () => {
         try {
             return require(`../img/hills/${processHillName(props.currentHill.name)}-${props.currentHill.elevation}.webp`);
@@ -27,42 +20,6 @@ const Sidebar = (props) => {
         });
 
         props.setBtnClimb(!props.btnClimb)
-    }
-
-    const sendRating = async () => {
-        await axios.post(`http://localhost:8082/api/review/addReview`, {
-            stars: props.rating,
-            hill: props.currentHill,
-            user: props.user,
-            text: reviewText.current.value,
-            difficulty: chbDifficulty.current.value.includes("on") ? props.user._id : null,
-            path: chbPath.current.value.includes("on") ? props.user._id : null,
-            stroller: chbStroller.current.value.includes("on") ? props.user._id : null,
-            parking: chbParking.current.value.includes("on") ? props.user._id : null,
-            food: chbFood.current.value.includes("on") ? props.user._id : null
-        }).then(() => {
-            props.setTxtArea('none')
-            props.setBtnReview(!props.btnReview);
-            reviewText.current.value = "";
-        });
-    }
-
-    const helpfulClicked = async (review) => {
-        await axios.post(`http://localhost:8082/api/reviews/addHelpful`, {
-            hillId: props.currentHill._id,
-            userId: props.user._id,
-            reviewId: review
-        }).then(async (res) => {
-            if (res.data === 'remove') {
-                await axios.post(`http://localhost:8082/api/reviews/removeHelpful`, {
-                    hillId: props.currentHill._id,
-                    userId: props.user._id,
-                    reviewId: review
-                })
-            }
-        });
-
-        props.setBtnHelpful(!props.btnHelpful);
     }
 
     return (
@@ -134,22 +91,11 @@ const Sidebar = (props) => {
                         <Tab.Content className={""}>
                             <hr/>
                             <Tab.Pane eventKey="first">
-                                <Reviews setRating={props.setRating}
-                                         setTxtArea={props.setTxtArea}
-                                         chbDifficulty={chbDifficulty}
-                                         chbPath={chbPath}
-                                         chbStroller={chbStroller}
-                                         chbParking={chbParking}
-                                         chbFood={chbFood}
-                                         reviewText={reviewText}
-                                         sendRating={sendRating}
-                                         reviews={props.reviews}
-                                         helpfulClicked={helpfulClicked}
-                                         rating={props.rating}>
+                                <Reviews currentHill={props.currentHill} user={props.user}>
                                 </Reviews>
                             </Tab.Pane>
                             <Tab.Pane eventKey="second">
-                                <Faults setTxtArea={props.setTxtArea} currentHill={props.currentHill}
+                                <Faults currentHill={props.currentHill}
                                         user={props.user}></Faults>
                             </Tab.Pane>
                         </Tab.Content>

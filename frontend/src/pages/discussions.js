@@ -22,7 +22,7 @@ function DiscussionsPage() {
     }
 
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
         return response.data;
     }
 

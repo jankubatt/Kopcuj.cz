@@ -29,9 +29,6 @@ function MapPage() {
     //Reviews variables
     const [rating, setRating] = useState(0);
     const [txtArea, setTxtArea] = useState('none');
-    const [allReviews, setAllReviews] = useState([])
-    const [reviews, setReviews] = useState([])
-    const [btnReview, setBtnReview] = useState(false);
     const [btnHelpful, setBtnHelpful] = useState(false);
 
     const navigate = useNavigate();
@@ -45,7 +42,7 @@ function MapPage() {
     //Functions
     const fetchUser = async () => {
         const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
-        return response.data;
+        return response.data[0];
     }
 
     const fetchUserClimbedHills = async () => {
@@ -55,11 +52,6 @@ function MapPage() {
 
     const fetchHills = async () => {
         const response = await axios.get('http://localhost:8082/api/hills/');
-        return response.data;
-    }
-
-    const fetchReviews = async () => {
-        const response = await axios.get(`http://localhost:8082/api/reviews/`);
         return response.data;
     }
 
@@ -82,9 +74,6 @@ function MapPage() {
             if (userClimbedHills.filter(uHill => uHill.id === clickedHill.id)[0] !== undefined) setClimbed(true);
 
             setCurrentHill(clickedHill);
-
-            let currentHillReviews = await axios.get(`http://localhost:8082/api/reviews/${clickedHill.id}`)
-            setReviews(currentHillReviews.data);
         }
     }
 
@@ -96,13 +85,20 @@ function MapPage() {
         fetchUserClimbedHills().then((res) => {
             setUserClimbedHills(res);
         })
-    }, [])
 
-    useEffect(() => {
         fetchHills().then((res) => {
             setHills(res);
         })
     }, [])
+
+    //BTN CLIMBED PRESSED
+    useEffect(() => {
+        fetchUserClimbedHills().then((res) => {
+            setUserClimbedHills(res);
+        })
+
+        setClimbed(true)
+    }, [btnClimb])
 
     return (
         <>
@@ -119,14 +115,12 @@ function MapPage() {
                                         rating={rating}
                                         user={user}
                                         setTxtArea={setTxtArea}
-                                        setBtnReview={setBtnReview}
-                                        btnReview={btnReview}
                                         btnHelpful={btnHelpful}
                                         setBtnHelpful={setBtnHelpful}
                                         climbed={climbed}
                                         setRating={setRating}
                                         txtArea={txtArea}
-                                        reviews={reviews} />
+            />
             }
 
 
