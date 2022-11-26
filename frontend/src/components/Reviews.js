@@ -38,7 +38,7 @@ const Reviews = (props) => {
             <hr/>
             <div id='reviews'>
                 {props.reviews?.map((review) => ((review.text !== null) ?
-                    <Review key={review._id} review={review} helpfulClicked={props.helpfulClicked}/>
+                    <Review key={review.id} review={review} helpfulClicked={props.helpfulClicked}/>
                     : 'Loading...'))}
             </div>
 

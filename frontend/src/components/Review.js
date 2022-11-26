@@ -4,8 +4,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Username from "./Username";
 
 const Review = (props) => {
+    console.log(props.review.name)
     return (
-        <div key={props.review._id}>
+        <div key={props.review.id}>
             <Card className='card'>
                 <Card.Body>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -25,14 +26,15 @@ const Review = (props) => {
 
                     <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
                         <Button className={"btn2"} style={{alignSelf: "flex-end"}} onClick={() => {
-                            props.helpfulClicked(props.review._id)
+                            props.helpfulClicked(props.review.id)
                         }} aria-label="thumbs up" disabled={false}><FontAwesomeIcon
-                            icon="fa-solid fa-thumbs-up"/>{props.review.helpful.length}
+                            icon="fa-solid fa-thumbs-up"/>
+                            {/*{props.review.helpful.length}*/}
                         </Button>
                         <div style={{
                             color: 'GrayText',
                             alignSelf: "flex-end"
-                        }}>{new Date(props.review.date_added).getDate()}.{new Date(props.review.date_added).getMonth() + 1}.{new Date(props.review.date_added).getFullYear()}</div>
+                        }}>{new Date(props.review.added).getDate()}.{new Date(props.review.added).getMonth() + 1}.{new Date(props.review.added).getFullYear()}</div>
                     </div>
                 </Card.Body>
             </Card>

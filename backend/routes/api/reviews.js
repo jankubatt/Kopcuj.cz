@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/:hillId', (req, res) => {
-    let sql = `SELECT * FROM reviews WHERE hill='${req.params.hillId}'`;
+    let sql = `SELECT reviews.* FROM reviews JOIN users ON users.id = reviews.user WHERE hill='${req.params.hillId}';`;
     db.query(sql, (err, result) => {
         res.send(result);
     })

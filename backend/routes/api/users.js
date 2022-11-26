@@ -59,9 +59,9 @@ router.get("/:auth", (req, res) => {
 //gets user climbed hills by authToken
 router.get("/:auth/climbedHills", (req, res) => {
     let sql = `SELECT hills.*
-                FROM (users LEFT JOIN hills_climbed ON hills_climbed.user = users.id)
-                LEFT JOIN hills ON hills.id = hills_climbed.hill
-                WHERE users.authToken = '${req.params.auth}'`
+                FROM (hills JOIN hills_climbed ON hills.id = hills_climbed.hill)
+                RIGHT JOIN users ON users.id = hills_climbed.user
+                WHERE users.authToken="${req.params.auth}";`
     db.query(sql, (err, result) => {
         res.send(result);
     })

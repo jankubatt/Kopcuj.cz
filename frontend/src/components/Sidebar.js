@@ -98,11 +98,11 @@ const Sidebar = (props) => {
 
                     <hr/>
 
-                    {props.currentHill.difficulty.length > 0 ? "Obtížné " : ""}
-                    {props.currentHill.path.length > 0 ? "Dostupná cesta " : ""}
-                    {props.currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}
-                    {props.currentHill.parking.length > 0 ? "Parkoviště " : ""}
-                    {props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}
+                    {/*{props.currentHill.difficulty.length > 0 ? "Obtížné " : ""}*/}
+                    {/*{props.currentHill.path.length > 0 ? "Dostupná cesta " : ""}*/}
+                    {/*{props.currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}*/}
+                    {/*{props.currentHill.parking.length > 0 ? "Parkoviště " : ""}*/}
+                    {/*{props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}*/}
 
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <Button id={'btnClaimHill'} type="button" className="btn1" onClick={addHill}

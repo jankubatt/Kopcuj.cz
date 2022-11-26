@@ -14,8 +14,9 @@ axios.defaults.withCredentials = true;
 function MapPage() {
     //USER
     const [userClimbedHills, setUserClimbedHills] = useState([]);
+
     //Hill variables
-    const [hills, getHills] = useState([]);
+    const [hills, setHills] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [climbed, setClimbed] = useState(true);
     const [btnClimb, setBtnClimb] = useState(false);
@@ -62,6 +63,11 @@ function MapPage() {
         return response.data;
     }
 
+    const logout = () => {
+        Cookies.remove("authToken");
+        navigate("/login");
+    }
+
     const mapClicked = async (e) => {
         if (e.target.toString() === '[object HTMLImageElement]') {
             setCurrentHill(undefined);
@@ -73,19 +79,12 @@ function MapPage() {
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
-            if (user.hills.filter(uHill => uHill._id === clickedHill._id)[0] !== undefined) setClimbed(true);
+            if (userClimbedHills.filter(uHill => uHill.id === clickedHill.id)[0] !== undefined) setClimbed(true);
 
             setCurrentHill(clickedHill);
 
-            let currentHillReviews = [];
-
-            allReviews?.forEach((review) => {
-                if (clickedHill._id === review.hill._id) {
-                    currentHillReviews.push(review);
-                }
-            })
-
-            setReviews(currentHillReviews);
+            let currentHillReviews = await axios.get(`http://localhost:8082/api/reviews/${clickedHill.id}`)
+            setReviews(currentHillReviews.data);
         }
     }
 
@@ -97,12 +96,13 @@ function MapPage() {
         fetchUserClimbedHills().then((res) => {
             setUserClimbedHills(res);
         })
-    })
+    }, [])
 
-    const logout = () => {
-        Cookies.remove("authToken");
-        navigate("/login");
-    }
+    useEffect(() => {
+        fetchHills().then((res) => {
+            setHills(res);
+        })
+    }, [])
 
     return (
         <>
@@ -152,8 +152,9 @@ function MapPage() {
 
 
             <div className={"clickMap"} onClick={mapClicked}>
-                {user.hills !== undefined ?
-                    <Map center={center} centerValue={centerValue} user={user} hills={hills}/> : "Loading map..."}
+                {userClimbedHills !== undefined ?
+                    <Map center={center} centerValue={centerValue} userClimbedHills={userClimbedHills}
+                         hills={hills}/> : "Loading map..."}
             </div>
         </>
     )
