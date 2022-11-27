@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 25, 2022 at 01:06 PM
--- Server version: 10.4.25-MariaDB
--- PHP Version: 8.1.10
+-- Generation Time: Nov 27, 2022 at 11:52 AM
+-- Server version: 10.4.24-MariaDB
+-- PHP Version: 8.1.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -33,6 +33,62 @@ CREATE TABLE `discussions` (
   `subject` varchar(50) NOT NULL,
   `text` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `discussions`
+--
+
+INSERT INTO `discussions` (`id`, `user`, `subject`, `text`, `created`) VALUES
+(5, 3, 'ahoj', 'tohle je test', '2022-11-27 09:54:42'),
+(6, 3, 'aaa', 'aaa', '2022-11-27 10:00:11'),
+(7, 3, 'aaa', 'aaaddd', '2022-11-27 10:00:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `discussions_replies`
+--
+
+CREATE TABLE `discussions_replies` (
+  `id` int(11) NOT NULL,
+  `discussion` int(11) NOT NULL,
+  `user` int(11) NOT NULL,
+  `created` int(11) NOT NULL DEFAULT current_timestamp(),
+  `text` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `discussions_replies`
+--
+
+INSERT INTO `discussions_replies` (`id`, `discussion`, `user`, `created`, `text`) VALUES
+(7, 7, 3, 2147483647, 'aaaaaa'),
+(8, 7, 3, 2147483647, 'aaaa'),
+(9, 7, 3, 2147483647, 'aha no');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `discussions_replies_downvotes`
+--
+
+CREATE TABLE `discussions_replies_downvotes` (
+  `discussion` int(11) NOT NULL,
+  `user` int(11) NOT NULL,
+  `random` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `discussions_replies_upvotes`
+--
+
+CREATE TABLE `discussions_replies_upvotes` (
+  `discussion` int(11) NOT NULL,
+  `user` int(11) NOT NULL,
+  `random` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -184,6 +240,121 @@ INSERT INTO `hills` (`id`, `name`, `elevation`, `lat`, `lng`, `prominence`, `iso
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `hills_attributes`
+--
+
+CREATE TABLE `hills_attributes` (
+  `hill` int(11) NOT NULL,
+  `difficulty` int(11) DEFAULT 0,
+  `path` int(11) DEFAULT 0,
+  `stroller` int(11) NOT NULL DEFAULT 0,
+  `parking` int(11) NOT NULL DEFAULT 0,
+  `food` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `hills_attributes`
+--
+
+INSERT INTO `hills_attributes` (`hill`, `difficulty`, `path`, `stroller`, `parking`, `food`) VALUES
+(1, 1, 1, 1, 1, 1),
+(2, 0, 0, 0, 0, 0),
+(3, 0, 0, 0, 0, 0),
+(4, 0, 0, 0, 0, 0),
+(5, 0, 0, 0, 0, 0),
+(6, 0, 0, 0, 0, 0),
+(7, 0, 0, 0, 0, 0),
+(8, 0, 0, 0, 0, 0),
+(9, 0, 0, 0, 0, 0),
+(10, 0, 0, 0, 0, 0),
+(11, 0, 0, 0, 0, 0),
+(12, 0, 0, 0, 0, 0),
+(13, 0, 0, 0, 0, 0),
+(14, 0, 0, 0, 0, 0),
+(15, 0, 0, 0, 0, 0),
+(16, 0, 0, 0, 0, 0),
+(17, 0, 0, 0, 0, 0),
+(18, 0, 0, 0, 0, 0),
+(19, 0, 0, 0, 0, 0),
+(20, 0, 0, 0, 0, 0),
+(21, 0, 0, 0, 0, 0),
+(22, 0, 0, 0, 0, 0),
+(23, 0, 0, 0, 0, 0),
+(24, 0, 0, 0, 0, 0),
+(25, 0, 0, 0, 0, 0),
+(26, 0, 0, 0, 0, 0),
+(27, 0, 0, 0, 0, 0),
+(28, 0, 0, 0, 0, 0),
+(29, 0, 0, 0, 0, 0),
+(30, 0, 0, 0, 0, 0),
+(31, 0, 0, 0, 0, 0),
+(32, 0, 0, 0, 0, 0),
+(33, 0, 0, 0, 0, 0),
+(34, 0, 0, 0, 0, 0),
+(35, 0, 0, 0, 0, 0),
+(36, 0, 0, 0, 0, 0),
+(37, 0, 0, 0, 0, 0),
+(38, 0, 0, 0, 0, 0),
+(39, 0, 0, 0, 0, 0),
+(40, 0, 0, 0, 0, 0),
+(41, 0, 0, 0, 0, 0),
+(42, 0, 0, 0, 0, 0),
+(43, 0, 0, 0, 0, 0),
+(44, 0, 0, 0, 0, 0),
+(45, 0, 0, 0, 0, 0),
+(46, 0, 0, 0, 0, 0),
+(47, 0, 0, 0, 0, 0),
+(48, 0, 0, 0, 0, 0),
+(49, 0, 0, 0, 0, 0),
+(50, 0, 0, 0, 0, 0),
+(51, 0, 0, 0, 0, 0),
+(52, 0, 0, 0, 0, 0),
+(53, 0, 0, 0, 0, 0),
+(54, 0, 0, 0, 0, 0),
+(55, 0, 0, 0, 0, 0),
+(56, 0, 0, 0, 0, 0),
+(57, 0, 0, 0, 0, 0),
+(58, 0, 0, 0, 0, 0),
+(59, 0, 0, 0, 0, 0),
+(60, 0, 0, 0, 0, 0),
+(61, 0, 0, 0, 0, 0),
+(62, 0, 0, 0, 0, 0),
+(63, 0, 0, 0, 0, 0),
+(64, 0, 0, 0, 0, 0),
+(65, 0, 0, 0, 0, 0),
+(66, 0, 0, 0, 0, 0),
+(67, 0, 0, 0, 0, 0),
+(68, 0, 0, 0, 0, 0),
+(69, 0, 0, 0, 0, 0),
+(70, 0, 0, 0, 0, 0),
+(71, 0, 0, 0, 0, 0),
+(72, 0, 0, 0, 0, 0),
+(73, 0, 0, 0, 0, 0),
+(74, 0, 0, 0, 0, 0),
+(75, 0, 0, 0, 0, 0),
+(76, 0, 0, 0, 0, 0),
+(77, 0, 0, 0, 0, 0),
+(78, 0, 0, 0, 0, 0),
+(79, 0, 0, 0, 0, 0),
+(80, 0, 0, 0, 0, 0),
+(81, 0, 0, 0, 0, 0),
+(82, 0, 0, 0, 0, 0),
+(83, 0, 0, 0, 0, 0),
+(84, 0, 0, 0, 0, 0),
+(85, 0, 0, 0, 0, 0),
+(86, 0, 0, 0, 0, 0),
+(87, 0, 0, 0, 0, 0),
+(88, 0, 0, 0, 0, 0),
+(89, 0, 0, 0, 0, 0),
+(90, 0, 0, 0, 0, 0),
+(91, 0, 0, 0, 0, 0),
+(92, 0, 0, 0, 0, 0),
+(93, 0, 0, 0, 0, 0),
+(94, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `hills_climbed`
 --
 
@@ -198,23 +369,9 @@ CREATE TABLE `hills_climbed` (
 --
 
 INSERT INTO `hills_climbed` (`id`, `hill`, `user`) VALUES
-(1, 1, 3);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `replies`
---
-
-CREATE TABLE `replies` (
-  `id` int(11) NOT NULL,
-  `discussion` int(11) NOT NULL,
-  `user` int(11) NOT NULL,
-  `upVotes` int(11) NOT NULL,
-  `downVotes` int(11) NOT NULL,
-  `created` int(11) NOT NULL,
-  `text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+(2, 1, 3),
+(3, 49, 4),
+(4, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -236,7 +393,8 @@ CREATE TABLE `reviews` (
 --
 
 INSERT INTO `reviews` (`id`, `hill`, `user`, `added`, `stars`, `text`) VALUES
-(1, 1, 3, '2022-11-25 07:18:24', 3, 'Test');
+(1, 1, 3, '2022-11-25 07:18:24', 3, 'Test'),
+(15, 1, 4, '2022-11-26 11:07:48', 1, 'fffff');
 
 -- --------------------------------------------------------
 
@@ -247,7 +405,8 @@ INSERT INTO `reviews` (`id`, `hill`, `user`, `added`, `stars`, `text`) VALUES
 CREATE TABLE `reviews_likes` (
   `id` int(11) NOT NULL,
   `review` int(11) NOT NULL,
-  `user` int(11) NOT NULL
+  `user` int(11) NOT NULL,
+  `random` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -279,7 +438,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `name`, `pass`, `email`, `description`, `authToken`, `pfp`, `theme`, `registered`, `lastLogin`, `forgotPassToken`, `verifyToken`, `isVerified`, `isAdmin`) VALUES
-(3, 'admin', 'aaa', '$2b$10$sABad3z7gaU6CXaE6KuRruQO5431RMDvFPyoGXFuu8Vgjq251XlLq', 'jankubat77@gmail.com', NULL, '847566e5-7610-44a0-bcc6-a36d2a8df59a', NULL, NULL, '2022-11-25 07:01:02', '0000-00-00 00:00:00', NULL, '3d5a4e22-6380-402e-ad39-810a75e1b770', 0, 0);
+(3, 'admin', 'MorpheusStathis', '$2b$10$sABad3z7gaU6CXaE6KuRruQO5431RMDvFPyoGXFuu8Vgjq251XlLq', 'jankubat77@gmail.com', NULL, 'a49d943e-9e78-48fb-bcd7-4e3b7a65cb16', NULL, NULL, '2022-11-25 07:01:02', '2022-11-27 08:50:54', NULL, '3d5a4e22-6380-402e-ad39-810a75e1b770', 1, 1),
+(4, 'test', 'test', '$2b$10$7cFsSR3AQw.Uzf8K/iR6IOPsACsVKeyliDOnp14JiIrxE3KJnEfym', 'jankubat.1@seznam.cz', NULL, '3feca689-9364-4fa9-b645-b002a56c0859', NULL, NULL, '2022-11-26 06:47:54', '0000-00-00 00:00:00', NULL, '13ed2c63-8226-478b-b87f-5f513cf86510', 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -291,6 +451,27 @@ INSERT INTO `users` (`id`, `login`, `name`, `pass`, `email`, `description`, `aut
 ALTER TABLE `discussions`
   ADD PRIMARY KEY (`id`),
   ADD KEY `discussions_user_fk` (`user`);
+
+--
+-- Indexes for table `discussions_replies`
+--
+ALTER TABLE `discussions_replies`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `replies_discussion_fk` (`discussion`),
+  ADD KEY `replies_user_fk` (`user`);
+
+--
+-- Indexes for table `discussions_replies_downvotes`
+--
+ALTER TABLE `discussions_replies_downvotes`
+  ADD KEY `discussions_replies_downVotes_discussion` (`discussion`),
+  ADD KEY `discussions_replies_downVotes_user` (`user`);
+
+--
+-- Indexes for table `discussions_replies_upvotes`
+--
+ALTER TABLE `discussions_replies_upvotes`
+  ADD KEY `discussions_replies_upVotes_user` (`user`);
 
 --
 -- Indexes for table `faults`
@@ -315,20 +496,18 @@ ALTER TABLE `hills`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `hills_attributes`
+--
+ALTER TABLE `hills_attributes`
+  ADD KEY `hills_attributes_hill_fk` (`hill`);
+
+--
 -- Indexes for table `hills_climbed`
 --
 ALTER TABLE `hills_climbed`
   ADD PRIMARY KEY (`id`),
   ADD KEY `hills_climbed_user_fk` (`user`),
   ADD KEY `hills_climbed_hill_fk` (`hill`);
-
---
--- Indexes for table `replies`
---
-ALTER TABLE `replies`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `replies_discussion_fk` (`discussion`),
-  ADD KEY `replies_user_fk` (`user`);
 
 --
 -- Indexes for table `reviews`
@@ -360,7 +539,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `discussions`
 --
 ALTER TABLE `discussions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `discussions_replies`
+--
+ALTER TABLE `discussions_replies`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `faults`
@@ -384,31 +569,25 @@ ALTER TABLE `hills`
 -- AUTO_INCREMENT for table `hills_climbed`
 --
 ALTER TABLE `hills_climbed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT for table `replies`
---
-ALTER TABLE `replies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `reviews_likes`
 --
 ALTER TABLE `reviews_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -419,6 +598,26 @@ ALTER TABLE `users`
 --
 ALTER TABLE `discussions`
   ADD CONSTRAINT `discussions_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `discussions_replies`
+--
+ALTER TABLE `discussions_replies`
+  ADD CONSTRAINT `replies_discussion_fk` FOREIGN KEY (`discussion`) REFERENCES `discussions` (`id`),
+  ADD CONSTRAINT `replies_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
+
+--
+-- Constraints for table `discussions_replies_downvotes`
+--
+ALTER TABLE `discussions_replies_downvotes`
+  ADD CONSTRAINT `discussions_replies_downVotes_discussion` FOREIGN KEY (`discussion`) REFERENCES `discussions_replies` (`discussion`),
+  ADD CONSTRAINT `discussions_replies_downVotes_user` FOREIGN KEY (`user`) REFERENCES `discussions_replies` (`user`);
+
+--
+-- Constraints for table `discussions_replies_upvotes`
+--
+ALTER TABLE `discussions_replies_upvotes`
+  ADD CONSTRAINT `discussions_replies_upVotes_user` FOREIGN KEY (`user`) REFERENCES `discussions_replies` (`user`);
 
 --
 -- Constraints for table `faults`
@@ -435,18 +634,17 @@ ALTER TABLE `faults_likes`
   ADD CONSTRAINT `faults_likes_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
 
 --
+-- Constraints for table `hills_attributes`
+--
+ALTER TABLE `hills_attributes`
+  ADD CONSTRAINT `hills_attributes_hill_fk` FOREIGN KEY (`hill`) REFERENCES `hills` (`id`);
+
+--
 -- Constraints for table `hills_climbed`
 --
 ALTER TABLE `hills_climbed`
   ADD CONSTRAINT `hills_climbed_hill_fk` FOREIGN KEY (`hill`) REFERENCES `hills` (`id`),
   ADD CONSTRAINT `hills_climbed_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
-
---
--- Constraints for table `replies`
---
-ALTER TABLE `replies`
-  ADD CONSTRAINT `replies_discussion_fk` FOREIGN KEY (`discussion`) REFERENCES `discussions` (`id`),
-  ADD CONSTRAINT `replies_user_fk` FOREIGN KEY (`user`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `reviews`
