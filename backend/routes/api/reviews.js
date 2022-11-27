@@ -62,7 +62,7 @@ router.post('/addReview', (req, res) => {
 });
 
 router.post('/like', (req, res) => {
-    let sql = `UPDATE reviews_likes SET random='${crypto.randomUUID()}' WHERE user='${req.body.user}'`;
+    let sql = `UPDATE reviews_likes SET random='${crypto.randomUUID()}' WHERE user='${req.body.user}' AND review='${req.body.review}'`;
     db.query(sql, (err, result) => {
         if (result.changedRows === 0) {
             sql = `INSERT INTO reviews_likes (review, user) VALUES ('${req.body.review}', '${req.body.user}')`;
@@ -79,9 +79,8 @@ router.post('/like', (req, res) => {
 })
 
 router.get('/likeCount/:review', (req, res) => {
-    let sql = `SELECT COUNT(reviews_likes.review) AS "count" FROM reviews_likes JOIN reviews ON reviews.id = reviews_likes.review WHERE reviews_likes.review = '${req.params.review}'`
+    let sql = `SELECT COUNT(reviews_likes.review) AS "count" FROM reviews_likes WHERE reviews_likes.review = '${req.params.review}'`
     db.query(sql, (err, result) => {
-        console.log(result)
         res.send(result);
     })
 })

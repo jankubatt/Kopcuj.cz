@@ -95,8 +95,7 @@ const Sidebar = (props) => {
                                 </Reviews>
                             </Tab.Pane>
                             <Tab.Pane eventKey="second">
-                                <Faults currentHill={props.currentHill}
-                                        user={props.user}></Faults>
+                                <Faults currentHill={props.currentHill} user={props.user}></Faults>
                             </Tab.Pane>
                         </Tab.Content>
                     </div>

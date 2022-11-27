@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2022 at 11:52 AM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Nov 27, 2022 at 02:52 PM
+-- Server version: 10.4.25-MariaDB
+-- PHP Version: 8.1.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -65,7 +65,9 @@ CREATE TABLE `discussions_replies` (
 INSERT INTO `discussions_replies` (`id`, `discussion`, `user`, `created`, `text`) VALUES
 (7, 7, 3, 2147483647, 'aaaaaa'),
 (8, 7, 3, 2147483647, 'aaaa'),
-(9, 7, 3, 2147483647, 'aha no');
+(9, 7, 3, 2147483647, 'aha no'),
+(10, 7, 3, 2147483647, 'lm'),
+(11, 5, 3, 2147483647, 'Opravdu');
 
 -- --------------------------------------------------------
 
@@ -105,6 +107,13 @@ CREATE TABLE `faults` (
   `created` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `faults`
+--
+
+INSERT INTO `faults` (`id`, `user`, `hill`, `text`, `created`) VALUES
+(6, 3, 1, 'mrdko', '2022-11-27 13:38:18');
+
 -- --------------------------------------------------------
 
 --
@@ -114,7 +123,8 @@ CREATE TABLE `faults` (
 CREATE TABLE `faults_likes` (
   `id` int(11) NOT NULL,
   `user` int(11) NOT NULL,
-  `fault` int(11) NOT NULL
+  `fault` int(11) NOT NULL,
+  `random` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -257,7 +267,7 @@ CREATE TABLE `hills_attributes` (
 --
 
 INSERT INTO `hills_attributes` (`hill`, `difficulty`, `path`, `stroller`, `parking`, `food`) VALUES
-(1, 1, 1, 1, 1, 1),
+(1, 2, 2, 2, 2, 2),
 (2, 0, 0, 0, 0, 0),
 (3, 0, 0, 0, 0, 0),
 (4, 0, 0, 0, 0, 0),
@@ -393,7 +403,7 @@ CREATE TABLE `reviews` (
 --
 
 INSERT INTO `reviews` (`id`, `hill`, `user`, `added`, `stars`, `text`) VALUES
-(1, 1, 3, '2022-11-25 07:18:24', 3, 'Test'),
+(1, 1, 3, '2022-11-25 07:18:24', 2, 'aaaaa'),
 (15, 1, 4, '2022-11-26 11:07:48', 1, 'fffff');
 
 -- --------------------------------------------------------
@@ -438,7 +448,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `name`, `pass`, `email`, `description`, `authToken`, `pfp`, `theme`, `registered`, `lastLogin`, `forgotPassToken`, `verifyToken`, `isVerified`, `isAdmin`) VALUES
-(3, 'admin', 'MorpheusStathis', '$2b$10$sABad3z7gaU6CXaE6KuRruQO5431RMDvFPyoGXFuu8Vgjq251XlLq', 'jankubat77@gmail.com', NULL, 'a49d943e-9e78-48fb-bcd7-4e3b7a65cb16', NULL, NULL, '2022-11-25 07:01:02', '2022-11-27 08:50:54', NULL, '3d5a4e22-6380-402e-ad39-810a75e1b770', 1, 1),
+(3, 'admin', 'MorpheusStathis', '$2b$10$sABad3z7gaU6CXaE6KuRruQO5431RMDvFPyoGXFuu8Vgjq251XlLq', 'jankubat77@gmail.com', NULL, 'ad8c6ca7-5348-45fb-b3dd-52a69c3d835e', NULL, NULL, '2022-11-25 07:01:02', '2022-11-27 12:22:31', NULL, '3d5a4e22-6380-402e-ad39-810a75e1b770', 1, 1),
 (4, 'test', 'test', '$2b$10$7cFsSR3AQw.Uzf8K/iR6IOPsACsVKeyliDOnp14JiIrxE3KJnEfym', 'jankubat.1@seznam.cz', NULL, '3feca689-9364-4fa9-b645-b002a56c0859', NULL, NULL, '2022-11-26 06:47:54', '0000-00-00 00:00:00', NULL, '13ed2c63-8226-478b-b87f-5f513cf86510', 0, 0);
 
 --
@@ -545,19 +555,19 @@ ALTER TABLE `discussions`
 -- AUTO_INCREMENT for table `discussions_replies`
 --
 ALTER TABLE `discussions_replies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `faults`
 --
 ALTER TABLE `faults`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `faults_likes`
 --
 ALTER TABLE `faults_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `hills`
@@ -581,7 +591,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `reviews_likes`
 --
 ALTER TABLE `reviews_likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `users`
