@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Reviews = require('../../models/Review');
-const User = require('../../models/User');
-const Hill = require('../../models/Hill');
+const crypto = require("crypto");
 
 let mysql = require('mysql');
 let config = require('../../config/db.js');
@@ -24,51 +23,70 @@ router.get('/:hillId', (req, res) => {
 })
 
 router.post('/addReview', (req, res) => {
-    let sql = `INSERT INTO reviews (hill, user, stars, text) VALUES ('${req.body.id_hill}', '${req.body.id_user}', '${req.body.stars}', '${req.body.text}')`;
+    let sql = `UPDATE reviews SET stars='${req.body.stars}', text='${req.body.text}' WHERE user='${req.body.user}' AND hill='${req.body.hill}' `;
     db.query(sql, (err, result) => {
-
+        if (result.changedRows === 0) {
+            sql = `INSERT INTO reviews (hill, user, stars, text) VALUES ('${req.body.hill}', '${req.body.user}', '${req.body.stars}', '${req.body.text}')`;
+            db.query(sql, () => {
+                res.sendStatus(200)
+            });
+        } else {
+            res.sendStatus(200)
+        }
     });
 
+
     if (req.body.difficulty !== null) {
+        let sql = `UPDATE hills_attributes SET difficulty=difficulty+1 WHERE hill='${req.body.hill}'`;
+        db.query(sql);
     }
 
     if (req.body.food !== null) {
+        let sql = `UPDATE hills_attributes SET food=food+1 WHERE hill='${req.body.hill}'`;
+        db.query(sql);
     }
 
     if (req.body.parking !== null) {
+        let sql = `UPDATE hills_attributes SET parking=parking+1 WHERE hill='${req.body.hill}'`;
+        db.query(sql);
     }
 
-        if (req.body.path !== null) {
-        }
+    if (req.body.path !== null) {
+        let sql = `UPDATE hills_attributes SET path=path+1 WHERE hill='${req.body.hill}'`;
+        db.query(sql);
+    }
 
-        if (req.body.stroller !== null) {
-        }
+    if (req.body.stroller !== null) {
+        let sql = `UPDATE hills_attributes SET stroller=stroller+1 WHERE hill='${req.body.hill}'`;
+        db.query(sql);
+    }
 });
 
-router.post('/addHelpful', (req, res) => {
-    Reviews.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
-        $addToSet: {
-            helpful: req.body.userId
-        }
-    }).then((response) => {
-        if (response.modifiedCount == 0) {
-            res.send("remove");
+router.post('/like', (req, res) => {
+    console.log(req.body)
+    let sql = `UPDATE reviews_likes SET random='${crypto.randomUUID()}' WHERE user='${req.body.user}'`;
+    db.query(sql, (err, result) => {
+        if (result.changedRows === 0) {
+            sql = `INSERT INTO reviews_likes (review, user) VALUES ('${req.body.review}', '${req.body.user}')`;
+            db.query(sql, () => {
+                res.sendStatus(200)
+            });
         } else {
-            res.sendStatus(200);
-        } 
-    }).catch((err) => {
-        console.log(err);
-    })
-});
-
-router.post('/removeHelpful', (req, res) => {
-    Reviews.updateOne({id_hill: req.body.hillId, _id: req.body.reviewId}, {
-        $pull: {
-            helpful: {$in: [req.body.userId]}
+            sql = `DELETE FROM reviews_likes WHERE user='${req.body.user}' AND review='${req.body.review}'`;
+            db.query(sql, () => {
+                res.sendStatus(200)
+            });
         }
-    }).then(() => {res.sendStatus(200)}).catch((err) => {
-        console.log(err);
+    });
+})
+
+router.get('/likeCount/:review', (req, res) => {
+    let sql = `SELECT COUNT(reviews_likes.review) AS "count" FROM reviews_likes JOIN reviews ON reviews.id = reviews_likes.review WHERE reviews_likes.review = '${req.params.review}'`
+    db.query(sql, (err, result) => {
+        console.log(result)
+        res.send(result);
     })
-});
+})
+
 
 module.exports = router;

@@ -15,10 +15,53 @@ const Reviews = (props) => {
     const [rating, setRating] = useState();
     const [reviews, setReviews] = useState()
     const [btnReview, setBtnReview] = useState(true)
+    const [loading, setLoading] = useState(true);
+
+    const fetchReviews = async () => {
+        const response = await axios.get(`http://localhost:8082/api/reviews/${props.currentHill.id}`);
+        return response.data;
+    }
+
+    const sendReview = async () => {
+        await axios.post(`http://localhost:8082/api/reviews/addReview`, {
+            stars: rating,
+            hill: props.currentHill.id,
+            user: props.user.id,
+            text: reviewText.current.value,
+            difficulty: chbDifficulty.current.value.includes("on") ? 1 : null,
+            path: chbPath.current.value.includes("on") ? 1 : null,
+            stroller: chbStroller.current.value.includes("on") ? 1 : null,
+            parking: chbParking.current.value.includes("on") ? 1 : null,
+            food: chbFood.current.value.includes("on") ? 1 : null
+        }).then(() => {
+            setBtnReview(!btnReview);
+            reviewText.current.value = "";
+        });
+    }
+
+    const helpfulClicked = async (review) => {
+        await axios.post(`http://localhost:8082/api/reviews/like`, {
+            user: props.user.id,
+            review: review
+        })
+
+        setBtnReview(!btnReview);
+    }
+
+    const getRating = () => {
+        if (reviews === undefined) return 3;
+        let value = 0;
+
+        reviews?.forEach((review) => {
+            value += review.stars;
+        })
+        return Math.floor(value / reviews.length);
+    }
 
     useEffect(() => {
         fetchReviews().then((res) => {
             setReviews(res);
+            setLoading(false)
         })
     }, [])
 
@@ -28,45 +71,11 @@ const Reviews = (props) => {
         })
     }, [btnReview])
 
-    const fetchReviews = async () => {
-        const response = await axios.get(`http://localhost:8082/api/reviews/${props.currentHill.id}`);
-        return response.data;
-    }
+    useEffect(() => {
+        setRating(getRating())
+    }, [reviews])
 
-    const sendRating = async () => {
-        await axios.post(`http://localhost:8082/api/review/addReview`, {
-            stars: rating,
-            hill: props.currentHill,
-            user: props.user,
-            text: reviewText.current.value,
-            difficulty: chbDifficulty.current.value.includes("on") ? props.user.id : null,
-            path: chbPath.current.value.includes("on") ? props.user.id : null,
-            stroller: chbStroller.current.value.includes("on") ? props.user.id : null,
-            parking: chbParking.current.value.includes("on") ? props.user.id : null,
-            food: chbFood.current.value.includes("on") ? props.user.id : null
-        }).then(() => {
-            setBtnReview(!btnReview);
-            reviewText.current.value = "";
-        });
-    }
-
-    const helpfulClicked = async (review) => {
-        await axios.post(`http://localhost:8082/api/reviews/addHelpful`, {
-            hillId: props.currentHill.id,
-            userId: props.user.id,
-            reviewId: review
-        }).then(async (res) => {
-            if (res.data === 'remove') {
-                await axios.post(`http://localhost:8082/api/reviews/removeHelpful`, {
-                    hillId: props.currentHill.id,
-                    userId: props.user.id,
-                    reviewId: review
-                })
-            }
-        });
-
-        setBtnReview(!props.btnHelpful);
-    }
+    if (loading) return "Loading...";
 
     return (
         <>
@@ -74,7 +83,6 @@ const Reviews = (props) => {
                 <h1>Rating</h1>
                 <div className={'rating'}>
                     <Rating
-                        name="simple-controlled"
                         value={rating}
                         onChange={(event, newValue) => {
                             setRating(newValue);
@@ -91,7 +99,7 @@ const Reviews = (props) => {
 
                     <Form.Control as="textarea" rows={3} ref={reviewText} className={"textarea"}></Form.Control>
                     <div className={"d-flex justify-content-end"}>
-                        <Button type="button" className="btn1 mt-2" onClick={sendRating}>Odeslat</Button>
+                        <Button type="button" className="btn1 mt-2" onClick={sendReview}>Odeslat</Button>
                     </div>
                 </div>
             </div>

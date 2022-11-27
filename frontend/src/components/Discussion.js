@@ -15,7 +15,6 @@ const Discussion = (props) => {
     useEffect(() => {
         fetchUser().then((res) => {
             setUser(res);
-            console.log(user)
             setLoading(false)
         })
     }, [])

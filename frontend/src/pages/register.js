@@ -33,8 +33,6 @@ function RegisterPage() {
             checkUser = res.data;
         });
 
-        console.log(checkEmail)
-
         if (checkEmail != "") {
             setError("Tento email byl již použit");
             return;

@@ -14,7 +14,6 @@ const Username = (props) => {
     useEffect(() => {
         fetchUser().then((res) => {
             setUser(res)
-            console.log(res.name)
             setLoading(false)
         })
     }, [])

@@ -1,9 +1,24 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Username from "./Username";
+import axios from "axios";
 
 const Review = (props) => {
+    const [likeCount, setLikeCount] = useState(0);
+
+    const getLikeCount = async () => {
+        const response = await axios.get(`http://localhost:8082/api/reviews/likeCount/${props.review.id}`);
+        return response.data;
+        console.log(response.data)
+    }
+
+    useEffect(() => {
+        setLikeCount(getLikeCount())
+    }, [])
+
+    if (likeCount === undefined) return;
+
     return (
         <div key={props.review.id}>
             <Card className='card'>
@@ -28,7 +43,7 @@ const Review = (props) => {
                             props.helpfulClicked(props.review.id)
                         }} aria-label="thumbs up" disabled={false}><FontAwesomeIcon
                             icon="fa-solid fa-thumbs-up"/>
-                            {/*{props.review.helpful.length}*/}
+                            {/*{likeCount}*/}
                         </Button>
                         <div style={{
                             color: 'GrayText',
