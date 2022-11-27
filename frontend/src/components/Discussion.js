@@ -1,26 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Button, Card} from "react-bootstrap";
 import Username from "./Username";
-import axios from "axios";
 
 const Discussion = (props) => {
-    const [loading, setLoading] = useState(true)
-    const [user, setUser] = useState()
-
-    const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/${props.discussion.id_user}`);
-        return response.data;
-    }
-
-    useEffect(() => {
-        fetchUser().then((res) => {
-            setUser(res);
-            setLoading(false)
-        })
-    }, [])
-
-    if (loading) return "Loading...";
-
     return (
         <>
             <Card>
@@ -31,7 +13,7 @@ const Discussion = (props) => {
                                 {props.discussion.subject}
                             </div>
                             <div>
-                                <Username user={user}/>
+                                <Username user={props.discussion.user}/>
                             </div>
                         </div>
                     </Card.Title>
@@ -39,7 +21,7 @@ const Discussion = (props) => {
                         {props.discussion.text}
                     </Card.Text>
 
-                    <Button href={`http://localhost:3000/discussion?id=${props.discussion._id}`} className={"btn2"}>K
+                    <Button href={`http://localhost:3000/discussion?id=${props.discussion.id}`} className={"btn2"}>K
                         diskuzi</Button>
                 </Card.Body>
             </Card>

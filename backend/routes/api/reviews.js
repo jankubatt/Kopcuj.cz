@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const Reviews = require('../../models/Review');
 const crypto = require("crypto");
 
 let mysql = require('mysql');
@@ -63,7 +62,6 @@ router.post('/addReview', (req, res) => {
 });
 
 router.post('/like', (req, res) => {
-    console.log(req.body)
     let sql = `UPDATE reviews_likes SET random='${crypto.randomUUID()}' WHERE user='${req.body.user}'`;
     db.query(sql, (err, result) => {
         if (result.changedRows === 0) {

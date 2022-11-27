@@ -23,7 +23,7 @@ function DiscussionsPage() {
 
     const fetchUser = async () => {
         const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
-        return response.data;
+        return response.data[0];
     }
 
     const fetchDiscussions = async () => {
@@ -87,7 +87,7 @@ function DiscussionsPage() {
 
                 {loading && <h2>Loading...</h2>}
 
-                {discussions?.map((discussion) => <Discussion key={discussion._id} discussion={discussion}/>)}
+                {discussions?.map((discussion) => <Discussion key={discussion.id} discussion={discussion}/>)}
             </div>
         </>
     )
