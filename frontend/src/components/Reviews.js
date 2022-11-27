@@ -39,15 +39,6 @@ const Reviews = (props) => {
         });
     }
 
-    const helpfulClicked = async (review) => {
-        await axios.post(`http://localhost:8082/api/reviews/like`, {
-            user: props.user.id,
-            review: review
-        })
-
-        setBtnReview(!btnReview);
-    }
-
     const getRating = () => {
         if (reviews === undefined) return 3;
         let value = 0;
@@ -107,7 +98,7 @@ const Reviews = (props) => {
             <hr/>
             <div id='reviews'>
                 {reviews?.map((review) => ((review.text !== null) ?
-                    <Review key={review.id} review={review} helpfulClicked={helpfulClicked}/>
+                    <Review key={review.id} review={review} user={props.user}/>
                     : 'Loading...'))}
             </div>
         </>

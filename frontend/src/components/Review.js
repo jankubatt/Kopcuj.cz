@@ -6,18 +6,35 @@ import axios from "axios";
 
 const Review = (props) => {
     const [likeCount, setLikeCount] = useState(0);
+    const [btnLike, setBtnLike] = useState(false);
 
     const getLikeCount = async () => {
         const response = await axios.get(`http://localhost:8082/api/reviews/likeCount/${props.review.id}`);
-        return response.data;
-        console.log(response.data)
+        return response.data[0].count;
+    }
+
+    const helpfulClicked = async () => {
+        await axios.post(`http://localhost:8082/api/reviews/like`, {
+            user: props.user.id,
+            review: props.review.id
+        })
+
+        setBtnLike(!btnLike);
     }
 
     useEffect(() => {
-        setLikeCount(getLikeCount())
+        getLikeCount().then((res) => {
+            setLikeCount(res)
+        })
     }, [])
 
-    if (likeCount === undefined) return;
+    useEffect(() => {
+        getLikeCount().then((res) => {
+            setLikeCount(res)
+        })
+    }, [btnLike])
+
+    if (likeCount === undefined) return "Loading";
 
     return (
         <div key={props.review.id}>
@@ -39,16 +56,13 @@ const Review = (props) => {
                     </div>
 
                     <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
-                        <Button className={"btn2"} style={{alignSelf: "flex-end"}} onClick={() => {
-                            props.helpfulClicked(props.review.id)
-                        }} aria-label="thumbs up" disabled={false}><FontAwesomeIcon
-                            icon="fa-solid fa-thumbs-up"/>
-                            {/*{likeCount}*/}
+                        <Button className={"btn2"} style={{alignSelf: "flex-end"}} onClick={helpfulClicked}
+                                aria-label="thumbs up" disabled={false}>
+                            <FontAwesomeIcon icon="fa-solid fa-thumbs-up"/>&nbsp;{likeCount}
                         </Button>
-                        <div style={{
-                            color: 'GrayText',
-                            alignSelf: "flex-end"
-                        }}>{new Date(props.review.added).getDate()}.{new Date(props.review.added).getMonth() + 1}.{new Date(props.review.added).getFullYear()}</div>
+                        <div style={{color: 'GrayText', alignSelf: "flex-end"}}>
+                            {new Date(props.review.added).getDate()}.{new Date(props.review.added).getMonth() + 1}.{new Date(props.review.added).getFullYear()}
+                        </div>
                     </div>
                 </Card.Body>
             </Card>

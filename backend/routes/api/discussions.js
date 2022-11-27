@@ -6,22 +6,32 @@ const Discussion = require('../../models/Discussion');
 const crypto = require("crypto");
 
 router.get('/', (req, res) => {
-    Discussion.find().sort({date_added: -1})
-        .then(discussions => res.json(discussions))
-        .catch(err => res.status(404).json(err));
+    let sql = `SELECT * FROM discussions ORDER BY created DESC`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 });
 
 router.get('/:id', (req, res) => {
-    Discussion.find({_id: req.params.id})
-        .then(discussion => res.json(discussion[0]))
-        .catch(err => res.status(404).json(err));
+    let sql = `SELECT * FROM discussions WHERE id='${req.params.id}'`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 })
 
 router.post('/create', (req, res) => {
-    Discussion.create({...req.body}).then(res.sendStatus(200));
+    let sql = `INSERT INTO discussions (user, subject, text) VALUES ('${req.body.id_user}', '${req.body.subject}', '${req.body.text}')`
+    db.query(sql, (err, result) => {
+        res.sendStatus(200);
+    })
 })
 
 router.post('/reply', (req, res) => {
+    let sql = `INSERT INTO replies (discussion, user, text) VALUES ('${req.body.id_user}', '${req.body.subject}', '${req.body.text}')`
+    db.query(sql, (err, result) => {
+        res.sendStatus(200);
+    })
+
     Discussion.updateOne({_id: req.body.id_discussion}, {
         $push: {replies: {_id: crypto.randomUUID(), ...req.body.reply, downVotes: [], upVotes: []}}
     }).then(res.sendStatus(200))

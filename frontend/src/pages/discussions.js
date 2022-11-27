@@ -50,7 +50,7 @@ function DiscussionsPage() {
 
     const createDiscussion = async () => {
         await axios.post("http://localhost:8082/api/discussions/create", {
-            id_user: user._id,
+            id_user: user.id,
             subject: subject.current.value,
             text: text.current.value
         });
