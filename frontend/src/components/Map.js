@@ -7,20 +7,19 @@ const MapComponent = (props) => {
             <ZoomControl/>
             <MouseControl zoom={true} pan={true} wheel={true}/>
             <MarkerLayer>
-
                 {props.hills?.map((hill) => {
-                    if (props.user.hills.filter(uHill => uHill._id === hill._id)[0] !== undefined) {
+                    if (props.userClimbedHills.filter(uHill => uHill.id === hill.id)[0] !== undefined) {
                         return (
-                            <Marker key={hill._id} options={{
+                            <Marker key={hill.id} options={{
                                 title: `${hill.name}-${hill.elevation}m`,
                                 url: "https://api.mapy.cz/img/api/marker/drop-blue.png"
                             }}
-                                    coords={{lat: hill.lat, lng: hill.lon}}/>
+                                    coords={{lat: hill.lat, lng: hill.lng}}/>
                         )
                     } else {
                         return (
-                            <Marker key={hill._id} options={{title: `${hill.name}-${hill.elevation}m`}}
-                                    coords={{lat: hill.lat, lng: hill.lon}}/>
+                            <Marker key={hill.id} options={{title: `${hill.name}-${hill.elevation}m`}}
+                                    coords={{lat: hill.lat, lng: hill.lng}}/>
                         )
                     }
 

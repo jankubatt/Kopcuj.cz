@@ -2,7 +2,6 @@ require('dotenv').config()
 
 const express = require('express');
 const router = express.Router();
-const User = require('../../models/User');
 const bcrypt = require('bcrypt');
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
@@ -10,48 +9,78 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.web4u.cz',
     port: 25,
     auth: {
-        user:process.env.EMAIL_USER,
-        pass:process.env.EMAIL_PASS
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
     }
 });
 
+let mysql = require('mysql');
+let config = require('../../config/db.js');
+let db = mysql.createConnection(config);
+
 router.get("/", (req, res) => {
-    User.find()
-        .then(users => res.json(users))
-        .catch(() => res.status(404).json({error: 'No user found'}));
+    let sql = `SELECT * FROM users`;
+    db.query(sql, (err, result) => {
+        res.send(result)
+    })
 });
 
 //gets user by name
-router.get("/checkName/:name", (req, res) => {
-    User.findOne({login: req.params.name})
-        .then(users => res.json(users))
-        .catch(() => res.status(404).json({error: 'No user found'}));
+router.get("/checkLogin/:login", (req, res) => {
+    let sql = `SELECT login FROM users WHERE login='${req.params.login}'`;
+    db.query(sql, (err, result) => {
+        if (result.length < 1)
+            res.send("");
+        else
+            res.send(result)
+    })
 });
 
 //gets user by email
 router.get("/checkEmail/:email", (req, res) => {
-    User.findOne({email: req.params.email})
-        .then(users => res.json(users))
-        .catch(() => res.status(404).json({error: 'No user found'}));
+    let sql = `SELECT email FROM users WHERE email='${req.params.email}'`;
+    db.query(sql, (err, result) => {
+        if (result.length < 1)
+            res.send("");
+        else
+            res.send(result)
+    })
 });
 
 //gets user by authToken
-router.get("/token/:auth", (req, res) => {
-    User.findOne({"authToken": req.params.auth})
-        .then(user => res.json(user))
-        .catch(() => res.status(404).json({error: 'No user found'}));
+router.get("/:auth", (req, res) => {
+    let sql = `SELECT * FROM users WHERE authToken='${req.params.auth}'`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
+});
+
+//gets user climbed hills by authToken
+router.get("/:auth/climbedHills", (req, res) => {
+    let sql = `SELECT hills.*
+                FROM (hills JOIN hills_climbed ON hills.id = hills_climbed.hill)
+                RIGHT JOIN users ON users.id = hills_climbed.user
+                WHERE users.authToken="${req.params.auth}";`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 });
 
 //gets user by id
-router.get("/:id", (req, res) => {
-    User.findById(req.params.id)
-        .then(user => res.json(user))
-        .catch(() => res.status(404).json({error: 'No user found'}));
+router.get("/id/:id", (req, res) => {
+    let sql = `SELECT * FROM users WHERE id='${req.params.id}'`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 });
 
 router.get("/verify/:token", (req, res) => {
-    User.findOne({verifyToken: req.params.token}).then((user) => {
-        User.updateOne({"_id": user.id}, {$set: {"isVerified": true}}).then(() => {res.redirect("http://localhost:3000/")});
+    let sql = `SELECT * FROM users WHERE verifyToken='${req.params.token}'`
+    db.query(sql, (err, result) => {
+        let sql = `UPDATE users SET isVerified=true WHERE id=${result[0].id}`
+        db.query(sql, (err, result) => {
+            res.redirect('http://localhost:3000')
+        })
     })
 })
 
@@ -74,21 +103,19 @@ router.post("/register", (req, res) => {
             }
         });
 
-        User.create({
-            ...req.body,
-            pass: hash,
-            verifyToken: token,
-            date_registered: Date.now()
-        }).then(() => res.send("/login")).catch(() => {
-            res.status(400);
-        });
+        console.log('register')
+
+        let sql = `INSERT INTO users (login, name, pass, email, verifyToken) VALUES ('${req.body.login}', '${req.body.name}', '${hash}', '${req.body.email}', '${token}')`;
+        db.query(sql, (err, result) => {
+            res.send(result)
+        })
     });
 });
 
 router.post("/forgot-password", (req, res) => {
     let token = crypto.randomUUID();
-
-    User.updateOne({"email": req.body.email}, {$set: {"forgotPassToken": token}}).then(() => {
+    let sql = `UPDATE users SET forgotPassToken='${token}' WHERE email='${req.body.email}'`
+    db.query(sql, (err, result) => {
         let mailOptions = {
             from: process.env.EMAIL_USER,
             to: req.body.email,
@@ -105,21 +132,27 @@ router.post("/forgot-password", (req, res) => {
         });
 
         res.sendStatus(200);
-    });
+    })
 })
 
 router.post("/change-password", (req, res) => {
     bcrypt.hash(req.body.pass, 10).then(function (hash) {
-        User.updateOne({"forgotPassToken": req.body.token}, {$set: {"pass": hash}}).then(() => {res.sendStatus(200)});
+        let sql = `UPDATE users SET pass='${hash}' WHERE forgotPassToken='${req.body.token}'`;
+        db.query(sql, (err, result) => {
+            res.sendStatus(200)
+        })
     });
 })
 
 router.post("/login", (req, res) => {
-    User.findOne({login: req.body.login}).then((user) => {
-        bcrypt.compare(req.body.pass, user.pass).then(function (result) {
+    let sql = `SELECT id, pass FROM users WHERE login='${req.body.login}'`;
+    db.query(sql, (err, user) => {
+        bcrypt.compare(req.body.pass, user[0].pass).then(function (result) {
             if (result) {
                 const token = crypto.randomUUID();
-                User.updateOne({"_id": user.id}, {$set: {"authToken": token, "date_lastLogin": new Date()}}).then();
+                let sql = `UPDATE users SET authToken='${token}', lastLogin='${new Date().toISOString().slice(0, 19).replace('T', ' ')}' WHERE id=${user[0].id}`;
+                db.query(sql, (err) => {
+                })
 
                 res.cookie("authToken", token, {maxAge: 1000 * 3600 * 24, sameSite: false});
                 res.send("/").status(200);
@@ -127,15 +160,14 @@ router.post("/login", (req, res) => {
                 res.sendStatus(400);
             }
         });
-    }).catch(() => {
-        res.sendStatus(400);
     })
 });
 
 router.post('/addHill', (req, res) => {
-    User.updateOne({authToken: req.body.authToken}, {$push: {hills: req.body.hill}}).then(() => {
-        res.sendStatus(200);
-    });
+    let sql = `INSERT INTO hills_climbed (hill, user) VALUES ('${req.body.id_hill}', '${req.body.id_user}')`;
+    db.query(sql, (err) => {
+        res.sendStatus(200)
+    })
 });
 
 module.exports = router;

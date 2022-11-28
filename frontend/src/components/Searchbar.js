@@ -11,7 +11,7 @@ const Searchbar = (props) => {
 
         props.hills.forEach((hill) => {
             if (hill.name.includes(name) && hill.elevation == elevation) {
-                props.setCenterValue({lat: hill.lat, lng: hill.lon})
+                props.setCenterValue({lat: hill.lat, lng: hill.lng})
                 props.setCenter(false);
             }
         })

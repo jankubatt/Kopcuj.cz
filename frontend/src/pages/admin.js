@@ -7,6 +7,7 @@ import AdminRow from "../components/AdminRow";
 import AdminReview from "../components/AdminReview";
 import AdminDiscussion from "../components/AdminDiscussion";
 import AdminReply from "../components/AdminReply";
+import Cookies from "js-cookie";
 
 //formats pushable row into table
 function createData(id_user, login, name, email, desc, hills, discussions, replies, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
@@ -31,10 +32,10 @@ axios.defaults.withCredentials = true;
 
 function AdminPage() {
     const [users, setUsers] = useState([]);                     //All users
-    const [hills, setHills] = useState([]);                     //All hills
     const [reviews, setReviews] = useState([]);           //All reviews
     const [rows, setRows] = useState();                       //Rows of a table
     const [discussions, setDiscussions] = useState([]);
+    const [userClimbedHills, setUserClimbedHills] = useState([]);
 
     //State for storing form values
     const [state, setState] = useState({});
@@ -55,7 +56,7 @@ function AdminPage() {
             name: state.name,
             elevation: state.elevation,
             lat: state.lat,
-            lon: state.lon,
+            lng: state.lng,
             prominence: state.prominence,
             isolation: state.isolation,
             material: state.material,
@@ -80,15 +81,9 @@ function AdminPage() {
         return response.data;
     }
 
-    //Fetch hills from database
-    const fetchHills = async () => {
-        const response = await axios.get('http://localhost:8082/api/hills/');
-        return response.data;
-    }
-
     //Fetch reviews from database
     const fetchReviews = async () => {
-        const response = await axios.get(`http://localhost:8082/api/review/`);
+        const response = await axios.get(`http://localhost:8082/api/reviews/`);
         return response.data;
     }
 
@@ -97,19 +92,24 @@ function AdminPage() {
         return response.data;
     }
 
+    const fetchUserClimbedHills = async () => {
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}/climbedHills`);
+        return response.data;
+    }
+
     //Fetching data
     useEffect(() => {
         fetchUsers().then((res) => {
             setUsers(res)
-        })
-        fetchHills().then((res) => {
-            setHills(res)
         })
         fetchReviews().then((res) => {
             setReviews(res)
         })
         fetchDiscussions().then((res) => {
             setDiscussions(res)
+        })
+        fetchUserClimbedHills().then((res) => {
+            setUserClimbedHills(res);
         })
     }, [])
 
@@ -123,7 +123,7 @@ function AdminPage() {
             let userDiscussions = [];
             let userReplies = [];
 
-            user.hills.map((hill) => {
+            userClimbedHills.map((hill) => {
                 userClimbed.push(<li>{hill.name}</li>);
             })
 
@@ -149,7 +149,7 @@ function AdminPage() {
                 })
             })
 
-            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, userDiscussions, userReplies, userReviews, DateTime(user.date_registered), DateTime(user.date_lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
+            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, userDiscussions, userReplies, userReviews, DateTime(user.registered), DateTime(user.lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
 
             userClimbed = [];
             userReviews = [];
@@ -219,7 +219,7 @@ function AdminPage() {
                                                               className={"textarea"}></Form.Control><br/>
                                                 <Form.Control onChange={handleChange} placeholder='Lat' name='lat'
                                                               className={"textarea"}></Form.Control><br/>
-                                                <Form.Control onChange={handleChange} placeholder='Lon' name='lon'
+                                                <Form.Control onChange={handleChange} placeholder='Lng' name='lng'
                                                               className={"textarea"}></Form.Control><br/>
                                                 <Form.Control onChange={handleChange} placeholder='Prominence'
                                                               name='prominence'

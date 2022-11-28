@@ -1,11 +1,43 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Button, Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Username from "./Username";
+import axios from "axios";
 
 const Fault = (props) => {
+    const [likeCount, setLikeCount] = useState(0);
+    const [btnLike, setBtnLike] = useState(false);
+
+    const getLikeCount = async () => {
+        const response = await axios.get(`http://localhost:8082/api/faults/likeCount/${props.fault.id}`);
+        return response.data[0].count;
+    }
+
+    const helpfulClicked = async () => {
+        await axios.post(`http://localhost:8082/api/faults/like`, {
+            user: props.user.id,
+            fault: props.fault.id
+        })
+
+        setBtnLike(!btnLike);
+    }
+
+    useEffect(() => {
+        getLikeCount().then((res) => {
+            setLikeCount(res)
+        })
+    }, [])
+
+    useEffect(() => {
+        getLikeCount().then((res) => {
+            setLikeCount(res)
+        })
+    }, [btnLike])
+
+    if (likeCount === undefined) return "Loading";
+
     return (
-        <div key={props.fault._id}>
+        <div key={props.fault.id}>
             <Card className='card'>
                 <Card.Body>
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>
@@ -18,15 +50,14 @@ const Fault = (props) => {
                     </div>
 
                     <div style={{display: 'flex', justifyContent: 'space-between', marginTop: "10px"}}>
-                        <Button className={"btn2"} style={{alignSelf: "flex-end"}} onClick={() => {
-                            props.helpfulClicked(props.fault._id)
-                        }} aria-label="thumbs up" disabled={false}><FontAwesomeIcon
-                            icon="fa-solid fa-thumbs-up"/>{props.fault.helpful.length}
+                        <Button className={"btn2"} style={{alignSelf: "flex-end"}} onClick={helpfulClicked}
+                                aria-label="thumbs up" disabled={false}>
+                            <FontAwesomeIcon icon="fa-solid fa-thumbs-up"/>&nbsp;{likeCount}
                         </Button>
                         <div style={{
                             color: 'GrayText',
                             alignSelf: "flex-end"
-                        }}>{new Date(props.fault.date_added).getDate()}.{new Date(props.fault.date_added).getMonth() + 1}.{new Date(props.fault.date_added).getFullYear()}</div>
+                        }}>{new Date(props.fault.created).getDate()}.{new Date(props.fault.created).getMonth() + 1}.{new Date(props.fault.created).getFullYear()}</div>
                     </div>
                 </Card.Body>
             </Card>

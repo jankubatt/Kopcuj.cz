@@ -10,18 +10,18 @@ const Discussion = (props) => {
                     <Card.Title>
                         <div className={"d-flex justify-content-between"}>
                             <div>
-                                {props.data.subject}
+                                {props.discussion.subject}
                             </div>
                             <div>
-                                <Username user={props.data.user}/>
+                                <Username user={props.discussion.user}/>
                             </div>
                         </div>
                     </Card.Title>
                     <Card.Text>
-                        {props.data.text}
+                        {props.discussion.text}
                     </Card.Text>
 
-                    <Button href={`http://localhost:3000/discussion?id=${props.data._id}`} className={"btn2"}>K
+                    <Button href={`http://localhost:3000/discussion?id=${props.discussion.id}`} className={"btn2"}>K
                         diskuzi</Button>
                 </Card.Body>
             </Card>

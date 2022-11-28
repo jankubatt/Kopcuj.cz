@@ -22,8 +22,8 @@ function DiscussionsPage() {
     }
 
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
-        return response.data;
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
+        return response.data[0];
     }
 
     const fetchDiscussions = async () => {
@@ -50,7 +50,7 @@ function DiscussionsPage() {
 
     const createDiscussion = async () => {
         await axios.post("http://localhost:8082/api/discussions/create", {
-            user: user,
+            id_user: user.id,
             subject: subject.current.value,
             text: text.current.value
         });
@@ -87,7 +87,7 @@ function DiscussionsPage() {
 
                 {loading && <h2>Loading...</h2>}
 
-                {discussions?.map((discussion) => <Discussion key={discussion._id} data={discussion}/>)}
+                {discussions?.map((discussion) => <Discussion key={discussion.id} discussion={discussion}/>)}
             </div>
         </>
     )

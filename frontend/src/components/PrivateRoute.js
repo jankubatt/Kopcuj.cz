@@ -1,25 +1,27 @@
-import React, {useState, useEffect} from 'react'
-import { Navigate } from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
+import {Navigate} from 'react-router-dom'
 import Cookies from 'js-cookie';
 import axios from "axios";
 
-const PrivateRoute = ({ children }) => {
-  	const [currentUser, setCurrentUser] = useState();
+const PrivateRoute = ({children}) => {
+	const [user, setUser] = useState();
+
+	const fetchUser = async () => {
+		const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
+		return response.data[0]
+	}
 
 	useEffect(() => {
-		const fetchUser = async () => {
-		const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
-		setCurrentUser(response.data);
-	}
-		
-	fetchUser();
-		
+		fetchUser().then((res) => {
+			setUser(res)
+		})
+
 	}, [])
-		
-	if (currentUser !== undefined) {
-		return currentUser.isAdmin===true ? children : <Navigate to="/login" />;
+
+	if (user !== undefined) {
+		return user.isAdmin ? children : <Navigate to="/login"/>;
 	}
-		
+
 	return 'Loading...';
 }
 

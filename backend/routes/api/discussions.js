@@ -1,52 +1,101 @@
 const express = require('express');
 const router = express.Router();
-
-// Load hill model
-const Discussion = require('../../models/Discussion');
 const crypto = require("crypto");
+let mysql = require('mysql');
+let config = require('../../config/db.js');
+let db = mysql.createConnection(config);
 
 router.get('/', (req, res) => {
-    Discussion.find().sort({date_added: -1})
-        .then(discussions => res.json(discussions))
-        .catch(err => res.status(404).json(err));
+    let sql = `SELECT * FROM discussions ORDER BY created DESC`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 });
 
 router.get('/:id', (req, res) => {
-    Discussion.find({_id: req.params.id})
-        .then(discussion => res.json(discussion[0]))
-        .catch(err => res.status(404).json(err));
+    let sql = `SELECT * FROM discussions WHERE id='${req.params.id}'`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
+})
+
+router.get('/:id/replies', (req, res) => {
+    let sql = `SELECT * FROM discussions_replies WHERE discussion='${req.params.id}'`
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
 })
 
 router.post('/create', (req, res) => {
-    Discussion.create({...req.body}).then(res.sendStatus(200));
+    let sql = `INSERT INTO discussions (user, subject, text) VALUES ('${req.body.id_user}', '${req.body.subject}', '${req.body.text}')`
+    db.query(sql, (err, result) => {
+        res.sendStatus(200);
+    })
 })
 
 router.post('/reply', (req, res) => {
-    Discussion.updateOne({_id: req.body.id_discussion}, {
-        $push: {replies: {_id: crypto.randomUUID(), ...req.body.reply, downVotes: [], upVotes: []}}
-    }).then(res.sendStatus(200))
+    let sql = `INSERT INTO discussions_replies (discussion, user, text) VALUES ('${req.body.discussion}', '${req.body.user}', '${req.body.text}')`
+    db.query(sql, (err, result) => {
+        res.sendStatus(200);
+    })
 })
 
 router.post('/reply/downvote', (req, res) => {
-    Discussion.updateOne({"replies._id": req.body.id_reply}, {
-        $addToSet: {
-            "replies.$.downVotes": req.body.userId
-        },
-        $pull: {
-            "replies.$.upVotes": {$in: [req.body.userId]}
+    let sql = `UPDATE discussions_replies_downvotes SET random='${crypto.randomUUID()}' WHERE user='${req.body.user}'`;
+    db.query(sql, (err, result) => {
+        if (result.changedRows === 0) {
+            sql = `INSERT INTO discussions_replies_downvotes (discussion, user) VALUES ('${req.body.discussion}', '${req.body.user}')`;
+            db.query(sql, () => {
+                sql = `DELETE FROM discussions_replies_upvotes WHERE discussion='${req.body.discussion}' AND user='${req.body.user}'`;
+                db.query(sql, () => {
+                    res.sendStatus(200)
+                });
+            });
+        } else {
+            sql = `DELETE FROM discussions_replies_downvotes WHERE user='${req.body.user}' AND discussion='${req.body.discussion}'`;
+            db.query(sql, () => {
+                res.sendStatus(200)
+            });
         }
-    }).then(res.sendStatus(200))
+    });
 })
 
 router.post('/reply/upvote', (req, res) => {
-    Discussion.updateOne({"replies._id": req.body.id_reply}, {
-        $addToSet: {
-            "replies.$.upVotes": req.body.userId
-        },
-        $pull: {
-            "replies.$.downVotes": {$in: [req.body.userId]}
+    let sql = `UPDATE discussions_replies_upvotes SET random='${crypto.randomUUID()}' WHERE user='${req.body.user}'`;
+    db.query(sql, (err, result) => {
+        if (result.changedRows === 0) {
+            sql = `INSERT INTO discussions_replies_upvotes (discussion, user) VALUES ('${req.body.discussion}', '${req.body.user}')`;
+            db.query(sql, () => {
+                sql = `DELETE FROM discussions_replies_downvotes WHERE discussion='${req.body.discussion}' AND user='${req.body.user}'`;
+                db.query(sql, () => {
+                    res.sendStatus(200)
+                });
+            });
+        } else {
+            sql = `DELETE FROM discussions_replies_upvotes WHERE user='${req.body.user}' AND discussion='${req.body.discussion}'`;
+            db.query(sql, () => {
+                res.sendStatus(200)
+            });
         }
-    }).then(res.sendStatus(200))
+    });
+})
+
+router.get(`/reply/:id/rating`, (req, res) => {
+    let upvotes = 0;
+    let downvotes = 0;
+
+    let sql = `SELECT COUNT(discussion) AS "count" FROM discussions_replies_downvotes WHERE discussion='${req.params.id}'`;
+    db.query(sql, (err, result) => {
+        downvotes = result[0].count;
+
+        let sql = `SELECT COUNT(discussion) AS "count" FROM discussions_replies_upvotes WHERE discussion='${req.params.id}'`;
+        db.query(sql, (err, result) => {
+            upvotes = result[0].count;
+
+            res.send({upvotes: upvotes, downvotes: downvotes})
+        })
+    })
+
 })
 
 module.exports = router;

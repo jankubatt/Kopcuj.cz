@@ -11,7 +11,7 @@ const DiscussionPage = () => {
 
     const [discussion, setDiscussion] = useState([]);
     const [user, setUser] = useState([]);
-    const [replies, setReplies] = useState([]);
+    const [replies, setReplies] = useState();
     const [btn, setBtn] = useState(false);
     const [loading, setLoading] = useState(false);
     const reply = useRef();
@@ -23,12 +23,17 @@ const DiscussionPage = () => {
     }
 
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
-        return response.data;
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
+        return response.data[0];
     }
 
     const fetchDiscussion = async () => {
         const response = await axios.get(`http://localhost:8082/api/discussions/${parsed.id}`);
+        return response.data[0];
+    }
+
+    const fetchReplies = async () => {
+        const response = await axios.get(`http://localhost:8082/api/discussions/${parsed.id}/replies`);
         return response.data;
     }
 
@@ -39,48 +44,28 @@ const DiscussionPage = () => {
 
         fetchDiscussion().then((res) => {
             setDiscussion(res);
-            setReplies(res.replies);
+        })
+
+        fetchReplies().then((res) => {
+            setReplies(res);
         })
     }, [])
 
     useEffect(() => {
-        fetchDiscussion().then((res) => {
-            setReplies(res.replies);
+        fetchReplies().then((res) => {
+            setReplies(res);
             setLoading(false);
         })
     }, [btn])
 
     const SendReply = async () => {
         await axios.post('http://localhost:8082/api/discussions/reply', {
-            id_discussion: discussion._id,
-            reply: {
-                user: user,
-                text: reply.current.value,
-                date_added: `${new Date().getDate()}.${new Date().getMonth() + 1}.${new Date().getFullYear()}`
-            }
+            discussion: discussion.id,
+            user: user.id,
+            text: reply.current.value
         }).then(() => {
             setBtn(!btn)
             setLoading(true);
-        })
-    }
-
-    const SendUpvote = async (replyId) => {
-        await axios.post('http://localhost:8082/api/discussions/reply/upvote', {
-            id_discussion: discussion._id,
-            id_reply: replyId,
-            userId: user._id
-        }).then(() => {
-            setBtn(!btn)
-        })
-    }
-
-    const SendDownvote = async (replyId) => {
-        await axios.post('http://localhost:8082/api/discussions/reply/downvote', {
-            id_discussion: discussion._id,
-            id_reply: replyId,
-            userId: user._id
-        }).then(() => {
-            setBtn(!btn)
         })
     }
 
@@ -113,11 +98,8 @@ const DiscussionPage = () => {
                     <hr/>
 
                     <div>
-                        {replies?.map((reply) => <Reply key={reply._id} upVote={() => {
-                            SendUpvote(reply._id)
-                        }} downVote={() => {
-                            SendDownvote(reply._id)
-                        }} reply={reply}/>)}
+                        {replies?.map((reply) => <Reply key={reply.id} reply={reply} discussion={discussion}
+                                                        user={user}/>)}
                     </div>
 
                     <hr/>

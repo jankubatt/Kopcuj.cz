@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Card, Form, Table} from "react-bootstrap";
+import {Button, Card, Form, Table} from "react-bootstrap";
 
-function createData(name, rating, food, difficulty, parking, path, stroller) {
-    return {name, rating, food, difficulty, parking, path, stroller};
+function createData(id, name, rating, food, difficulty, parking, path, stroller) {
+    return {id, name, rating, food, difficulty, parking, path, stroller};
 }
 
 function processHillName(name) {
@@ -18,20 +18,20 @@ const FilterPage = () => {
     const [rowData, setRowData] = useState([]);
     const [filter, setFilter] = useState('name');
     const [refresh, setRefresh] = useState(false);
+    const [hillRatings, setHillRatings] = useState();
+    const [hills, setHills] = useState();
 
     const handleChange = async () => {
         await setRowData(sortArray(rowData, type, filter));
-        setRefresh(!refresh)
+        await setRefresh(!refresh)
     }
 
-    const handleType = (event) => {
-        setType(event.target.value);
-        handleChange();
+    const handleType = async (event) => {
+        await setType(event.target.value);
     }
 
-    const handleFilter = (event) => {
-        setFilter(event.target.value);
-        handleChange();
+    const handleFilter = async (event) => {
+        await setFilter(event.target.value);
     }
 
     const sortArray = (arr, orderBy, orderType) => {
@@ -40,7 +40,7 @@ const FilterPage = () => {
             default:
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        processHillName(a.name) < processHillName(b.name) ? 1 : processHillName(b.name) < processHillName(a.name) ? -1 : 0
+                        processHillName(a.name) > processHillName(b.name) ? 1 : processHillName(b.name) > processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -76,7 +76,7 @@ const FilterPage = () => {
             case "desc":
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        processHillName(a.name) > processHillName(b.name) ? 1 : processHillName(b.name) > processHillName(a.name) ? -1 : 0
+                        processHillName(a.name) < processHillName(b.name) ? 1 : processHillName(b.name) < processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -112,51 +112,48 @@ const FilterPage = () => {
         }
     };
 
-    const fetchReviews = async () => {
-        const response = await axios.get('http://localhost:8082/api/review/');
+    const fetchRatings = async () => {
+        const response = await axios.get('http://localhost:8082/api/reviews/hills');
         return response.data;
     }
 
     const fetchHills = async () => {
-        const response = await axios.get('http://localhost:8082/api/hills');
+        const response = await axios.get(`http://localhost:8082/api/hills`);
         return response.data;
     }
 
     useEffect(() => {
-        fetchHills().then((hills) => {
-            fetchReviews().then((reviews) => {
-                let tmp = [];
+        fetchHills().then((res) => {
+            setHills(res);
 
-                hills.forEach((hill) => {
-                    let starValue = 0;
-                    let counter = 0;
-
-                    reviews.forEach((review) => {
-                        if (hill._id === review.hill._id) {
-                            starValue += review.stars;
-                            counter++;
-                        }
-                    })
-
-                    if (counter === 0) counter = 1
-
-                    tmp.push(createData(
-                        `${hill.name} ${hill.elevation}m`,
-                        Math.floor(starValue / counter),
-                        hill.food.length,
-                        hill.difficulty.length,
-                        hill.parking.length,
-                        hill.path.length,
-                        hill.stroller.length
-                    ))
-
-
-                })
-
-                setRowData(tmp);
+            fetchRatings().then((res) => {
+                setHillRatings(res);
             })
         })
     }, [])
+
+    useEffect(() => {
+        if (hills === undefined || hillRatings === undefined) return;
+        let tmp = [];
+        setRowData([])
+
+        let beenPushed = false;
+        hills.forEach((hill) => {
+            beenPushed = false;
+            hillRatings.forEach((rating) => {
+                if (rating.name === hill.name) {
+                    tmp.push(createData(hill.id, hill.name, rating.rating, rating.food, rating.difficulty, rating.parking, rating.path, rating.stroller))
+                    beenPushed = true;
+                }
+            })
+
+            if (!beenPushed) {
+                tmp.push(createData(hill.id, hill.name, 0, 0, 0, 0, 0, 0))
+            }
+        })
+
+        setRowData(sortArray(tmp, "asc", "name"))
+    }, [hillRatings, hills])
 
     return (
         <>
@@ -166,7 +163,7 @@ const FilterPage = () => {
                         <Card>
                             <Card.Body>
                                 <Form.Select id="filter" value={filter} label="Filtr" onChange={handleFilter}
-                                             className={"textarea mb-5"}>
+                                             className={"textarea mb-2"}>
                                     <option value={'name'}>Jméno</option>
                                     <option value={'rating'}>Hodnocení</option>
                                     <option value={'food'}>Jídlo</option>
@@ -185,6 +182,10 @@ const FilterPage = () => {
                                     <option value={'asc'}>Vzestupně</option>
                                     <option value={'desc'}>Sestupně</option>
                                 </Form.Select>
+
+                                <Form.Group className={'mt-2'}>
+                                    <Button onClick={handleChange} className={'btn2 w-100'}>Seřadit</Button>
+                                </Form.Group>
                             </Card.Body>
                         </Card>
                     </div>
@@ -224,7 +225,7 @@ const FilterPage = () => {
                             </thead>
                             <tbody>
                             {rowData?.map((row) => (
-                                <tr key={row.name}>
+                                <tr key={row.id}>
                                     <td component="th" scope="row" align="center">
                                         {row.name}
                                     </td>

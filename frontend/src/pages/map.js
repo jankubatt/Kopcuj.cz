@@ -12,8 +12,11 @@ import {useNavigate} from "react-router-dom";
 axios.defaults.withCredentials = true;
 
 function MapPage() {
+    //USER
+    const [userClimbedHills, setUserClimbedHills] = useState([]);
+
     //Hill variables
-    const [hills, getHills] = useState([]);
+    const [hills, setHills] = useState([]);
     const [currentHill, setCurrentHill] = useState();
     const [climbed, setClimbed] = useState(true);
     const [btnClimb, setBtnClimb] = useState(false);
@@ -26,9 +29,6 @@ function MapPage() {
     //Reviews variables
     const [rating, setRating] = useState(0);
     const [txtArea, setTxtArea] = useState('none');
-    const [allReviews, setAllReviews] = useState([])
-    const [reviews, setReviews] = useState([])
-    const [btnReview, setBtnReview] = useState(false);
     const [btnHelpful, setBtnHelpful] = useState(false);
 
     const navigate = useNavigate();
@@ -39,66 +39,14 @@ function MapPage() {
         document.location.replace(document.location + 'login');
     }
 
-    useEffect(() => {
-        setCenter(true)
-
-        fetchHills().then((res) => {
-            getHills(res)
-            setCurrentHill(hills[0]);
-        })
-
-        fetchUser().then((res) => {
-            setUser(res)
-        })
-
-        fetchReviews().then((res) => {
-            setAllReviews(res);
-        })
-    }, [])
-
-    useEffect(() => {
-        if (currentHill !== undefined) {
-            let starValue = 0;
-            allReviews?.forEach((review) => {
-                if (currentHill._id === review.hill._id) {
-                    starValue += review.stars;
-                }
-            })
-            setRating(Math.floor(starValue / reviews.length));
-        }
-    }, [reviews])
-
-    useEffect(() => {
-        fetchReviews().then((res) => {
-            setAllReviews(res);
-
-            if (currentHill !== undefined) {
-                let currentReviews = []
-                res.forEach((review) => {
-                    if (review.hill._id === currentHill._id) {
-                        currentReviews.push(review);
-                    }
-                })
-                currentReviews.sort((a, b) => a.helpful.length < b.helpful.length ? 1 : b.helpful.length < a.helpful.length ? -1 : 0);
-                setReviews(currentReviews);
-            }
-        })
-    }, [btnReview, currentHill, btnHelpful]);
-
-    useEffect(() => {
-        fetchHills().then((res) => {
-            getHills(res);
-            setClimbed(true);
-        })
-
-        fetchUser().then((res) => {
-            setUser(res)
-        })
-    }, [btnClimb])
-
     //Functions
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/token/${Cookies.get('authToken')}`);
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
+        return response.data[0];
+    }
+
+    const fetchUserClimbedHills = async () => {
+        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}/climbedHills`);
         return response.data;
     }
 
@@ -107,9 +55,9 @@ function MapPage() {
         return response.data;
     }
 
-    const fetchReviews = async () => {
-        const response = await axios.get(`http://localhost:8082/api/review/`);
-        return response.data;
+    const logout = () => {
+        Cookies.remove("authToken");
+        navigate("/login");
     }
 
     const mapClicked = async (e) => {
@@ -123,26 +71,34 @@ function MapPage() {
             let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
-            if (user.hills.filter(uHill => uHill._id === clickedHill._id)[0] !== undefined) setClimbed(true);
+            if (userClimbedHills.filter(uHill => uHill.id === clickedHill.id)[0] !== undefined) setClimbed(true);
 
             setCurrentHill(clickedHill);
-
-            let currentHillReviews = [];
-
-            allReviews?.forEach((review) => {
-                if (clickedHill._id === review.hill._id) {
-                    currentHillReviews.push(review);
-                }
-            })
-
-            setReviews(currentHillReviews);
         }
     }
 
-    const logout = () => {
-        Cookies.remove("authToken");
-        navigate("/login");
-    }
+    useEffect(() => {
+        fetchUser().then((res) => {
+            setUser(res);
+        })
+
+        fetchUserClimbedHills().then((res) => {
+            setUserClimbedHills(res);
+        })
+
+        fetchHills().then((res) => {
+            setHills(res);
+        })
+    }, [])
+
+    //BTN CLIMBED PRESSED
+    useEffect(() => {
+        fetchUserClimbedHills().then((res) => {
+            setUserClimbedHills(res);
+        })
+
+        setClimbed(true)
+    }, [btnClimb])
 
     return (
         <>
@@ -159,14 +115,12 @@ function MapPage() {
                                         rating={rating}
                                         user={user}
                                         setTxtArea={setTxtArea}
-                                        setBtnReview={setBtnReview}
-                                        btnReview={btnReview}
                                         btnHelpful={btnHelpful}
                                         setBtnHelpful={setBtnHelpful}
                                         climbed={climbed}
                                         setRating={setRating}
                                         txtArea={txtArea}
-                                        reviews={reviews} />
+            />
             }
 
 
@@ -192,8 +146,9 @@ function MapPage() {
 
 
             <div className={"clickMap"} onClick={mapClicked}>
-                {user.hills !== undefined ?
-                    <Map center={center} centerValue={centerValue} user={user} hills={hills}/> : "Loading map..."}
+                {userClimbedHills !== undefined ?
+                    <Map center={center} centerValue={centerValue} userClimbedHills={userClimbedHills}
+                         hills={hills}/> : "Loading map..."}
             </div>
         </>
     )

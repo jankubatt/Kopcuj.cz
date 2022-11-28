@@ -1,26 +1,61 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import Username from "./Username";
+import axios from "axios";
 
 const Reply = (props) => {
+    const [rating, setRating] = useState();
+    const [btn, setBtn] = useState(false);
 
-    let rating = props.reply.upVotes.length - props.reply.downVotes.length;
+    const fetchRating = async () => {
+        const response = await axios.get(`http://localhost:8082/api/discussions/reply/${props.discussion.id}/rating`)
+        return response.data;
+    }
+
+    const SendUpvote = async () => {
+        await axios.post('http://localhost:8082/api/discussions/reply/upvote', {
+            discussion: props.discussion.id,
+            user: props.user.id,
+        }).then(() => {
+            setBtn(!btn)
+        })
+    }
+
+    const SendDownvote = async () => {
+        await axios.post('http://localhost:8082/api/discussions/reply/downvote', {
+            discussion: props.discussion.id,
+            user: props.user.id,
+        }).then(() => {
+            setBtn(!btn)
+        })
+    }
+
+    useEffect(() => {
+        fetchRating().then((res) => {
+            setRating(res.upvotes - res.downvotes);
+        })
+    }, [])
+
+    useEffect(() => {
+        fetchRating().then((res) => {
+            setRating(res.upvotes - res.downvotes);
+        })
+    }, [btn])
 
     return (
         <Card>
             <Card.Header>
                 <div style={{display: "flex", justifyContent: "space-between"}}>
                     <div>
-                        {props.reply.user !== undefined ?
-                            <Username user={props.reply.user}/> : "Loading..."}
+                        <Username user={props.reply.user}/>
                     </div>
 
                     <div style={{alignSelf: "flex-end"}}>
-                        <FontAwesomeIcon onClick={props.upVote} icon="fa-solid fa-chevron-up"/>
+                        <FontAwesomeIcon onClick={SendUpvote} icon="fa-solid fa-chevron-up"/>
                         {<span
                             style={((rating < 0) ? {color: "red"} : (rating === 0) ? {color: "gray"} : {color: "green"})}> {rating} </span>}
-                        <FontAwesomeIcon onClick={props.downVote} icon="fa-solid fa-chevron-down"/>
+                        <FontAwesomeIcon onClick={SendDownvote} icon="fa-solid fa-chevron-down"/>
                     </div>
                 </div>
             </Card.Header>
