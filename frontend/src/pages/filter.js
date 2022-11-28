@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import {Card, Form, Table} from "react-bootstrap";
+import {Button, Card, Form, Table} from "react-bootstrap";
 
 function createData(id, name, rating, food, difficulty, parking, path, stroller) {
     return {id, name, rating, food, difficulty, parking, path, stroller};
@@ -23,17 +23,15 @@ const FilterPage = () => {
 
     const handleChange = async () => {
         await setRowData(sortArray(rowData, type, filter));
-        setRefresh(!refresh)
+        await setRefresh(!refresh)
     }
 
-    const handleType = (event) => {
-        setType(event.target.value);
-        handleChange();
+    const handleType = async (event) => {
+        await setType(event.target.value);
     }
 
-    const handleFilter = (event) => {
-        setFilter(event.target.value);
-        handleChange();
+    const handleFilter = async (event) => {
+        await setFilter(event.target.value);
     }
 
     const sortArray = (arr, orderBy, orderType) => {
@@ -42,7 +40,7 @@ const FilterPage = () => {
             default:
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        processHillName(a.name) < processHillName(b.name) ? 1 : processHillName(b.name) < processHillName(a.name) ? -1 : 0
+                        processHillName(a.name) > processHillName(b.name) ? 1 : processHillName(b.name) > processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -78,7 +76,7 @@ const FilterPage = () => {
             case "desc":
                 if (orderType === 'name') {
                     return arr.sort((a, b) =>
-                        processHillName(a.name) > processHillName(b.name) ? 1 : processHillName(b.name) > processHillName(a.name) ? -1 : 0
+                        processHillName(a.name) < processHillName(b.name) ? 1 : processHillName(b.name) < processHillName(a.name) ? -1 : 0
                     );
                 }
                 if (orderType === 'rating') {
@@ -130,7 +128,6 @@ const FilterPage = () => {
 
             fetchRatings().then((res) => {
                 setHillRatings(res);
-                handleChange();
             })
         })
     }, [])
@@ -155,8 +152,7 @@ const FilterPage = () => {
             }
         })
 
-        setRowData(tmp)
-        console.log(rowData)
+        setRowData(sortArray(tmp, "asc", "name"))
     }, [hillRatings, hills])
 
     return (
@@ -167,7 +163,7 @@ const FilterPage = () => {
                         <Card>
                             <Card.Body>
                                 <Form.Select id="filter" value={filter} label="Filtr" onChange={handleFilter}
-                                             className={"textarea mb-5"}>
+                                             className={"textarea mb-2"}>
                                     <option value={'name'}>Jméno</option>
                                     <option value={'rating'}>Hodnocení</option>
                                     <option value={'food'}>Jídlo</option>
@@ -186,6 +182,10 @@ const FilterPage = () => {
                                     <option value={'asc'}>Vzestupně</option>
                                     <option value={'desc'}>Sestupně</option>
                                 </Form.Select>
+
+                                <Form.Group className={'mt-2'}>
+                                    <Button onClick={handleChange} className={'btn2 w-100'}>Seřadit</Button>
+                                </Form.Group>
                             </Card.Body>
                         </Card>
                     </div>
