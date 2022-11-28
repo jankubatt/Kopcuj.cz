@@ -147,6 +147,9 @@ router.post("/change-password", (req, res) => {
 router.post("/login", (req, res) => {
     let sql = `SELECT id, pass FROM users WHERE login='${req.body.login}'`;
     db.query(sql, (err, user) => {
+
+        if (user === undefined) return res.sendStatus(503);
+
         bcrypt.compare(req.body.pass, user[0].pass).then(function (result) {
             if (result) {
                 const token = crypto.randomUUID();
@@ -157,7 +160,7 @@ router.post("/login", (req, res) => {
                 res.cookie("authToken", token, {maxAge: 1000 * 3600 * 24, sameSite: false});
                 res.send("/").status(200);
             } else {
-                res.sendStatus(400);
+                res.send("details").status(401);
             }
         });
     })

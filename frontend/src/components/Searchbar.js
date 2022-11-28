@@ -31,7 +31,7 @@ const Searchbar = (props) => {
                     labelKey="name"
                     onChange={setSingleSelections}
                     options={props.hills.map(hill => `${hill.name}-${hill.elevation}m`)}
-                    placeholder="Vyber kopec..."
+                    placeholder="Vyhledat kopec"
                     selected={singleSelections}
                 />
             </Form.Group>

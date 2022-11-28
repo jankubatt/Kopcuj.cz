@@ -1,8 +1,8 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
-import {Button, Card, Form} from "react-bootstrap";
+import {Alert, Button, Card, Form} from "react-bootstrap";
 
 axios.defaults.withCredentials = true;
 
@@ -10,6 +10,8 @@ function LoginPage() {
     //Ref for storing form values
     const username = useRef();
     const password = useRef();
+
+    const [error, setError] = useState(null);
 
     let navigate = useNavigate();
 
@@ -24,11 +26,12 @@ function LoginPage() {
 
         //post data to database
         axios.post("http://localhost:8082/api/users/login", data)
-            .then(() => {
+            .then((res) => {
+                if (res.data === "details") return setError(`Špatné údaje`);
                 return navigate("/");
             })
             .catch(err => {
-                console.log("Error in login user!\n" + err);
+                setError(`Něco se pokazilo.`)
             });
     }
 
@@ -58,6 +61,7 @@ function LoginPage() {
                             <Button className={"btn2"} type="submit">Přihlásit</Button>
                         </div>
                     </Form>
+                    {error !== null ? <Alert variant='danger'>{error}</Alert> : ""}
                 </Card.Body>
             </Card>
         </div>

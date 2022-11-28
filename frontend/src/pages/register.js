@@ -33,12 +33,12 @@ function RegisterPage() {
             checkUser = res.data;
         });
 
-        if (checkEmail != "") {
+        if (checkEmail !== "") {
             setError("Tento email byl již použit");
             return;
         }
 
-        if (checkUser != "") {
+        if (checkUser !== "") {
             setError("Toto uživatelské jméno je již použito");
             return;
         }
