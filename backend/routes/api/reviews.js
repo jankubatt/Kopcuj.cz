@@ -14,6 +14,13 @@ router.get('/', (req, res) => {
     })
 })
 
+router.get('/hills', (req, res) => {
+    let sql = `SELECT hills.name, SUM(reviews.stars)/COUNT(hills.name) AS "rating", hills_attributes.* FROM (hills JOIN hills_attributes ON hills.id=hills_attributes.hill) JOIN reviews ON hills_attributes.hill = reviews.hill;`;
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
+})
+
 router.get('/:hillId', (req, res) => {
     let sql = `SELECT reviews.* FROM reviews JOIN users ON users.id = reviews.user WHERE hill='${req.params.hillId}';`;
     db.query(sql, (err, result) => {
