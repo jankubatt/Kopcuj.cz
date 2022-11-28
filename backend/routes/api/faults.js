@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const Faults = require('../../models/Fault');
 let mysql = require('mysql');
 let config = require('../../config/db.js');
 const crypto = require("crypto");

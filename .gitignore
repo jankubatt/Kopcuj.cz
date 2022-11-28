@@ -2,5 +2,4 @@
 .code
 node_modules
 !frontend/node_modules/react-mapycz
-backend/config/default.json
 .env
