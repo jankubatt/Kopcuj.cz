@@ -19,7 +19,6 @@
     "query-string": "^7.1.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.6.0",
-    "react-bootstrap-star-rating": "^3.5.5-alpha.0.3",
     "react-bootstrap-typeahead": "^6.0.0",
     "react-dom": "^18.2.0",
     "react-mapycz": "^1.1.21",
