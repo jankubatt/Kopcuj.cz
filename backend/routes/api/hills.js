@@ -22,6 +22,13 @@ router.get('/name/:name', (req, res) => {
     })
 })
 
+router.get(`/attributes/:hillId`, (req, res) => {
+    let sql = `SELECT * FROM hills_attributes WHERE hill=${req.params.hillId};`;
+    db.query(sql, (e, r) => {
+        res.send(r);
+    })
+})
+
 router.post('/create', (req, res) => {
     let sql = `INSERT INTO hills (
                                     name, 

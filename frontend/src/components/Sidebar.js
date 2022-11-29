@@ -1,10 +1,11 @@
 import axios from "axios";
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Nav, Tab} from "react-bootstrap";
 import Reviews from "./Reviews";
 import Faults from "./Faults";
 
 const Sidebar = (props) => {
+    const [hillAttributes, setHillAttributes] = useState();
     const tryHillImage = () => {
         try {
             return require(`../img/hills/${processHillName(props.currentHill.name)}-${props.currentHill.elevation}.webp`);
@@ -22,10 +23,24 @@ const Sidebar = (props) => {
         props.setBtnClimb(!props.btnClimb)
     }
 
+    const fetchHillAttributes = async () => {
+        const response = await axios.get(`http://localhost:8082/api/hills/attributes/${props.currentHill.id}`);
+        return response.data[0];
+    }
+
+    useEffect(() => {
+        fetchHillAttributes().then((res) => {
+            setHillAttributes(res);
+        })
+    }, [])
+
+    if (hillAttributes === undefined) return "Loading";
+
     return (
         <div className={'sidebar'}>
             <div className={'hill'}>
-                <h1>{props.currentHill.name}<small style={{fontSize: 'medium'}}>({props.currentHill.elevation}m)</small></h1>
+                <h1>{props.currentHill.name}<small style={{fontSize: 'medium'}}>({props.currentHill.elevation}m)</small>
+                </h1>
 
                 <hr/>
 
@@ -55,11 +70,11 @@ const Sidebar = (props) => {
 
                     <hr/>
 
-                    {/*{props.currentHill.difficulty.length > 0 ? "Obtížné " : ""}*/}
-                    {/*{props.currentHill.path.length > 0 ? "Dostupná cesta " : ""}*/}
-                    {/*{props.currentHill.food.length > 0 ? "Vhodné pro kočárky " : ""}*/}
-                    {/*{props.currentHill.parking.length > 0 ? "Parkoviště " : ""}*/}
-                    {/*{props.currentHill.stroller.length > 0 ? "Občerstvení " : ""}*/}
+                    {hillAttributes.difficulty > 0 ? "Obtížné " : ""}
+                    {hillAttributes.path > 0 ? "Dostupná cesta " : ""}
+                    {hillAttributes.food > 0 ? "Vhodné pro kočárky " : ""}
+                    {hillAttributes.parking > 0 ? "Parkoviště " : ""}
+                    {hillAttributes.stroller > 0 ? "Občerstvení " : ""}
 
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <Button id={'btnClaimHill'} type="button" className="btn1" onClick={addHill}
