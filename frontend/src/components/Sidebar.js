@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, {useEffect, useState} from 'react';
-import {Button, Nav, Tab} from "react-bootstrap";
+import {Badge, Button, Nav, Tab} from "react-bootstrap";
 import Reviews from "./Reviews";
 import Faults from "./Faults";
 
@@ -70,11 +70,11 @@ const Sidebar = (props) => {
 
                     <hr/>
 
-                    {hillAttributes.difficulty > 0 ? "Obtížné " : ""}
-                    {hillAttributes.path > 0 ? "Dostupná cesta " : ""}
-                    {hillAttributes.food > 0 ? "Vhodné pro kočárky " : ""}
-                    {hillAttributes.parking > 0 ? "Parkoviště " : ""}
-                    {hillAttributes.stroller > 0 ? "Občerstvení " : ""}
+                    <Badge className={'badge1'}>{hillAttributes.difficulty > 0 ? "Obtížné " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}>{hillAttributes.path > 0 ? "Dostupná cesta " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}>{hillAttributes.food > 0 ? "Vhodné pro kočárky " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}>{hillAttributes.parking > 0 ? "Parkoviště " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}>{hillAttributes.stroller > 0 ? "Občerstvení " : ""}</Badge>&nbsp;
 
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <Button id={'btnClaimHill'} type="button" className="btn1" onClick={addHill}

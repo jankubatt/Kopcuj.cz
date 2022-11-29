@@ -260,6 +260,12 @@ table, tr, td {
     padding: 10px;
 }
 
+.badge1 {
+    background-color: var(--c2) !important;
+    color: var(--c1) !important;
+    border: 1px solid var(--c1) !important;
+}
+
 .btn1 {
     background-color: var(--c1) !important;
     color: var(--c2) !important;
