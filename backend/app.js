@@ -12,6 +12,9 @@ const faults = require('./routes/api/faults')
 
 const app = express();
 
+const swaggerUi = require('swagger-ui-express')
+const swaggerDocument = require('./swagger.json');
+
 // cors
 app.use(cors({origin: true, credentials: true}));
 
@@ -28,5 +31,7 @@ app.use('/api/discussions', discussions)
 app.use('/api/faults', faults)
 
 const port = process.env.PORT || 8082;
+
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
