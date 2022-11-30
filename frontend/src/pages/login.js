@@ -25,7 +25,7 @@ function LoginPage() {
         };
 
         //post data to database
-        axios.post("http://localhost:8082/api/users/login", data)
+        axios.post("/api/users/login", data)
             .then((res) => {
                 if (res.data === "details") return setError(`Špatné údaje`);
                 return navigate("/");

@@ -9,12 +9,12 @@ const Fault = (props) => {
     const [btnLike, setBtnLike] = useState(false);
 
     const getLikeCount = async () => {
-        const response = await axios.get(`http://localhost:8082/api/faults/likeCount/${props.fault.id}`);
+        const response = await axios.get(`/api/faults/likeCount/${props.fault.id}`);
         return response.data[0].count;
     }
 
     const helpfulClicked = async () => {
-        await axios.post(`http://localhost:8082/api/faults/like`, {
+        await axios.post(`/api/faults/like`, {
             user: props.user.id,
             fault: props.fault.id
         })

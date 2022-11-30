@@ -23,17 +23,17 @@ const DiscussionPage = () => {
     }
 
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
+        const response = await axios.get(`/api/users/${Cookies.get('authToken')}`);
         return response.data[0];
     }
 
     const fetchDiscussion = async () => {
-        const response = await axios.get(`http://localhost:8082/api/discussions/${parsed.id}`);
+        const response = await axios.get(`/api/discussions/${parsed.id}`);
         return response.data[0];
     }
 
     const fetchReplies = async () => {
-        const response = await axios.get(`http://localhost:8082/api/discussions/${parsed.id}/replies`);
+        const response = await axios.get(`/api/discussions/${parsed.id}/replies`);
         return response.data;
     }
 
@@ -59,7 +59,7 @@ const DiscussionPage = () => {
     }, [btn])
 
     const SendReply = async () => {
-        await axios.post('http://localhost:8082/api/discussions/reply', {
+        await axios.post('/api/discussions/reply', {
             discussion: discussion.id,
             user: user.id,
             text: reply.current.value

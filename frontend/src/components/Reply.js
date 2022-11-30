@@ -9,12 +9,12 @@ const Reply = (props) => {
     const [btn, setBtn] = useState(false);
 
     const fetchRating = async () => {
-        const response = await axios.get(`http://localhost:8082/api/discussions/reply/${props.discussion.id}/rating`)
+        const response = await axios.get(`/api/discussions/reply/${props.discussion.id}/rating`)
         return response.data;
     }
 
     const SendUpvote = async () => {
-        await axios.post('http://localhost:8082/api/discussions/reply/upvote', {
+        await axios.post('/api/discussions/reply/upvote', {
             discussion: props.discussion.id,
             user: props.user.id,
         }).then(() => {
@@ -23,7 +23,7 @@ const Reply = (props) => {
     }
 
     const SendDownvote = async () => {
-        await axios.post('http://localhost:8082/api/discussions/reply/downvote', {
+        await axios.post('/api/discussions/reply/downvote', {
             discussion: props.discussion.id,
             user: props.user.id,
         }).then(() => {

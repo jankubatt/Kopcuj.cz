@@ -30,7 +30,7 @@ app.use('/api/reviews', reviews);
 app.use('/api/discussions', discussions)
 app.use('/api/faults', faults)
 
-const port = process.env.PORT || 8082;
+const port = process.env.PORT || 8080;
 
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

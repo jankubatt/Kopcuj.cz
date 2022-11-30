@@ -9,13 +9,13 @@ const Faults = (props) => {
     const faultText = useRef()
 
     const fetchFaults = async () => {
-        const response = await axios.get(`http://localhost:8082/api/faults/${props.currentHill.id}`);
+        const response = await axios.get(`/api/faults/${props.currentHill.id}`);
         return response.data;
     }
 
     const sendFault = async () => {
         console.log(props.user.id, props.currentHill.id)
-        await axios.post(`http://localhost:8082/api/faults/addFault`, {
+        await axios.post(`/api/faults/addFault`, {
             hill: props.currentHill.id,
             user: props.user.id,
             text: faultText.current.value,

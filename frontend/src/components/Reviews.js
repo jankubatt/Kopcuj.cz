@@ -18,12 +18,12 @@ const Reviews = (props) => {
     const [loading, setLoading] = useState(true);
 
     const fetchReviews = async () => {
-        const response = await axios.get(`http://localhost:8082/api/reviews/${props.currentHill.id}`);
+        const response = await axios.get(`/api/reviews/${props.currentHill.id}`);
         return response.data;
     }
 
     const sendReview = async () => {
-        await axios.post(`http://localhost:8082/api/reviews/addReview`, {
+        await axios.post(`/api/reviews/addReview`, {
             stars: rating,
             hill: props.currentHill.id,
             user: props.user.id,

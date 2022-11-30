@@ -61,7 +61,7 @@ router.post("/register", (req, res) => {
                 from: process.env.EMAIL_USER,
                 to: req.body.email,
                 subject: 'Kopcuj - Ověření emailové adresy',
-                html: `Děkujeme za vaši registraci, prosím ověřte email.\n<a href="http://localhost:8082/api/users/verify/${verificationToken}">http://localhost:8082/api/users/verify/${verificationToken}</a>`
+                html: `Děkujeme za vaši registraci, prosím ověřte email.\n<a href="http://localhost:8080/api/users/verify/${verificationToken}">http://localhost:8080/api/users/verify/${verificationToken}</a>`
             };
 
             transporter.sendMail(mailOptions, (error, info) => {

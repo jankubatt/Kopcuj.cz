@@ -15,7 +15,7 @@ const Sidebar = (props) => {
     };
 
     const addHill = async () => {
-        await axios.post('http://localhost:8082/api/users/addClimbed', {
+        await axios.post('/api/users/addClimbed', {
             id_user: props.user.id,
             id_hill: props.currentHill.id
         });
@@ -24,7 +24,7 @@ const Sidebar = (props) => {
     }
 
     const fetchHillAttributes = async () => {
-        const response = await axios.get(`http://localhost:8082/api/hills/attributes/${props.currentHill.id}`);
+        const response = await axios.get(`/api/hills/attributes/${props.currentHill.id}`);
         return response.data[0];
     }
 

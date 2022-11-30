@@ -41,17 +41,17 @@ function MapPage() {
 
     //Functions
     const fetchUser = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}`);
+        const response = await axios.get(`/api/users/${Cookies.get('authToken')}`);
         return response.data[0];
     }
 
     const fetchUserClimbedHills = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}/climbedHills`);
+        const response = await axios.get(`/api/users/${Cookies.get('authToken')}/climbedHills`);
         return response.data;
     }
 
     const fetchHills = async () => {
-        const response = await axios.get('http://localhost:8082/api/hills/');
+        const response = await axios.get('/api/hills/');
         return response.data;
     }
 
@@ -68,7 +68,7 @@ function MapPage() {
             setTxtArea('none')
 
             let hillName = e.target.title;
-            let clickedHill = await axios.get(`http://localhost:8082/api/hills/name/${hillName}`);
+            let clickedHill = await axios.get(`/api/hills/name/${hillName}`);
             clickedHill = clickedHill.data[0];
 
             if (userClimbedHills.filter(uHill => uHill.id === clickedHill.id)[0] !== undefined) setClimbed(true);

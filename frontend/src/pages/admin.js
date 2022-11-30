@@ -66,7 +66,7 @@ function AdminPage() {
         };
 
         //post data to database
-        axios.post("http://localhost:8082/api/hills/create", data)
+        axios.post("/api/hills/create", data)
             .then(() => {
                 return navigate("/");
             })
@@ -77,23 +77,23 @@ function AdminPage() {
 
     //Fetch users from database
     const fetchUsers = async () => {
-        const response = await axios.get('http://localhost:8082/api/users/');
+        const response = await axios.get('/api/users/');
         return response.data;
     }
 
     //Fetch reviews from database
     const fetchReviews = async () => {
-        const response = await axios.get(`http://localhost:8082/api/reviews/`);
+        const response = await axios.get(`/api/reviews/`);
         return response.data;
     }
 
     const fetchDiscussions = async () => {
-        const response = await axios.get(`http://localhost:8082/api/discussions`);
+        const response = await axios.get(`/api/discussions`);
         return response.data;
     }
 
     const fetchUserClimbedHills = async () => {
-        const response = await axios.get(`http://localhost:8082/api/users/${Cookies.get('authToken')}/climbedHills`);
+        const response = await axios.get(`/api/users/${Cookies.get('authToken')}/climbedHills`);
         return response.data;
     }
 

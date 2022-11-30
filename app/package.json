@@ -4,8 +4,11 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "app": "nodemon app.js"
+    "start": "node app",
+    "server": "nodemon",
+    "client": "npm start --prefix ../frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "build": "npm run build --prefix ../frontend"
   },
   "keywords": [],
   "author": "Jan Kubat",
@@ -26,6 +29,7 @@
     "validation": "^0.0.1"
   },
   "devDependencies": {
+    "concurrently": "^7.6.0",
     "nodemon": "^2.0.20"
   }
 }

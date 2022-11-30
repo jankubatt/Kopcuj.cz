@@ -24,12 +24,12 @@ function RegisterPage() {
         let checkUser;
 
         //get request to check, if email isn't already used
-        await axios.get("http://localhost:8082/api/users/checkEmail/" + email.current.value).then(res => {
+        await axios.get("/api/users/checkEmail/" + email.current.value).then(res => {
             checkEmail = res.data;
         });
 
         //get request to check if login isn't already used
-        await axios.get("http://localhost:8082/api/users/checkLogin/" + username.current.value).then(res => {
+        await axios.get("/api/users/checkLogin/" + username.current.value).then(res => {
             checkUser = res.data;
         });
 
@@ -57,7 +57,7 @@ function RegisterPage() {
         };
 
         //post data to database
-        axios.post("http://localhost:8082/api/users/register", data).then(() => {
+        axios.post("/api/users/register", data).then(() => {
             return navigate("/login")
         })
     }
