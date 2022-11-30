@@ -31,7 +31,8 @@ router.get('/:hillId', (req, res) => {
 router.post('/addReview', (req, res) => {
     let sql = `UPDATE reviews SET stars='${req.body.stars}', text='${req.body.text}' WHERE user='${req.body.user}' AND hill='${req.body.hill}' `;
     db.query(sql, (err, result) => {
-        if (result.changedRows === 0) {
+        console.log(result)
+        if (result.affectedRows === 0) {
             sql = `INSERT INTO reviews (hill, user, stars, text) VALUES ('${req.body.hill}', '${req.body.user}', '${req.body.stars}', '${req.body.text}')`;
             db.query(sql, () => {
                 res.sendStatus(200)
@@ -42,27 +43,27 @@ router.post('/addReview', (req, res) => {
     });
 
 
-    if (req.body.difficulty !== null) {
+    if (req.body.difficulty) {
         let sql = `UPDATE hills_attributes SET difficulty=difficulty+1 WHERE hill='${req.body.hill}'`;
         db.query(sql);
     }
 
-    if (req.body.food !== null) {
+    if (req.body.food) {
         let sql = `UPDATE hills_attributes SET food=food+1 WHERE hill='${req.body.hill}'`;
         db.query(sql);
     }
 
-    if (req.body.parking !== null) {
+    if (req.body.parking) {
         let sql = `UPDATE hills_attributes SET parking=parking+1 WHERE hill='${req.body.hill}'`;
         db.query(sql);
     }
 
-    if (req.body.path !== null) {
+    if (req.body.path) {
         let sql = `UPDATE hills_attributes SET path=path+1 WHERE hill='${req.body.hill}'`;
         db.query(sql);
     }
 
-    if (req.body.stroller !== null) {
+    if (req.body.stroller) {
         let sql = `UPDATE hills_attributes SET stroller=stroller+1 WHERE hill='${req.body.hill}'`;
         db.query(sql);
     }

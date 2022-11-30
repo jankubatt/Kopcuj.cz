@@ -5,14 +5,14 @@ import Rating from '@mui/material/Rating';
 import axios from "axios";
 
 const Reviews = (props) => {
-    const chbDifficulty = useRef();
-    const chbPath = useRef();
-    const chbStroller = useRef();
-    const chbParking = useRef();
-    const chbFood = useRef();
+    const [chbDifficulty, setChbDifficulty] = useState(false);
+    const [chbPath, setChbPath] = useState(false);
+    const [chbStroller, setChbStroller] = useState(false);
+    const [chbParking, setChbParking] = useState(false);
+    const [chbFood, setChbFood] = useState(false);
     const reviewText = useRef();
 
-    const [rating, setRating] = useState();
+    const [rating, setRating] = useState(1);
     const [reviews, setReviews] = useState()
     const [btnReview, setBtnReview] = useState(true)
     const [loading, setLoading] = useState(true);
@@ -24,15 +24,15 @@ const Reviews = (props) => {
 
     const sendReview = async () => {
         await axios.post(`/api/reviews/addReview`, {
-            stars: rating,
+            stars: rating === 0 ? 1 : rating,
             hill: props.currentHill.id,
             user: props.user.id,
             text: reviewText.current.value,
-            difficulty: chbDifficulty.current.value.includes("on") ? 1 : null,
-            path: chbPath.current.value.includes("on") ? 1 : null,
-            stroller: chbStroller.current.value.includes("on") ? 1 : null,
-            parking: chbParking.current.value.includes("on") ? 1 : null,
-            food: chbFood.current.value.includes("on") ? 1 : null
+            difficulty: chbDifficulty,
+            path: chbPath,
+            stroller: chbStroller,
+            parking: chbParking,
+            food: chbFood
         }).then(() => {
             setBtnReview(!btnReview);
             reviewText.current.value = "";
@@ -81,11 +81,11 @@ const Reviews = (props) => {
                     />
 
                     <div>
-                        <Form.Check ref={chbDifficulty} label={"Obtížné"}/>
-                        <Form.Check ref={chbPath} label={"Dostupná cesta"}/>
-                        <Form.Check ref={chbStroller} label={"Vhodné pro kočárky"}/>
-                        <Form.Check ref={chbParking} label={"Parkoviště"}/>
-                        <Form.Check ref={chbFood} label={"Občerstvení"}/>
+                        <Form.Check onClick={() => setChbDifficulty(!chbDifficulty)} label={"Obtížné"}/>
+                        <Form.Check onClick={() => setChbPath(!chbPath)} label={"Dostupná cesta"}/>
+                        <Form.Check onClick={() => setChbStroller(!chbStroller)} label={"Vhodné pro kočárky"}/>
+                        <Form.Check onClick={() => setChbParking(!chbParking)} label={"Parkoviště"}/>
+                        <Form.Check onClick={() => setChbFood(!chbFood)} label={"Občerstvení"}/>
                     </div>
 
                     <Form.Control as="textarea" rows={3} ref={reviewText} className={"textarea"}></Form.Control>
