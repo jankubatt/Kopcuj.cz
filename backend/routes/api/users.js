@@ -2,8 +2,10 @@ require('dotenv').config()
 
 const express = require('express');
 const router = express.Router();
+
 const bcrypt = require('bcrypt');
 const crypto = require("crypto");
+
 const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
     host: 'smtp.web4u.cz',
@@ -18,147 +20,78 @@ let mysql = require('mysql');
 let config = require('../../config/db.js');
 let db = mysql.createConnection(config);
 
+//GET all users
 router.get("/", (req, res) => {
     let sql = `SELECT * FROM users`;
-    db.query(sql, (err, result) => {
-        res.send(result)
-    })
+
+    db.query(sql, (e, r) => res.send(r));
 });
 
-//gets user by name
-router.get("/checkLogin/:login", (req, res) => {
-    let sql = `SELECT login FROM users WHERE login='${req.params.login}'`;
-    db.query(sql, (err, result) => {
-        if (result.length < 1)
-            res.send("");
-        else
-            res.send(result)
-    })
+//GET user by authToken
+router.get("/:authToken", (req, res) => {
+    let sql = `SELECT * FROM users WHERE authToken='${req.params.authToken}';`;
+
+    db.query(sql, (e, r) => res.send(r));
 });
 
-//gets user by email
-router.get("/checkEmail/:email", (req, res) => {
-    let sql = `SELECT email FROM users WHERE email='${req.params.email}'`;
-    db.query(sql, (err, result) => {
-        if (result.length < 1)
-            res.send("");
-        else
-            res.send(result)
-    })
+//GET users climbed hills by authToken
+router.get("/:authToken/climbedHills", (req, res) => {
+    let sql = `SELECT hills.* FROM (hills JOIN hills_climbed ON hills.id = hills_climbed.hill) RIGHT JOIN users ON users.id = hills_climbed.user WHERE users.authToken="${req.params.authToken}";`;
+
+    db.query(sql, (e, r) => res.send(r));
 });
 
-//gets user by authToken
-router.get("/:auth", (req, res) => {
-    let sql = `SELECT * FROM users WHERE authToken='${req.params.auth}'`
-    db.query(sql, (err, result) => {
-        res.send(result);
-    })
-});
-
-//gets user climbed hills by authToken
-router.get("/:auth/climbedHills", (req, res) => {
-    let sql = `SELECT hills.*
-                FROM (hills JOIN hills_climbed ON hills.id = hills_climbed.hill)
-                RIGHT JOIN users ON users.id = hills_climbed.user
-                WHERE users.authToken="${req.params.auth}";`
-    db.query(sql, (err, result) => {
-        res.send(result);
-    })
-});
-
-//gets user by id
+//GET user by ID
 router.get("/id/:id", (req, res) => {
-    let sql = `SELECT * FROM users WHERE id='${req.params.id}'`
-    db.query(sql, (err, result) => {
-        res.send(result);
-    })
+    let sql = `SELECT * FROM users WHERE id='${req.params.id}';`;
+
+    db.query(sql, (e, r) => res.send(r));
 });
 
-router.get("/verify/:token", (req, res) => {
-    let sql = `SELECT * FROM users WHERE verifyToken='${req.params.token}'`
-    db.query(sql, (err, result) => {
-        let sql = `UPDATE users SET isVerified=true WHERE id=${result[0].id}`
-        db.query(sql, (err, result) => {
-            res.redirect('http://localhost:3000')
-        })
-    })
-})
-
-//registers a user
+//Register user
 router.post("/register", (req, res) => {
-    let token = crypto.randomUUID();
-    bcrypt.hash(req.body.pass, 10).then(function (hash) {
-        let mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: req.body.email,
-            subject: 'Ověření emailové adresy',
-            html: `Děkujeme za vaši registraci, prosím ověřte email.\n<a href="http://localhost:8082/api/users/verify/${token}">ZDE</a>`
-        };
+    let verificationToken = crypto.randomUUID();
 
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('User Verification Email sent: ' + info.response);
-            }
-        });
+    bcrypt.hash(req.body.pass, 10).then((hash) => {
+        let sql = `INSERT INTO users (login, name, pass, email, verifyToken) VALUES ('${req.body.login}', '${req.body.name}', '${hash}', '${req.body.email}', '${verificationToken}');`;
 
-        console.log('register')
+        db.query(sql, () => {
+            //Send email
+            let mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: req.body.email,
+                subject: 'Kopcuj - Ověření emailové adresy',
+                html: `Děkujeme za vaši registraci, prosím ověřte email.\n<a href="http://localhost:8082/api/users/verify/${verificationToken}">http://localhost:8082/api/users/verify/${verificationToken}</a>`
+            };
 
-        let sql = `INSERT INTO users (login, name, pass, email, verifyToken) VALUES ('${req.body.login}', '${req.body.name}', '${hash}', '${req.body.email}', '${token}')`;
-        db.query(sql, (err, result) => {
-            res.send(result)
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error)
+                    console.log(error);
+                else
+                    console.log('User Verification Email sent: ' + info.response);
+            });
+
+            res.sendStatus(200);
         })
     });
 });
 
-router.post("/forgot-password", (req, res) => {
-    let token = crypto.randomUUID();
-    let sql = `UPDATE users SET forgotPassToken='${token}' WHERE email='${req.body.email}'`
-    db.query(sql, (err, result) => {
-        let mailOptions = {
-            from: process.env.EMAIL_USER,
-            to: req.body.email,
-            subject: 'Zapomenuté heslo',
-            html: `Na tomto odkazu si můžete změnit heslo. Přejeme úspěšné chození.\n<a href="http://localhost:3000/change-password?token=${token}">http://localhost:3000/change-password?token=${token}</a>`
-        };
-
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log('Forgotten Password Email sent: ' + JSON.stringify(info));
-            }
-        });
-
-        res.sendStatus(200);
-    })
-})
-
-router.post("/change-password", (req, res) => {
-    bcrypt.hash(req.body.pass, 10).then(function (hash) {
-        let sql = `UPDATE users SET pass='${hash}' WHERE forgotPassToken='${req.body.token}'`;
-        db.query(sql, (err, result) => {
-            res.sendStatus(200)
-        })
-    });
-})
-
+//Login user
 router.post("/login", (req, res) => {
-    let sql = `SELECT id, pass FROM users WHERE login='${req.body.login}'`;
-    db.query(sql, (err, user) => {
+    let sql = `SELECT id, pass FROM users WHERE login='${req.body.login}';`;
 
-        if (user === undefined) return res.sendStatus(503);
+    db.query(sql, (e, r) => {
+        if (r === undefined) return res.sendStatus(503);
 
-        bcrypt.compare(req.body.pass, user[0].pass).then(function (result) {
-            if (result) {
-                const token = crypto.randomUUID();
-                let sql = `UPDATE users SET authToken='${token}', lastLogin='${new Date().toISOString().slice(0, 19).replace('T', ' ')}' WHERE id=${user[0].id}`;
-                db.query(sql, (err) => {
-                })
+        bcrypt.compare(req.body.pass, r[0].pass).then((bcrypt_result) => {
+            if (bcrypt_result) {
+                let authToken = crypto.randomUUID();
 
-                res.cookie("authToken", token, {maxAge: 1000 * 3600 * 24, sameSite: false});
-                res.send("/").status(200);
+                let sql = `UPDATE users SET authToken='${authToken}', lastLogin='${new Date().toISOString().slice(0, 19).replace('T', ' ')}' WHERE id=${r[0].id};`;
+                db.query(sql);
+
+                res.cookie("authToken", authToken, {maxAge: 1000 * 3600 * 24, sameSite: false});
+                res.sendStatus(200);
             } else {
                 res.send("details").status(401);
             }
@@ -166,11 +99,80 @@ router.post("/login", (req, res) => {
     })
 });
 
-router.post('/addHill', (req, res) => {
-    let sql = `INSERT INTO hills_climbed (hill, user) VALUES ('${req.body.id_hill}', '${req.body.id_user}')`;
-    db.query(sql, (err) => {
-        res.sendStatus(200)
+//Checks if user with login exists
+router.get("/checkLogin/:login", (req, res) => {
+    let sql = `SELECT login FROM users WHERE login='${req.params.login}'`;
+
+    db.query(sql, (e, r) => {
+        if (r.length < 1)
+            res.send("");
+        else
+            res.send(r);
     })
+});
+
+//Checks if user with email exists
+router.get("/checkEmail/:email", (req, res) => {
+    let sql = `SELECT email FROM users WHERE email='${req.params.email}'`;
+
+    db.query(sql, (e, r) => {
+        if (r.length < 1)
+            res.send("");
+        else
+            res.send(r);
+    })
+});
+
+//Verify user
+router.get("/verify/:token", (req, res) => {
+    let sql = `SELECT * FROM users WHERE verifyToken='${req.params.token}';`;
+
+    db.query(sql, (e, r) => {
+        let sql = `UPDATE users SET isVerified=true WHERE id=${r[0].id};`;
+
+        db.query(sql, () => res.redirect('http://localhost:3000'));
+    }).catch(() => console.log("Verification Error"));
+})
+
+
+//User forgotten password
+router.post("/forgot-password", (req, res) => {
+    let forgotPassToken = crypto.randomUUID();
+    let sql = `UPDATE users SET forgotPassToken='${forgotPassToken}' WHERE email='${req.body.email}';`;
+
+    db.query(sql, () => {
+        let mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: req.body.email,
+            subject: 'Zapomenuté heslo',
+            html: `Na tomto odkazu si můžete změnit heslo. Přejeme úspěšné chození.\n<a href="http://localhost:3000/change-password?token=${forgotPassToken}">http://localhost:3000/change-password?token=${forgotPassToken}</a>`
+        };
+
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error)
+                console.log(error);
+            else
+                console.log('Forgotten Password Email sent: ' + info.response);
+        });
+
+        res.sendStatus(200);
+    })
+})
+
+//Change users password
+router.post("/change-password", (req, res) => {
+    bcrypt.hash(req.body.pass, 10).then((hash) => {
+        let sql = `UPDATE users SET pass='${hash}' WHERE forgotPassToken='${req.body.token}';`;
+
+        db.query(sql, () => res.sendStatus(200));
+    });
+})
+
+//Mark hill as climbed
+router.post('/addClimbed', (req, res) => {
+    let sql = `INSERT INTO hills_climbed (hill, user) VALUES ('${req.body.id_hill}', '${req.body.id_user}');`;
+
+    db.query(sql, () => res.sendStatus(200));
 });
 
 module.exports = router;
