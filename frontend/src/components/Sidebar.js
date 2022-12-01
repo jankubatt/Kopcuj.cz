@@ -70,11 +70,16 @@ const Sidebar = (props) => {
 
                     <hr/>
 
-                    <Badge className={'badge1'}>{hillAttributes.difficulty > 0 ? "Obtížné " : ""}</Badge>&nbsp;
-                    <Badge className={'badge1'}>{hillAttributes.path > 0 ? "Dostupná cesta " : ""}</Badge>&nbsp;
-                    <Badge className={'badge1'}>{hillAttributes.food > 0 ? "Vhodné pro kočárky " : ""}</Badge>&nbsp;
-                    <Badge className={'badge1'}>{hillAttributes.parking > 0 ? "Parkoviště " : ""}</Badge>&nbsp;
-                    <Badge className={'badge1'}>{hillAttributes.stroller > 0 ? "Občerstvení " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}
+                           bg={"null"}>{hillAttributes.difficulty > 0 ? "Obtížné " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}
+                           bg={"null"}>{hillAttributes.path > 0 ? "Dostupná cesta " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}
+                           bg={"null"}>{hillAttributes.food > 0 ? "Vhodné pro kočárky " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}
+                           bg={"null"}>{hillAttributes.parking > 0 ? "Parkoviště " : ""}</Badge>&nbsp;
+                    <Badge className={'badge1'}
+                           bg={"null"}>{hillAttributes.stroller > 0 ? "Občerstvení " : ""}</Badge>&nbsp;
 
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <Button id={'btnClaimHill'} type="button" className="btn1" onClick={addHill}

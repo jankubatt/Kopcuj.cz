@@ -42,7 +42,6 @@ router.post('/addReview', (req, res) => {
         }
     });
 
-
     if (req.body.difficulty) {
         let sql = `UPDATE hills_attributes SET difficulty=difficulty+1 WHERE hill='${req.body.hill}'`;
         db.query(sql);
