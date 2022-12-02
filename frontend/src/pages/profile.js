@@ -37,10 +37,11 @@ function ProfilePage() {
             desc: desc.current.value,
             authToken: Cookies.get('authToken')
         });
+
         setDscBtn(!descBtn);
+        setDescVisible('none');
 
         return response.data;
-
     }
 
     const handleDesc = () => {
@@ -70,16 +71,13 @@ function ProfilePage() {
                 setClimbedHills(res);
             })
         })
-
-
     }, [])
 
     useEffect(() => {
         let ncHills = hills;
-        console.log(hills)
 
         climbedHills.forEach((hill) => {
-            ncHills.splice(ncHills.indexOf(hill), 1)
+            ncHills = ncHills.filter(item => item.id !== hill.id)
         })
 
         setNotClimbedHills(ncHills);
@@ -96,7 +94,7 @@ function ProfilePage() {
                 <div className={"mb-3 border-line"}>
                     <div style={{display: "flex", justifyContent: "space-between"}}>
                         <Card.Text>
-                            {user.description === null ? "Nic" : user.description}
+                            {user.description === null ? "Popisek..." : user.description}
                         </Card.Text>
                         <div onClick={handleDesc}><FontAwesomeIcon icon="fa-solid fa-pen"/></div>
                     </div>
@@ -114,7 +112,7 @@ function ProfilePage() {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text className={"hills"}>
-                            {climbedHills?.map(hill => <li key={hill.id}>{hill.name}</li>)}
+                            {climbedHills ? climbedHills?.map(hill => <li key={hill.id}>{hill.name}</li> ) : "Načítání..."}
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -125,7 +123,7 @@ function ProfilePage() {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text className={"hills"}>
-                            {notClimbedHills?.map(hill => <li key={hill.id}>{hill.name}</li>)}
+                            {notClimbedHills ? notClimbedHills?.map(hill => <li key={100+hill.id}>{hill.name}</li>) : "Načítání..."}
                         </Card.Text>
                     </Card.Body>
                 </Card>
