@@ -1,51 +1,82 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import '../App.css';
 import axios from "axios";
 import Cookies from 'js-cookie';
-import {Alert, Button, Card} from "react-bootstrap";
+import {Alert, Button, Card, Form} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 axios.defaults.withCredentials = true;
 
 function ProfilePage() {
-    const [user, getUser] = useState([]);
+    const [user, setUser] = useState([]);
     const [hills, getHills] = useState([]);
     const [climbedHills, setClimbedHills] = useState([]);
     const [notClimbedHills, setNotClimbedHills] = useState([]);
+    const [descVisible, setDescVisible] = useState('none');
+    const [descBtn, setDscBtn] = useState(false);
+
+    const desc = useRef();
+
+    const fetchUserClimbedHills = async () => {
+        const response = await axios.get(`/api/users/${Cookies.get('authToken')}/climbedHills`);
+        return response.data;
+    }
 
     const fetchUser = async () => {
         const response = await axios.get('/api/users/' + Cookies.get('authToken'));
-        return response.data;
+        return response.data[0];
     }
 
     const fetchHills = async () => {
-        const response = await axios.get('/api/hills/');
+        const response = await axios.get(`/api/hills/`);
         return response.data;
     }
 
+    const changeDesc = async () => {
+        const response = await axios.post(`/api/users/description`, {
+            desc: desc.current.value,
+            authToken: Cookies.get('authToken')
+        });
+        setDscBtn(!descBtn);
+
+        return response.data;
+
+    }
+
+    const handleDesc = () => {
+        if (descVisible === 'none')
+            setDescVisible('block')
+        else
+            setDescVisible('none')
+    }
+
+    useEffect(() => {
+
+        fetchUser().then((res) => {
+            setUser(res)
+        })
+
+    }, [descBtn])
+
     useEffect(() => {
         fetchUser().then((res) => {
-            getUser(res)
+            setUser(res)
         })
 
         fetchHills().then((res) => {
             getHills(res)
+
+            fetchUserClimbedHills().then((res) => {
+                setClimbedHills(res);
+            })
         })
+
+
     }, [])
 
     useEffect(() => {
-        let cHills = [];
-        hills?.forEach((hill) => {
-            if (user.hills.filter(uHill => uHill._id === hill._id)[0] !== undefined) {
-                cHills.push(hill);
-            }
-        })
-        setClimbedHills(cHills);
-
-
-    }, [hills])
-
-    useEffect(() => {
         let ncHills = hills;
+        console.log(hills)
 
         climbedHills.forEach((hill) => {
             ncHills.splice(ncHills.indexOf(hill), 1)
@@ -54,20 +85,28 @@ function ProfilePage() {
         setNotClimbedHills(ncHills);
     }, [climbedHills])
 
+    if (user === undefined) return "Loading"
+
     return (
         <>
-            {notClimbedHills !== undefined ? <div className={'container profile'}>
-
+            <div className={'container profile'}>
                 <h1 className={"d-inline-block"}>{user.login}</h1>&nbsp;<small
                 className={"d-inline-block"}>({user.name})</small>
 
-                <Card className={"mb-3"}>
-                    <Card.Body>
+                <div className={"mb-3 border-line"}>
+                    <div style={{display: "flex", justifyContent: "space-between"}}>
                         <Card.Text>
                             {user.description === null ? "Nic" : user.description}
                         </Card.Text>
-                    </Card.Body>
-                </Card>
+                        <div onClick={handleDesc}><FontAwesomeIcon icon="fa-solid fa-pen"/></div>
+                    </div>
+                </div>
+
+                <div className={"mb-3"} style={{display: descVisible}}>
+                    <Form.Control as={'textarea'} ref={desc} className={"textarea1"}></Form.Control>
+                    <div className={"w-100 mt-1"} style={{display: "flex", justifyContent: "flex-end"}}><Button
+                        onClick={changeDesc} className={'btn1'}>Změnit</Button></div>
+                </div>
 
                 <Card className={"mb-3"}>
                     <Card.Header>
@@ -75,7 +114,7 @@ function ProfilePage() {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text className={"hills"}>
-                            {climbedHills?.map(hill => <li key={hill._id}>{hill.name}</li>)}
+                            {climbedHills?.map(hill => <li key={hill.id}>{hill.name}</li>)}
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -86,7 +125,7 @@ function ProfilePage() {
                     </Card.Header>
                     <Card.Body>
                         <Card.Text className={"hills"}>
-                            {notClimbedHills?.map(hill => <li key={hill._id}>{hill.name}</li>)}
+                            {notClimbedHills?.map(hill => <li key={hill.id}>{hill.name}</li>)}
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -95,7 +134,7 @@ function ProfilePage() {
 
                 {user.isVerified === false ?
                     <Alert className={"mt-3"} variant='info'>Email s ověřením účtu byl odeslán na email!</Alert> : ""}
-            </div> : "Loading..."}
+            </div>
 
         </>
     )

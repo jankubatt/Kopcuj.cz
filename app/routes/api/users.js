@@ -175,4 +175,14 @@ router.post('/addClimbed', (req, res) => {
     db.query(sql, () => res.sendStatus(200));
 });
 
+//Change description of user
+router.post('/description', (req, res) => {
+    let sql = `UPDATE users SET description='${req.body.desc}' WHERE authToken="${req.body.authToken}";`
+
+    db.query(sql, (e, r) => {
+        console.log(e, r);
+        res.sendStatus(200)
+    })
+});
+
 module.exports = router;
