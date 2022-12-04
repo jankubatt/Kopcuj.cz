@@ -10,9 +10,17 @@ function ellipsify(str) {
     }
 }
 
+function DateTime(dateTime) {
+    let dt = new Date(dateTime);
+    return (
+        `${(dt.getDate() < 10) ? '0' + dt.getDate() : dt.getDate()}.${(dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1)}.${dt.getFullYear()} 
+        [${(dt.getHours()) < 10 ? '0' + dt.getHours() : dt.getHours()}:${(dt.getMinutes() < 10) ? '0' + dt.getMinutes() : dt.getMinutes()}:${(dt.getSeconds() < 10) ? '0' + dt.getSeconds() : dt.getSeconds()}]`)
+}
+
+
 const AdminReview = (props) => {
     return (
-        <Card key={props.review._id} className='card'>
+        <Card key={props.review.id} className='card'>
             <Card.Body>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <div>
@@ -26,13 +34,10 @@ const AdminReview = (props) => {
                 </div>
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <div style={{color: 'GrayText'}}>
-                        {props.review.user.login}
+                        {props.review.hill_name}&nbsp;
                     </div>
                     <div style={{color: 'GrayText'}}>
-                        {props.review.hill.name}
-                    </div>
-                    <div style={{color: 'GrayText'}}>
-                        {new Date(props.review.date_added).getDate()}.{new Date(props.review.date_added).getMonth() + 1}.{new Date(props.review.date_added).getFullYear()}
+                        {DateTime(props.review.added)}
                     </div>
                 </div>
             </Card.Body>

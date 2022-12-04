@@ -27,6 +27,13 @@ router.get("/", (req, res) => {
     db.query(sql, (e, r) => res.send(r));
 });
 
+//GET users climbed hills
+router.get("/climbedHills", (req, res) => {
+    let sql = `SELECT hills.*, hills_climbed.user FROM (hills JOIN hills_climbed ON hills.id = hills_climbed.hill) RIGHT JOIN users ON users.id = hills_climbed.user;`;
+
+    db.query(sql, (e, r) => res.send(r));
+});
+
 //GET user by authToken
 router.get("/:authToken", (req, res) => {
     let sql = `SELECT * FROM users WHERE authToken='${req.params.authToken}';`;

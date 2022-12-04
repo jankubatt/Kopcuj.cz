@@ -20,7 +20,7 @@ const AdminDiscussion = (props) => {
             </Card.Body>
             <Card.Footer>
                 <div className={"d-flex justify-content-end"}>
-                    <div>{DateTime(props.discussion.date_added)}</div>
+                    <div>{DateTime(props.discussion.created)}</div>
                 </div>
             </Card.Footer>
         </Card>

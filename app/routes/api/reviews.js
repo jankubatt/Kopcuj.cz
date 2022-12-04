@@ -8,7 +8,7 @@ let db = mysql.createConnection(config);
 
 
 router.get('/', (req, res) => {
-    let sql = `SELECT * FROM reviews`;
+    let sql = `SELECT reviews.*, hills.name AS "hill_name" FROM reviews JOIN hills ON hills.id = reviews.hill`;
     db.query(sql, (err, result) => {
         res.send(result);
     })

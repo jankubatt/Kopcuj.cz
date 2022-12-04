@@ -13,7 +13,7 @@ const AdminReply = (props) => {
             </Card.Body>
             <Card.Footer>
                 <div className={"d-flex justify-content-end"}>
-                    <div>{props.reply.date_added}</div>
+                    <div>{props.reply.created}</div>
                 </div>
             </Card.Footer>
         </Card>

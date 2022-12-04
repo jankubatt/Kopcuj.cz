@@ -6,8 +6,6 @@ import {Button, Card, Form, Nav, Tab, Table} from "react-bootstrap";
 import AdminRow from "../components/AdminRow";
 import AdminReview from "../components/AdminReview";
 import AdminDiscussion from "../components/AdminDiscussion";
-import AdminReply from "../components/AdminReply";
-import Cookies from "js-cookie";
 
 //formats pushable row into table
 function createData(id_user, login, name, email, desc, hills, discussions, replies, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
@@ -35,7 +33,7 @@ function AdminPage() {
     const [reviews, setReviews] = useState([]);           //All reviews
     const [rows, setRows] = useState();                       //Rows of a table
     const [discussions, setDiscussions] = useState([]);
-    const [userClimbedHills, setUserClimbedHills] = useState([]);
+    const [usersClimbedHills, setUsersClimbedHills] = useState([]);
 
     //State for storing form values
     const [state, setState] = useState({});
@@ -92,8 +90,8 @@ function AdminPage() {
         return response.data;
     }
 
-    const fetchUserClimbedHills = async () => {
-        const response = await axios.get(`/api/users/${Cookies.get('authToken')}/climbedHills`);
+    const fetchUsersClimbedHills = async () => {
+        const response = await axios.get(`/api/users/climbedHills`);
         return response.data;
     }
 
@@ -108,8 +106,8 @@ function AdminPage() {
         fetchDiscussions().then((res) => {
             setDiscussions(res)
         })
-        fetchUserClimbedHills().then((res) => {
-            setUserClimbedHills(res);
+        fetchUsersClimbedHills().then((res) => {
+            setUsersClimbedHills(res);
         })
     }, [])
 
@@ -123,40 +121,34 @@ function AdminPage() {
             let userDiscussions = [];
             let userReplies = [];
 
-            userClimbedHills.map((hill) => {
-                userClimbed.push(<li>{hill.name}</li>);
+            usersClimbedHills.map((hill) => {
+                if (hill.user === user.id)
+                    userClimbed.push(<li>{hill.name}</li>);
             })
 
             reviews.map((review) => {
-                if (review.user.login === user.login) {
+                if (review.user === user.id) {
                     userReviews.push(
-                        <AdminReview review={review}></AdminReview>
+                        <AdminReview key={review.id} review={review}></AdminReview>
                     );
                 }
             })
 
             discussions.map((discussion) => {
-                if (user._id === discussion.user._id) {
-                    userDiscussions.push(<AdminDiscussion key={discussion._id}
+                if (user.id === discussion.user) {
+                    userDiscussions.push(<AdminDiscussion key={discussion.id}
                                                           discussion={discussion}></AdminDiscussion>)
                 }
-
-                discussion.replies.map((reply) => {
-                    if (user._id === reply.user._id) {
-                        userReplies.push(<AdminReply key={reply._id} reply={reply}
-                                                     discussion={discussion}></AdminReply>)
-                    }
-                })
             })
 
-            tempRows.push(createData(user._id, user.login, user.name, user.email, user.description, userClimbed, userDiscussions, userReplies, userReviews, DateTime(user.registered), DateTime(user.lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
+            tempRows.push(createData(user.id, user.login, user.name, user.email, user.description, userClimbed, userDiscussions, userReplies, userReviews, DateTime(user.registered), DateTime(user.lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
 
             userClimbed = [];
             userReviews = [];
         })
 
         setRows(tempRows);
-    }, [users, discussions, reviews])
+    }, [users, discussions, reviews, usersClimbedHills])
 
     return (
         <>
@@ -167,7 +159,7 @@ function AdminPage() {
                             <Nav variant="pills" className="flex-column">
                                 <Nav.Item>
                                     <Nav.Link eventKey="first" className={"btn1"}
-                                              style={{borderRadius: "0"}}>Hodnocení</Nav.Link>
+                                              style={{borderRadius: "0"}}>Admin Panel</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
                                     <Nav.Link eventKey="second" className={"btn1"}
