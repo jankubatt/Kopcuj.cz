@@ -180,6 +180,9 @@ function AdminPage() {
                                 <Nav.Item>
                                     <Nav.Link eventKey="second" className={"btn1"}>CRUD Kopec</Nav.Link>
                                 </Nav.Item>
+                                <Nav.Item>
+                                    <Nav.Link href={"/"} eventKey="third" className={"btn1"}>Domů</Nav.Link>
+                                </Nav.Item>
                             </Nav>
                         </Col>
 

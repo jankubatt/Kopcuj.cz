@@ -133,10 +133,10 @@ function MapPage() {
                     variant={""}
                 >
                     <Dropdown.Item eventKey="1" onClick={() => navigate("/profile")}>Profil</Dropdown.Item>
-                    <Dropdown.Item eventKey="2" onClick={logout}>Odhlásit se</Dropdown.Item>
+                    <Dropdown.Item eventKey="2" onClick={() => navigate("/settings")}>Nastavení</Dropdown.Item>
+                    <Dropdown.Item eventKey="3" onClick={logout}>Odhlásit se</Dropdown.Item>
                 </DropdownButton>
 
-                <a><Button type="button" className="btn1">Settings</Button></a>
                 <a href={'/discussions'}><Button type="button" className="btn1">Diskuze</Button></a>
 
                 {user.isAdmin ? <a href={'/admin'}>

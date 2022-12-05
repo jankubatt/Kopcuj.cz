@@ -72,7 +72,9 @@ const DiscussionPage = () => {
     return (
         <>
             <div className='navbar'>
-                <div className='navbrand'>Kopcuj.cz</div>
+                <a href={"/"}>
+                    <div className='navbrand'>Kopcuj.cz</div>
+                </a>
                 <a href={"http://localhost:3000/discussions"}>
                     <div className='navbrand' style={{marginRight: "20px"}}>Diskuze</div>
                 </a>
