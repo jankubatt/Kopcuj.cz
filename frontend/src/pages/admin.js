@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import '../App.css';
 import axios from "axios";
-import {Button, Card, Form, Nav, Tab, Table} from "react-bootstrap";
+import {Button, Card, Col, Form, Nav, Row, Tab, Table} from "react-bootstrap";
 import AdminRow from "../components/AdminRow";
 import AdminReview from "../components/AdminReview";
 import AdminDiscussion from "../components/AdminDiscussion";
+import AdminReply from "../components/AdminReply";
 
 //formats pushable row into table
 function createData(id_user, login, name, email, desc, hills, discussions, replies, reviews, date_registered, date_lastLogin, isAdmin, isVerified) {
@@ -34,6 +35,7 @@ function AdminPage() {
     const [rows, setRows] = useState();                       //Rows of a table
     const [discussions, setDiscussions] = useState([]);
     const [usersClimbedHills, setUsersClimbedHills] = useState([]);
+    const [replies, setReplies] = useState([]);
 
     //State for storing form values
     const [state, setState] = useState({});
@@ -90,6 +92,11 @@ function AdminPage() {
         return response.data;
     }
 
+    const fetchReplies = async () => {
+        const response = await axios.get(`/api/discussions/replies`);
+        return response.data;
+    }
+
     const fetchUsersClimbedHills = async () => {
         const response = await axios.get(`/api/users/climbedHills`);
         return response.data;
@@ -105,6 +112,10 @@ function AdminPage() {
         })
         fetchDiscussions().then((res) => {
             setDiscussions(res)
+        })
+        fetchReplies().then((res) => {
+            setReplies(res);
+            console.log(res)
         })
         fetchUsersClimbedHills().then((res) => {
             setUsersClimbedHills(res);
@@ -141,6 +152,12 @@ function AdminPage() {
                 }
             })
 
+            replies.map((reply) => {
+                if (user.id === reply.user) {
+                    userReplies.push(<AdminReply key={reply.id} reply={reply}></AdminReply>)
+                }
+            })
+
             tempRows.push(createData(user.id, user.login, user.name, user.email, user.description, userClimbed, userDiscussions, userReplies, userReviews, DateTime(user.registered), DateTime(user.lastLogin), user.isAdmin ? 'true' : 'false', user.isVerified ? 'true' : 'false'))
 
             userClimbed = [];
@@ -148,27 +165,25 @@ function AdminPage() {
         })
 
         setRows(tempRows);
-    }, [users, discussions, reviews, usersClimbedHills])
+    }, [users, discussions, reviews, usersClimbedHills, replies])
 
     return (
         <>
             <div style={{overflowX: "scroll !important"}}>
                 <Tab.Container id="left-tabs-example" defaultActiveKey="first">
-                    <div className={"d-flex flex-row"}>
-                        <div style={{borderRight: "1px solid var(--c2)"}}>
-                            <Nav variant="pills" className="flex-column">
+                    <Row className={"d-flex flex-row"}>
+                        <Col className={"p-0 admin-sidebar"} sm={2}>
+                            <Nav className="flex-column ">
                                 <Nav.Item>
-                                    <Nav.Link eventKey="first" className={"btn1"}
-                                              style={{borderRadius: "0"}}>Admin Panel</Nav.Link>
+                                    <Nav.Link eventKey="first" className={"btn1"}>Admin Panel</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link eventKey="second" className={"btn1"}
-                                              style={{borderRadius: "0"}}>CRUD Kopec</Nav.Link>
+                                    <Nav.Link eventKey="second" className={"btn1"}>CRUD Kopec</Nav.Link>
                                 </Nav.Item>
                             </Nav>
-                        </div>
+                        </Col>
 
-                        <div className={"w-100"}>
+                        <Col className={"p-0"}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
                                     <Table aria-label="sticky table">
@@ -237,8 +252,8 @@ function AdminPage() {
                                     </Card>
                                 </Tab.Pane>
                             </Tab.Content>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </Tab.Container>
             </div>
         </>
@@ -247,8 +262,11 @@ function AdminPage() {
 
 function DateTime(dateTime) {
     let dt = new Date(dateTime);
+
+    if (isNaN(dt)) return "Wrong date";
+
     return (
-        `${(dt.getDate() < 10) ? '0' + dt.getDate() : dt.getDate()}.${(dt.getMonth()+1 < 10 ? '0' + (dt.getMonth()+1) : dt.getMonth()+1)}.${dt.getFullYear()} 
+        `${(dt.getDate() < 10) ? '0' + dt.getDate() : dt.getDate()}.${(dt.getMonth() + 1 < 10 ? '0' + (dt.getMonth() + 1) : dt.getMonth() + 1)}.${dt.getFullYear()} 
         [${(dt.getHours()) < 10 ? '0' + dt.getHours() : dt.getHours()}:${(dt.getMinutes() < 10) ? '0' + dt.getMinutes() : dt.getMinutes()}:${(dt.getSeconds() < 10) ? '0' + dt.getSeconds() : dt.getSeconds()}]`)
 }
 

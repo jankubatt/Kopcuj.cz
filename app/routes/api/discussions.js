@@ -12,6 +12,13 @@ router.get('/', (req, res) => {
     })
 });
 
+router.get('/replies', (req, res) => {
+    let sql = `SELECT * FROM discussions_replies`;
+    db.query(sql, (err, result) => {
+        res.send(result);
+    })
+})
+
 router.get('/:id', (req, res) => {
     let sql = `SELECT * FROM discussions WHERE id='${req.params.id}'`
     db.query(sql, (err, result) => {
